@@ -11,11 +11,8 @@ public class Player : MonoBehaviour
     private float _fireRate = 0.5f;
     private float _canFire = -1f;
 
-
     [SerializeField]
-    private GameObject _laserPrefab;
-
-    
+    private GameObject _laserPrefab;    
 
     void Start()
     {
@@ -24,27 +21,17 @@ public class Player : MonoBehaviour
         _maxHeight =  0f;
         _minHeight = -3.8f;
         _maxWidth  =  10f;
-        _minWidth  = -_maxWidth;
-        
+        _minWidth  = -_maxWidth;        
     }
 
     void Update()
     {
        CalculateMovement();
-
-        //if i hit the space key
-        //spawn gameObject
-
-        Debug.Log(Time.time + ", "+_canFire);
-
-        if(Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
-        {
-            //Debug.Log("Spacekey pressed");
-            _canFire = Time.time + _fireRate;
-            Vector3 offset = new Vector3(0f,.8f,0f);
-            Instantiate(_laserPrefab, transform.position+offset, Quaternion.identity);
-        }
-
+       if(Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
+       {
+           FireLaser();
+       }
+       
     }
 
     void CalculateMovement()
@@ -68,6 +55,12 @@ public class Player : MonoBehaviour
         {
             transform.position = new Vector3(_maxWidth, transform.position.y,0);
         }
+    }
 
+    void FireLaser()
+    {       
+        _canFire = Time.time + _fireRate;
+        Vector3 offset = new Vector3(0f,.8f,0f);
+        Instantiate(_laserPrefab, transform.position+offset, Quaternion.identity);
     }
 }
