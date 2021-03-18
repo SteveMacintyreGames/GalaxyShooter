@@ -7,6 +7,13 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _speed = 3.5f;
     private float _maxHeight, _minHeight, _minWidth, _maxWidth;
+    [SerializeField]
+    private float _fireRate = 0.5f;
+    private float _canFire = -1f;
+
+
+    [SerializeField]
+    private GameObject _laserPrefab;
 
     
 
@@ -24,6 +31,20 @@ public class Player : MonoBehaviour
     void Update()
     {
        CalculateMovement();
+
+        //if i hit the space key
+        //spawn gameObject
+
+        Debug.Log(Time.time + ", "+_canFire);
+
+        if(Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
+        {
+            //Debug.Log("Spacekey pressed");
+            _canFire = Time.time + _fireRate;
+            Vector3 offset = new Vector3(0f,.8f,0f);
+            Instantiate(_laserPrefab, transform.position+offset, Quaternion.identity);
+        }
+
     }
 
     void CalculateMovement()
