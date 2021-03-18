@@ -19,7 +19,6 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        //take the current position = new position(0,0,0)
         transform.position = new Vector3(0,0,0);
         _maxHeight =  0f;
         _minHeight = -3.8f;
@@ -71,7 +70,6 @@ public class Player : MonoBehaviour
     {
         _playerLives --;
 
-        //check if dead and if so, destroy object
         if(_playerLives < 1)
         {
             Destroy(this.gameObject);
