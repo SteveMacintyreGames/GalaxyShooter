@@ -49,6 +49,12 @@ public class Enemy : MonoBehaviour
         {
             //Debug.Log("Player Hit");
             //Damage Player
+            Player player = other.transform.GetComponent<Player>();
+            if(player != null)
+            {
+                player.Damage();
+            }
+            
             Destroy(this.gameObject);
         }
 

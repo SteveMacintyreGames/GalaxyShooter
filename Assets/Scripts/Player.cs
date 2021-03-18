@@ -12,7 +12,10 @@ public class Player : MonoBehaviour
     private float _canFire = -1f;
 
     [SerializeField]
-    private GameObject _laserPrefab;    
+    private GameObject _laserPrefab; 
+
+    [SerializeField]
+    private int _playerLives = 3;   
 
     void Start()
     {
@@ -62,5 +65,16 @@ public class Player : MonoBehaviour
         _canFire = Time.time + _fireRate;
         Vector3 offset = new Vector3(0f,.8f,0f);
         Instantiate(_laserPrefab, transform.position+offset, Quaternion.identity);
+    }
+
+    public void Damage()
+    {
+        _playerLives --;
+
+        //check if dead and if so, destroy object
+        if(_playerLives < 1)
+        {
+            Destroy(this.gameObject);
+        }
     }
 }
