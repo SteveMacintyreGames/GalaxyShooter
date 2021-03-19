@@ -15,10 +15,19 @@ public class Player : MonoBehaviour
     private GameObject _laserPrefab; 
 
     [SerializeField]
-    private int _playerLives = 3;   
+    private int _playerLives = 3;
+
+    private SpawnManager _spawnManager;   
 
     void Start()
     {
+        _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
+
+        if(_spawnManager == null)
+        {
+            Debug.LogError("The SpawnManager is NULL!");
+        }
+
         transform.position = new Vector3(0,0,0);
         _maxHeight =  0f;
         _minHeight = -3.8f;
@@ -72,6 +81,12 @@ public class Player : MonoBehaviour
 
         if(_playerLives < 1)
         {
+
+            //Communicate with the Spawn Manager
+            //let them know to stop spawning.
+
+            _spawnManager.OnPlayerDeath();
+
             Destroy(this.gameObject);
         }
     }
