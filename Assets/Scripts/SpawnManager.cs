@@ -21,36 +21,22 @@ public class SpawnManager : MonoBehaviour
 
     private bool _stopSpawning = false;
 
-    // Start is called before the first frame update
     void Start()
     {
         StartCoroutine(SpawnEnemyRoutine());
         StartCoroutine(SpawnPowerUpRoutine());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        //Spawn an enemy every 5 seconds
-        //create a Coroutine of type IEnumerator that allows us to yield events.
-        //use a while loop, an infinite game loop.
-        //whiles run as long as a condition is true.
-
-    }
 
     IEnumerator SpawnEnemyRoutine()
     {
-        //while loop (infinite loop)
-            //instantiate enemy prefab
-            //yield wait for 5 seconds.
         while(!_stopSpawning)
         {            
             float randomX = Random.Range(-xPos,xPos);
             Vector3 posToSpawn = new Vector3(randomX,Ypos,0);
             GameObject newEnemy = Instantiate (_enemyPrefab,posToSpawn, Quaternion.identity);
             newEnemy.transform.parent = _enemyHolder.transform;
-            yield return new WaitForSeconds(_timeToWait);
-            
+            yield return new WaitForSeconds(_timeToWait);            
         }
 
     }
