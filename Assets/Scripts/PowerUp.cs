@@ -36,7 +36,12 @@ public class PowerUp : MonoBehaviour
         {
             Destroy(this.gameObject);
             //Activate TripleShot in player
-            other.transform.GetComponent<Player>().ActivateTripleShot();
+            Player player = other.transform.GetComponent<Player>();
+            if(player)
+            {
+                player.ActivateTripleShot();
+            }
+            
         }
     }
 }
