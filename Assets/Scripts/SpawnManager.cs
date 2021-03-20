@@ -14,9 +14,6 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private GameObject _enemyHolder;
 
-    [SerializeField]
-    private GameObject _powerUpHolder;
-
     private float xPos = 9f;
     private float Ypos = 8f;
     [SerializeField]
@@ -59,15 +56,13 @@ public class SpawnManager : MonoBehaviour
     }
     IEnumerator SpawnPowerUpRoutine()
     {
-        while(true)
-        {   _powerUpTime = Random.Range(3f,7f);
-            yield return new WaitForSeconds(_powerUpTime);
-
+        while(!_stopSpawning)
+        {   
             float randomX = Random.Range(-xPos,xPos);
             Vector3 posToSpawn = new Vector3(randomX, Ypos,0);
-            GameObject newPowerUp = Instantiate(_powerUp, posToSpawn,Quaternion.identity);
-            newPowerUp.transform.parent = _powerUpHolder.transform;
-            
+            Instantiate(_powerUp, posToSpawn,Quaternion.identity); 
+            _powerUpTime = Random.Range(3,8);
+            yield return new WaitForSeconds(_powerUpTime);   
         }
     }
 
