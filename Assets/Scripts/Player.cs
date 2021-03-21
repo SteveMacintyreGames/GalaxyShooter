@@ -4,27 +4,35 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField]
     private float _speed = 3.5f;
     private float _maxHeight, _minHeight, _minWidth, _maxWidth;
     [SerializeField]
     private float _fireRate = 0.5f;
     private float _canFire = -1f;
-    [SerializeField]
-    private bool _isTripleShotActive;
 
     [SerializeField]
     private GameObject _laserPrefab;
 
     [SerializeField]
-    private GameObject _tripleShot;
-    [SerializeField]
-    private float _tripleShotTimer = 5.0f;
-
-    [SerializeField]
     private int _playerLives = 3;
 
     private SpawnManager _spawnManager;   
+
+    //Powerups
+    [SerializeField]
+    private GameObject _tripleShot;
+    [SerializeField]
+    private bool _isTripleShotActive;
+    [SerializeField]
+    private float _powerUpTimer = 5.0f;
+    [SerializeField]
+    private bool _isSpeedBoostActive;
+    [SerializeField]
+    private float _speedBoost = 8.5f;
+    [SerializeField]
+    private float _currentSpeed;
+
+    public int powerUpID;
 
     void Start()
     {
@@ -39,7 +47,9 @@ public class Player : MonoBehaviour
         _maxHeight =  0f;
         _minHeight = -3.8f;
         _maxWidth  =  10f;
-        _minWidth  = -_maxWidth;        
+        _minWidth  = -_maxWidth;
+        _currentSpeed = _speed;
+
     }
 
     void Update()
@@ -54,10 +64,14 @@ public class Player : MonoBehaviour
 
     void CalculateMovement()
     {
+        if(_isSpeedBoostActive)
+        {
+            _currentSpeed = _speedBoost;
+        }
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
         transform.Translate(Vector3.right * horizontalInput * _speed *  Time.deltaTime);
-        transform.Translate(Vector3.up * verticalInput * _speed * Time.deltaTime);
+        transform.Translate(Vector3.up * verticalInput * _currentSpeed * Time.deltaTime);
         
         if (transform.position.y > _maxHeight)
         {
@@ -103,12 +117,42 @@ public class Player : MonoBehaviour
     public void ActivateTripleShot()
     {
         _isTripleShotActive = true;
-        StartCoroutine(FinishTripleShot());
+        StartCoroutine(FinishPowerup());
     }
 
-    IEnumerator FinishTripleShot()
+    public void ActivateSpeedBoost()
     {
-        yield return new WaitForSeconds(_tripleShotTimer);
-        _isTripleShotActive = false;
+        _isSpeedBoostActive = true;
+        StartCoroutine(FinishPowerup());
+    }
+
+    IEnumerator FinishPowerup()
+    {
+        yield return new WaitForSeconds(_powerUpTimer);
+        
+        switch(powerUpID)
+        {
+        case 0:
+            _isTripleShotActive = false;
+            Debug.Log("TripleShot OVER");
+            break;
+            
+        case 1:
+            _isSpeedBoostActive = false;
+            _currentSpeed = _speed;
+            Debug.Log("SPEED OVER");
+            break;
+          
+        case 2:
+            //_isShieldActive = false;
+            break;
+          
+        default:
+            break;
+           
+        }
+
     }
 }
+
+
