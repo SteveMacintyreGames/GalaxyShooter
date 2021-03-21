@@ -4,21 +4,16 @@ using UnityEngine;
 
 public class PowerUp : MonoBehaviour
 {
+    [SerializeField] //0 = Tripleshot, 1 = Speed, 2 = Shields.
+    private int _powerUpID;
+
     [SerializeField]
     private float _powerUpSpeed = 3.0f;
     private float _bottomOfScreen = -7.0f;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
+ 
     void Update()
     {
-        //move down speed of 3. adjustable in inspector
-        //when leaving screen, destroy this object
         transform.Translate(Vector3.down * _powerUpSpeed * Time.deltaTime);
 
         if(transform.position.y <= _bottomOfScreen)
@@ -27,19 +22,26 @@ public class PowerUp : MonoBehaviour
         }
 
     }
-
-    //ontrigger collision
-    //only be collectable by player (hint use tags)
     void OnTriggerEnter2D(Collider2D other)
     {
         if(other.CompareTag("Player"))
         {
             Destroy(this.gameObject);
-            //Activate TripleShot in player
             Player player = other.transform.GetComponent<Player>();
             if(player)
             {
+                if(_powerUpID == 0)
+                {
                 player.ActivateTripleShot();
+                }
+                else if (_powerUpID == 1)
+                {
+                    Debug.Log("Speed PowerUp Picked up!");
+                }
+                else if (_powerUpID == 2)
+                {
+                    Debug.Log("Shield Powerup Picked up!");
+                }
             }
             
         }

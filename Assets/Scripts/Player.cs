@@ -14,7 +14,8 @@ public class Player : MonoBehaviour
     private bool _isTripleShotActive;
 
     [SerializeField]
-    private GameObject _laserPrefab; 
+    private GameObject _laserPrefab;
+
     [SerializeField]
     private GameObject _tripleShot;
     [SerializeField]
@@ -94,12 +95,7 @@ public class Player : MonoBehaviour
 
         if(_playerLives < 1)
         {
-
-            //Communicate with the Spawn Manager
-            //let them know to stop spawning.
-
             _spawnManager.OnPlayerDeath();
-
             Destroy(this.gameObject);
         }
     }
