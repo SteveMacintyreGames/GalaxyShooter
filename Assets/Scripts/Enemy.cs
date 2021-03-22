@@ -11,6 +11,13 @@ public class Enemy : MonoBehaviour
     private float _leftBorder = -9;
     private float _rightBorder = 9;
 
+    Player _player;
+
+    void Start()
+    {
+        _player = GameObject.Find("Player").GetComponent<Player>();
+    }
+
     void Update()
     {
         transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
@@ -38,6 +45,8 @@ public class Enemy : MonoBehaviour
         if(other.CompareTag("Laser"))
         {
             Destroy(other.gameObject);
+            
+            _player.AddScore(10);
             Destroy(this.gameObject);
         }
     }

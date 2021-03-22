@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Player : MonoBehaviour
 {
     [SerializeField]
@@ -25,8 +26,8 @@ public class Player : MonoBehaviour
     private GameObject _tripleShot;
     [SerializeField]
     private bool _isTripleShotActive;
-
-    private float _speed = 3.5f;
+    [SerializeField]
+    private float _speed = 5f;
     private float _speedBoost = 2f;
     [SerializeField]
     private bool _isShieldActive = false;
@@ -35,8 +36,17 @@ public class Player : MonoBehaviour
 
     public int powerUpID;
 
+    [SerializeField]
+    private int _score;
+
+    private UIManager _uiManager;
+
+    
+
     void Start()
-    {   _shield.SetActive(false);       
+    {   
+        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        _shield.SetActive(false);       
 
         if(_spawnManager == null)
         {
@@ -49,6 +59,12 @@ public class Player : MonoBehaviour
         _maxWidth  =  10f;
         _minWidth  = -_maxWidth;
         _speedBoost = 1f;
+
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        if(_uiManager == null)
+        {
+            Debug.LogError("UIManager is null");
+        }
     }
 
     void Update()
@@ -105,9 +121,12 @@ public class Player : MonoBehaviour
             return;
         }
         _playerLives --;
+        _uiManager.UpdateLives(_playerLives);
+
 
         if(_playerLives < 1)
         {
+            _uiManager.GameOverText();
             _spawnManager.OnPlayerDeath();
             Destroy(this.gameObject);
         }
@@ -134,20 +153,25 @@ public class Player : MonoBehaviour
     IEnumerator FinishPowerUp()
     {
         yield return new WaitForSeconds(_powerUpTimer);
-        Debug.Log(powerUpID);
         switch(powerUpID)
         {
         case 0:
             _isTripleShotActive = false;
-            Debug.Log("TripleShot OVER");
             break;
             
         case 1:
             _speedBoost = 1f;
-            Debug.Log("SPEED OVER");
             break;  
         }
     }
+
+    public void AddScore(int points)
+    {
+        _score+=points; 
+        _uiManager.UpdateScore(_score);       
+    }
+
+
 }
 
 

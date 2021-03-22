@@ -28,7 +28,6 @@ public class SpawnManager : MonoBehaviour
         StartCoroutine(SpawnPowerUpRoutine());
     }
 
-
     IEnumerator SpawnEnemyRoutine()
     {
         while(!_stopSpawning)
@@ -39,8 +38,8 @@ public class SpawnManager : MonoBehaviour
             newEnemy.transform.parent = _enemyHolder.transform;
             yield return new WaitForSeconds(_timeToWait);            
         }
-
     }
+    
     IEnumerator SpawnPowerUpRoutine()
     {
         while(!_stopSpawning)
