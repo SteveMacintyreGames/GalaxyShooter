@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
+
 
 public class UIManager : MonoBehaviour
 {
@@ -31,16 +31,7 @@ public class UIManager : MonoBehaviour
         scoreText.text = "Score: 0";        
     }
 
-    void Update()
-    {
-        if(_canRestart)
-        {
-            if(Input.GetKey(KeyCode.R))
-            {
-                SceneManager.LoadScene(0);
-            }
-        }
-    }
+
 
     public void UpdateScore(int playerScore)
     {

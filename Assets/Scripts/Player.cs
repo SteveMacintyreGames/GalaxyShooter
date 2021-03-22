@@ -40,12 +40,14 @@ public class Player : MonoBehaviour
     private int _score;
 
     private UIManager _uiManager;
+    private GameManager _gameManager;
 
     
 
     void Start()
     {   
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
         _shield.SetActive(false);       
 
         if(_spawnManager == null)
@@ -126,6 +128,7 @@ public class Player : MonoBehaviour
 
         if(_playerLives < 1)
         {
+            _gameManager.GameOver();
             _uiManager.GameOverText();
             _spawnManager.OnPlayerDeath();
             Destroy(this.gameObject);
