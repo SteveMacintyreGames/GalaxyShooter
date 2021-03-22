@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private float _speed = 3.5f;
+    [SerializeField]
+    private float _powerUpTimer = 5.0f;
+
     private float _maxHeight, _minHeight, _minWidth, _maxWidth;
     [SerializeField]
     private float _fireRate = 0.5f;
@@ -23,20 +25,19 @@ public class Player : MonoBehaviour
     private GameObject _tripleShot;
     [SerializeField]
     private bool _isTripleShotActive;
+
+    private float _speed = 3.5f;
+    private float _speedBoost = 2f;
     [SerializeField]
-    private float _powerUpTimer = 5.0f;
+    private bool _isShieldActive = false;
     [SerializeField]
-    private bool _isSpeedBoostActive;
-    [SerializeField]
-    private float _speedBoost = 8.5f;
-    [SerializeField]
-    private float _currentSpeed;
+    private GameObject _shield;
 
     public int powerUpID;
 
     void Start()
-    {
-        _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
+    {   _shield.SetActive(false);
+       
 
         if(_spawnManager == null)
         {
@@ -48,7 +49,7 @@ public class Player : MonoBehaviour
         _minHeight = -3.8f;
         _maxWidth  =  10f;
         _minWidth  = -_maxWidth;
-        _currentSpeed = _speed;
+        _speedBoost = 1f;
 
     }
 
@@ -64,14 +65,9 @@ public class Player : MonoBehaviour
 
     void CalculateMovement()
     {
-        if(_isSpeedBoostActive)
-        {
-            _currentSpeed = _speedBoost;
-        }
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
-        transform.Translate(Vector3.right * horizontalInput * _speed *  Time.deltaTime);
-        transform.Translate(Vector3.up * verticalInput * _currentSpeed * Time.deltaTime);
+        transform.Translate(new Vector3(horizontalInput, verticalInput,0)*_speed * _speedBoost * Time.deltaTime);
         
         if (transform.position.y > _maxHeight)
         {
@@ -105,6 +101,17 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
+        //if shields are active,
+        //do nothing.
+        //deactivate shields
+        //return;
+
+        if (_isShieldActive)
+        {
+            _isShieldActive = false;
+            _shield.SetActive(false);
+            return;
+        }
         _playerLives --;
 
         if(_playerLives < 1)
@@ -117,19 +124,26 @@ public class Player : MonoBehaviour
     public void ActivateTripleShot()
     {
         _isTripleShotActive = true;
-        StartCoroutine(FinishPowerup());
+        StartCoroutine(FinishPowerUp());
     }
 
     public void ActivateSpeedBoost()
     {
-        _isSpeedBoostActive = true;
-        StartCoroutine(FinishPowerup());
+        _speedBoost = 2f;
+        StartCoroutine(FinishPowerUp());
     }
 
-    IEnumerator FinishPowerup()
+    public void ActivateShields()
+    {
+        _isShieldActive = true;
+        _shield.SetActive(true);
+        //shield.enabled = true;
+    }
+
+    IEnumerator FinishPowerUp()
     {
         yield return new WaitForSeconds(_powerUpTimer);
-        
+        Debug.Log(powerUpID);
         switch(powerUpID)
         {
         case 0:
@@ -138,21 +152,15 @@ public class Player : MonoBehaviour
             break;
             
         case 1:
-            _isSpeedBoostActive = false;
-            _currentSpeed = _speed;
+            _speedBoost = 1f;
             Debug.Log("SPEED OVER");
-            break;
-          
-        case 2:
-            //_isShieldActive = false;
-            break;
-          
-        default:
-            break;
-           
+            break;  
+
+
         }
 
     }
 }
 
 
+ 

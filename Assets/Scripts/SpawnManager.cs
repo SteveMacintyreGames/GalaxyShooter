@@ -8,7 +8,7 @@ public class SpawnManager : MonoBehaviour
     private GameObject _enemyPrefab;
 
     [SerializeField]
-    private GameObject[] _powerUp;
+    private GameObject[] _powerUps;
     private float _powerUpTime;
 
     [SerializeField]
@@ -47,7 +47,7 @@ public class SpawnManager : MonoBehaviour
         {   
             float randomX = Random.Range(-xPos,xPos);
             Vector3 posToSpawn = new Vector3(randomX, Ypos,0);
-            GameObject newPowerUp = Instantiate(_powerUp[Random.Range(0,_powerUp.Length)], posToSpawn,Quaternion.identity);
+            GameObject newPowerUp = Instantiate(_powerUps[Random.Range(0,3)], posToSpawn,Quaternion.identity);
             _powerUpTime = Random.Range(3,8);
             yield return new WaitForSeconds(_powerUpTime);   
         }
