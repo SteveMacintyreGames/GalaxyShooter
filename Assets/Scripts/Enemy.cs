@@ -6,7 +6,6 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField]
     private float _enemySpeed = 4f;
-
     private float _bottomScreen = -6f;
     private float _topOfScreen = 8f;
     private float _leftBorder = -9;

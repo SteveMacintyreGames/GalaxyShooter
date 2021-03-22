@@ -36,8 +36,7 @@ public class Player : MonoBehaviour
     public int powerUpID;
 
     void Start()
-    {   _shield.SetActive(false);
-       
+    {   _shield.SetActive(false);       
 
         if(_spawnManager == null)
         {
@@ -50,7 +49,6 @@ public class Player : MonoBehaviour
         _maxWidth  =  10f;
         _minWidth  = -_maxWidth;
         _speedBoost = 1f;
-
     }
 
     void Update()
@@ -60,7 +58,6 @@ public class Player : MonoBehaviour
        {
            FireLaser();
        }
-       
     }
 
     void CalculateMovement()
@@ -101,11 +98,6 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
-        //if shields are active,
-        //do nothing.
-        //deactivate shields
-        //return;
-
         if (_isShieldActive)
         {
             _isShieldActive = false;
@@ -137,7 +129,6 @@ public class Player : MonoBehaviour
     {
         _isShieldActive = true;
         _shield.SetActive(true);
-        //shield.enabled = true;
     }
 
     IEnumerator FinishPowerUp()
@@ -155,10 +146,7 @@ public class Player : MonoBehaviour
             _speedBoost = 1f;
             Debug.Log("SPEED OVER");
             break;  
-
-
         }
-
     }
 }
 

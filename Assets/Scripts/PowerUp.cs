@@ -10,7 +10,6 @@ public class PowerUp : MonoBehaviour
     [SerializeField]
     private float _powerUpSpeed = 3.0f;
     private float _bottomOfScreen = -7.0f;
-
  
     void Update()
     {
@@ -28,6 +27,7 @@ public class PowerUp : MonoBehaviour
         {
             Destroy(this.gameObject);
             Player player = other.transform.GetComponent<Player>();
+
             player.powerUpID = _powerUpID;
             if(player)
             {
@@ -38,17 +38,14 @@ public class PowerUp : MonoBehaviour
                         break;
                     case 1:
                         player.ActivateSpeedBoost();
-                        Debug.Log("SPEED Powerup");
                          break;
                     case 2:
-                        player.ActivateShields();
-                        Debug.Log("SHIELD Powerup");
+                        player.ActivateShields();                        
                          break;
                     default:
                          break;
                 }
-            }
-            
+            }            
         }
     }
 }
