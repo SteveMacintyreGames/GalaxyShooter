@@ -1214,7 +1214,7 @@ MonoBehaviour:
   _powerUps:
   - {fileID: 5157578759746279781, guid: adf97298e794203118b39b6e2f9897b5, type: 3}
   - {fileID: 4675016065397619668, guid: cb932b4109c885395ac58c8b9ed187ee, type: 3}
-  - {fileID: 1043004218837762764, guid: 498682bdc706613e6bc9711718b69965, type: 3}
+  - {fileID: 4675016065397619668, guid: 8c12ffff03404467d8f3a7d80a5acb44, type: 3}
   _enemyHolder: {fileID: 1463605220}
   _timeToWait: 5
 --- !u!4 &1866165844
@@ -1730,6 +1730,18 @@ PrefabInstance:
       propertyPath: laser_Clip
       value: 
       objectReference: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
+    - target: {fileID: 4689441993901063445, guid: 32d441f46f595f30882c2e1010a8edf7, type: 3}
+      propertyPath: _laser_Clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
+    - target: {fileID: 4689441993901063445, guid: 32d441f46f595f30882c2e1010a8edf7, type: 3}
+      propertyPath: _thrust_Clip
+      value: 
+      objectReference: {fileID: 8300000, guid: f2422dd5daf87ec48bcccce065f515c5, type: 3}
+    - target: {fileID: 4689441993901063445, guid: 32d441f46f595f30882c2e1010a8edf7, type: 3}
+      propertyPath: _explosion_Clip
+      value: 
+      objectReference: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc, type: 3}
     - target: {fileID: 4689441993901063445, guid: 32d441f46f595f30882c2e1010a8edf7, type: 3}
       propertyPath: rocket_Thrust_Clip
       value: 

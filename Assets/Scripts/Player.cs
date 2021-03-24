@@ -19,14 +19,18 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private GameObject _laserPrefab;
-    public AudioClip laser_Clip;
-    public AudioClip rocket_Thrust_Clip;
+    [SerializeField]
+    private AudioClip _laser_Clip;
+    [SerializeField]
+    private AudioClip _thrust_Clip;
+    [SerializeField]
+    private AudioClip _explosion_Clip;
 
     private GameObject _rightThruster;
     private GameObject _leftThruster;
 
-    [SerializeField]
-    private int _playerLives = 3;
+    
+    public int _playerLives = 3;
 
     private SpawnManager _spawnManager;   
 
@@ -51,16 +55,26 @@ public class Player : MonoBehaviour
     private UIManager _uiManager;
     private GameManager _gameManager;
 
-    AudioSource audio;
+    AudioSource _audioSource;
 
 
     
 
     void Start()
     {   
-        audio = GetComponent<AudioSource>();
+        _audioSource = GetComponent<AudioSource>();
+        if(!_audioSource){
+            Debug.LogError("AudioSource in the Player is null");
+        }
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        if(!_spawnManager)
+        {
+            Debug.LogError("Spawn Manager in the Player is null");
+        }
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
+        if (!_gameManager){
+            Debug.LogError("Game Manager in the Player is null");
+        }
         _rightThruster = GameObject.Find("Right_Thruster");
         _leftThruster = GameObject.Find("Left_Thruster");
         _thruster = GameObject.Find("Thruster");
@@ -108,10 +122,10 @@ public class Player : MonoBehaviour
         
         if(Input.anyKey)
         {
-            if(!audio.isPlaying)
+            if(!_audioSource.isPlaying)
             {
-                audio.clip = rocket_Thrust_Clip;
-                audio.Play();
+                //_audioSource.clip = _thrust_Clip;
+                //_audioSource.Play();
             }
 
             if(Input.GetKey(KeyCode.Space))
@@ -122,7 +136,7 @@ public class Player : MonoBehaviour
         }else
         {
             _isMoving = false;
-            audio.Stop();
+            //_audioSource.Stop();
         }
 
         if(_isMoving){
@@ -170,8 +184,8 @@ public class Player : MonoBehaviour
             Vector3 offset = new Vector3(0f,.8f,0f);
             Instantiate(_laserPrefab, transform.position+offset, Quaternion.identity);
         }
-        audio.clip = laser_Clip;
-        audio.Play();
+        _audioSource.clip = _laser_Clip;
+        _audioSource.Play();
     }
 
     public void Damage()
@@ -193,7 +207,8 @@ public class Player : MonoBehaviour
             _gameManager.GameOver();
             _uiManager.GameOverText();
             _spawnManager.OnPlayerDeath();
-            Destroy(this.gameObject);
+            PlayExplosionSound();
+            Destroy(this.gameObject,1);
         }
     }
 
@@ -249,6 +264,12 @@ public class Player : MonoBehaviour
     {
         _score+=points; 
         _uiManager.UpdateScore(_score);       
+    }
+
+    public void PlayExplosionSound()
+    {
+        _audioSource.clip = _explosion_Clip;
+        _audioSource.Play();
     }
 
 
