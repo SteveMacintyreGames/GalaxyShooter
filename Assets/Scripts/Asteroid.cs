@@ -8,12 +8,13 @@ public class Asteroid : MonoBehaviour
     float _speed = -5f;
     [SerializeField]
     private GameObject _explosion;
+    private SpawnManager _spawnManager;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
     }
 
     // Update is called once per frame
@@ -32,6 +33,7 @@ public class Asteroid : MonoBehaviour
         if(other.CompareTag("Laser"))
         {
             GameObject kaboom = Instantiate(_explosion,transform.position,Quaternion.identity);
+            _spawnManager.StartSpawning();
             Destroy(this.gameObject,.40f);
             Destroy(other.gameObject);
         }

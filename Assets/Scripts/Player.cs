@@ -13,8 +13,14 @@ public class Player : MonoBehaviour
     private float _fireRate = 0.5f;
     private float _canFire = -1f;
 
+    private GameObject _thruster;
+    private bool _isMoving;
+
     [SerializeField]
     private GameObject _laserPrefab;
+
+    private GameObject _rightThruster;
+    private GameObject _leftThruster;
 
     [SerializeField]
     private int _playerLives = 3;
@@ -42,12 +48,19 @@ public class Player : MonoBehaviour
     private UIManager _uiManager;
     private GameManager _gameManager;
 
+
     
 
     void Start()
     {   
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
+        _rightThruster = GameObject.Find("Right_Thruster");
+        _leftThruster = GameObject.Find("Left_Thruster");
+        _thruster = GameObject.Find("Thruster");
+        _thruster.gameObject.SetActive(false);
+        _rightThruster.gameObject.SetActive(false);
+        _leftThruster.gameObject.SetActive(false);
         _shield.SetActive(false);       
 
         if(_spawnManager == null)
@@ -72,10 +85,37 @@ public class Player : MonoBehaviour
     void Update()
     {
        CalculateMovement();
+       CheckFireButton();
+       TurnThrustersOn();
+    }
+
+    void CheckFireButton()
+    {
        if(Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
        {
            FireLaser();
        }
+    }
+
+    void TurnThrustersOn()
+    {
+        if(Input.anyKey)
+        {
+            if(Input.GetKey(KeyCode.Space))
+            {
+                return;
+            }
+            _isMoving = true;
+        }else
+        {
+            _isMoving = false;
+        }
+
+        if(_isMoving){
+            _thruster.gameObject.SetActive(true);
+        }else{
+            _thruster.gameObject.SetActive(false);
+        }
     }
 
     void CalculateMovement()
@@ -123,8 +163,10 @@ public class Player : MonoBehaviour
             return;
         }
         _playerLives --;
+        
         _uiManager.UpdateLives(_playerLives);
 
+    DamageShip();
 
         if(_playerLives < 1)
         {
@@ -132,6 +174,21 @@ public class Player : MonoBehaviour
             _uiManager.GameOverText();
             _spawnManager.OnPlayerDeath();
             Destroy(this.gameObject);
+        }
+    }
+
+    private void DamageShip()
+    {
+            switch(_playerLives)
+        {
+            case 2:
+            _leftThruster.gameObject.SetActive(true);
+            break;
+            case 1:
+            _rightThruster.gameObject.SetActive(true);
+            break;
+            default:
+            break;
         }
     }
 
