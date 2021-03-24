@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _powerUpTimer = 5.0f;
 
+    //Borders of screen. Player cannot cross them.
     private float _maxHeight, _minHeight, _minWidth, _maxWidth;
     [SerializeField]
     private float _fireRate = 0.5f;
@@ -18,6 +19,8 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private GameObject _laserPrefab;
+    public AudioClip laser_Clip;
+    public AudioClip rocket_Thrust_Clip;
 
     private GameObject _rightThruster;
     private GameObject _leftThruster;
@@ -48,11 +51,14 @@ public class Player : MonoBehaviour
     private UIManager _uiManager;
     private GameManager _gameManager;
 
+    AudioSource audio;
+
 
     
 
     void Start()
     {   
+        audio = GetComponent<AudioSource>();
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
         _rightThruster = GameObject.Find("Right_Thruster");
@@ -99,8 +105,15 @@ public class Player : MonoBehaviour
 
     void TurnThrustersOn()
     {
+        
         if(Input.anyKey)
         {
+            if(!audio.isPlaying)
+            {
+                audio.clip = rocket_Thrust_Clip;
+                audio.Play();
+            }
+
             if(Input.GetKey(KeyCode.Space))
             {
                 return;
@@ -109,12 +122,17 @@ public class Player : MonoBehaviour
         }else
         {
             _isMoving = false;
+            audio.Stop();
         }
 
         if(_isMoving){
+            
+            
             _thruster.gameObject.SetActive(true);
+
         }else{
             _thruster.gameObject.SetActive(false);
+           
         }
     }
 
@@ -152,6 +170,8 @@ public class Player : MonoBehaviour
             Vector3 offset = new Vector3(0f,.8f,0f);
             Instantiate(_laserPrefab, transform.position+offset, Quaternion.identity);
         }
+        audio.clip = laser_Clip;
+        audio.Play();
     }
 
     public void Damage()
