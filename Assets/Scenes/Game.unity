@@ -1743,6 +1743,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc, type: 3}
     - target: {fileID: 4689441993901063445, guid: 32d441f46f595f30882c2e1010a8edf7, type: 3}
+      propertyPath: _explosion_anim
+      value: 
+      objectReference: {fileID: 6733522616298831898, guid: 4f4791a18dafef503a32fc9a1ccf4827, type: 3}
+    - target: {fileID: 4689441993901063445, guid: 32d441f46f595f30882c2e1010a8edf7, type: 3}
       propertyPath: rocket_Thrust_Clip
       value: 
       objectReference: {fileID: 8300000, guid: f2422dd5daf87ec48bcccce065f515c5, type: 3}

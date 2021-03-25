@@ -25,6 +25,8 @@ public class Player : MonoBehaviour
     private AudioClip _thrust_Clip;
     [SerializeField]
     private AudioClip _explosion_Clip;
+    [SerializeField]
+    private GameObject _explosion_anim;
 
     private GameObject _rightThruster;
     private GameObject _leftThruster;
@@ -204,11 +206,13 @@ public class Player : MonoBehaviour
 
         if(_playerLives < 1)
         {
+            Instantiate(_explosion_anim, transform.position, Quaternion.identity);
             _gameManager.GameOver();
             _uiManager.GameOverText();
             _spawnManager.OnPlayerDeath();
             PlayExplosionSound();
             Destroy(this.gameObject,1);
+            
         }
     }
 
