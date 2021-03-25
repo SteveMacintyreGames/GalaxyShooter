@@ -94,10 +94,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 3037272111978654834}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c4d598aacee004b4a3e05c5996f2b75, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c0db31c6d0a337e68da0ae9fea33a5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemy_Laser_Speed: 8.5
+  _speed: 8
+  _isEnemyLaser: 1
 --- !u!61 &4406697490498808780
 BoxCollider2D:
   m_ObjectHideFlags: 0

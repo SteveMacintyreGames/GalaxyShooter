@@ -35,7 +35,6 @@ public class Asteroid : MonoBehaviour
         if(other.CompareTag("Laser"))
         {
             GameObject kaboom = Instantiate(_explosion,transform.position,Quaternion.identity);
-            _player.PlayExplosionSound();
             _spawnManager.StartSpawning();
             Destroy(this.gameObject,.40f);
             Destroy(other.gameObject);

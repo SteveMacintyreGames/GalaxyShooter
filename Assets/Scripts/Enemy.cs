@@ -11,8 +11,12 @@ public class Enemy : MonoBehaviour
     private float _leftBorder = -9;
     private float _rightBorder = 9;
     private bool _isExploding;
-    private float _timeToShoot;
     private int _playerLives;
+
+    private float _fireRate = 3.0f;
+    private float _canFire = -1;
+
+
 
 
     Player _player;
@@ -46,13 +50,24 @@ public class Enemy : MonoBehaviour
         {
             Debug.LogError("The Animator inside Enemy is Null");
         }
-
-        StartCoroutine("PewPew");
     }
 
     void Update()
     {
         CalculateMovement();
+
+        if (Time.time > _canFire)
+        {
+            _fireRate = Random.Range(3f,7f);
+            _canFire = Time.time + _fireRate;
+            GameObject enemyLaser = Instantiate(_enemyLaser, transform.position, Quaternion.identity);
+            Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
+            for (int i=0; i<lasers.Length; i++)
+            {
+                lasers[i].AssignEnemyLaser();
+            }
+            //Debug.Break();
+        }
     }
 
     void CalculateMovement()
@@ -72,7 +87,7 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        StopCoroutine("PewPew");
+       
         if(other.CompareTag("Player"))
         {            
             Player player = other.transform.GetComponent<Player>();
@@ -108,14 +123,5 @@ public class Enemy : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-    IEnumerator PewPew()
-    {
-        while(true)
-        {
-        _timeToShoot = Random.Range(1,4);
-        yield return new WaitForSeconds (_timeToShoot);
-        Instantiate(_enemyLaser, transform.position, Quaternion.identity);
-        }
 
-    }
 }
