@@ -93,7 +93,7 @@ public class Player : MonoBehaviour
         transform.position = new Vector3(0,0,0);
         _maxHeight =  0f;
         _minHeight = -3.8f;
-        _maxWidth  =  10f;
+        _maxWidth  =  9f;
         _minWidth  = -_maxWidth;
         _speedBoost = 1f;
 
@@ -107,6 +107,7 @@ public class Player : MonoBehaviour
     void Update()
     {
        CalculateMovement();
+       CheckBorders();
        CheckFireButton();
        TurnThrustersOn();
     }
@@ -157,7 +158,10 @@ public class Player : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
         transform.Translate(new Vector3(horizontalInput, verticalInput,0)*_speed * _speedBoost * Time.deltaTime);
-        
+    }
+
+    void CheckBorders()
+    {
         if (transform.position.y > _maxHeight)
         {
             transform.position = new Vector3(transform.position.x, _maxHeight, 0);
@@ -170,7 +174,7 @@ public class Player : MonoBehaviour
             transform.position = new Vector3(_maxWidth, transform.position.y,0);
         }else if(transform.position.x < _minWidth)
         {
-            transform.position = new Vector3(_maxWidth, transform.position.y,0);
+            transform.position = new Vector3(_minWidth, transform.position.y,0);
         }
     }
 
@@ -211,6 +215,7 @@ public class Player : MonoBehaviour
             _uiManager.GameOverText();
             _spawnManager.OnPlayerDeath();
             PlayExplosionSound();
+            gameObject.SetActive(false);
             Destroy(this.gameObject,1);
             
         }

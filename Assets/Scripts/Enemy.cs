@@ -26,6 +26,10 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private GameObject _enemyLaser;
 
+    [SerializeField]
+    private AudioClip _enemyLaser_Clip;
+    private AudioClip _explosion_Clip;
+
     void Start()
     {
         _enemySpeed = Random.Range(1f,6f);
@@ -50,6 +54,8 @@ public class Enemy : MonoBehaviour
         {
             Debug.LogError("The Animator inside Enemy is Null");
         }
+
+        _explosion_Clip = _audioSource.clip;
     }
 
     void Update()
@@ -66,7 +72,8 @@ public class Enemy : MonoBehaviour
             {
                 lasers[i].AssignEnemyLaser();
             }
-            //Debug.Break();
+            _audioSource.clip = _enemyLaser_Clip;
+            _audioSource.Play();
         }
     }
 
@@ -112,8 +119,10 @@ public class Enemy : MonoBehaviour
     private void DestroyEnemyShip()
     {        
         _enemySpeed = 0;
+        _canFire = 999999999;
         _isExploding=true;
         _anim.SetTrigger("onEnemyDeath");
+        _audioSource.clip = _explosion_Clip;
         _audioSource.Play();
         
     }
