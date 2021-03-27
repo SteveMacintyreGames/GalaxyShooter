@@ -6,17 +6,18 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField]
     private float _enemySpeed;
+    private float _fireRate = 3.0f;
+    private float _canFire = -1;
+    private bool _isExploding;
+
+    //Screen Borders
     private float _bottomScreen = -6f;
     private float _topOfScreen = 8f;
     private float _leftBorder = -9;
     private float _rightBorder = 9;
-    private bool _isExploding;
+
+    
     private int _playerLives;
-
-    private float _fireRate = 3.0f;
-    private float _canFire = -1;
-
-
 
 
     Player _player;
@@ -32,10 +33,10 @@ public class Enemy : MonoBehaviour
 
     void Start()
     {
-        _enemySpeed = Random.Range(1f,6f);
-        
+        _enemySpeed = Random.Range(1f,6f);        
 
         _player = GameObject.Find("Player").GetComponent<Player>();
+        
         if(!_player)
         {
             Debug.LogError("The Player inside Enemy is Null");
@@ -61,7 +62,30 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         CalculateMovement();
+        FireLasers();
+    }
 
+    void CalculateMovement()
+    {
+        transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
+
+        if(transform.position.y < _bottomScreen)
+        {
+            //If the enemy isn't exploding, then it can respawn at the top of the screen.
+            //I know it isn't useful after Jonathans solution but leaving it in just
+            //in case of a fluke.
+
+            if(!_isExploding)
+            {
+                float randomX = Random.Range(_leftBorder,_rightBorder);
+                transform.position = new Vector3(randomX, _topOfScreen, transform.position.z);
+            }
+
+        }
+    }
+
+    void FireLasers()
+    {
         if (Time.time > _canFire)
         {
             _fireRate = Random.Range(3f,7f);
@@ -74,21 +98,6 @@ public class Enemy : MonoBehaviour
             }
             _audioSource.clip = _enemyLaser_Clip;
             _audioSource.Play();
-        }
-    }
-
-    void CalculateMovement()
-    {
-        transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
-
-        if(transform.position.y < _bottomScreen)
-        {
-            if(!_isExploding)
-            {
-                float randomX = Random.Range(_leftBorder,_rightBorder);
-                transform.position = new Vector3(randomX, _topOfScreen, transform.position.z);
-            }
-
         }
     }
 
@@ -107,8 +116,7 @@ public class Enemy : MonoBehaviour
         }
 
         if(other.CompareTag("Laser"))
-        {
-            
+        {            
             Destroy(other.gameObject);
             Destroy(GetComponent<Collider2D>());            
             _player.AddScore(Random.Range (5,11));
@@ -119,7 +127,7 @@ public class Enemy : MonoBehaviour
     private void DestroyEnemyShip()
     {        
         _enemySpeed = 0;
-        _canFire = 999999999;
+        _canFire = 999999999;//REALLY make sure it doesn't fire again.
         _isExploding=true;
         _anim.SetTrigger("onEnemyDeath");
         _audioSource.clip = _explosion_Clip;
@@ -129,6 +137,7 @@ public class Enemy : MonoBehaviour
 
     public void RemoveGameObjectFromScene()
     {
+        //public method called from within the enemy explosion animation.
         Destroy(this.gameObject);
     }
 

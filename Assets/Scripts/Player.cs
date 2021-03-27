@@ -15,7 +15,8 @@ public class Player : MonoBehaviour
     private float _canFire = -1f;
 
     private GameObject _thruster;
-    private bool _isMoving;
+    //[HideInInspector]
+    public bool _isMoving;
 
     [SerializeField]
     private GameObject _laserPrefab;
@@ -49,6 +50,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _shield;
 
+    [HideInInspector]
     public int powerUpID;
 
     [SerializeField]
@@ -77,9 +79,12 @@ public class Player : MonoBehaviour
         if (!_gameManager){
             Debug.LogError("Game Manager in the Player is null");
         }
+
+        //Thruster sprites and turning them off.
         _rightThruster = GameObject.Find("Right_Thruster");
         _leftThruster = GameObject.Find("Left_Thruster");
         _thruster = GameObject.Find("Thruster");
+
         _thruster.gameObject.SetActive(false);
         _rightThruster.gameObject.SetActive(false);
         _leftThruster.gameObject.SetActive(false);
@@ -90,6 +95,7 @@ public class Player : MonoBehaviour
             Debug.LogError("The SpawnManager is NULL!");
         }
 
+        //Initializing the players position
         transform.position = new Vector3(0,0,0);
         _maxHeight =  0f;
         _minHeight = -3.8f;
@@ -125,31 +131,17 @@ public class Player : MonoBehaviour
         
         if(Input.anyKey)
         {
-            if(!_audioSource.isPlaying)
-            {
-                //_audioSource.clip = _thrust_Clip;
-                //_audioSource.Play();
-            }
-
             if(Input.GetKey(KeyCode.Space))
             {
                 return;
             }
             _isMoving = true;
+            _thruster.gameObject.SetActive(true);
+
         }else
         {
             _isMoving = false;
-            //_audioSource.Stop();
-        }
-
-        if(_isMoving){
-            
-            
-            _thruster.gameObject.SetActive(true);
-
-        }else{
             _thruster.gameObject.SetActive(false);
-           
         }
     }
 
@@ -179,7 +171,7 @@ public class Player : MonoBehaviour
     }
 
     void FireLaser()
-    {       
+    {
         _canFire = Time.time + _fireRate;
         if(_isTripleShotActive)
         {
