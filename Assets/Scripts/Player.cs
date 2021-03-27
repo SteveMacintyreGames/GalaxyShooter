@@ -17,6 +17,8 @@ public class Player : MonoBehaviour
     private GameObject _thruster;
     //[HideInInspector]
     public bool _isMoving;
+    [SerializeField]
+    private AudioSource _thrusterSound;
 
     [SerializeField]
     private GameObject _laserPrefab;
@@ -61,7 +63,8 @@ public class Player : MonoBehaviour
 
     AudioSource _audioSource;
 
-
+    //Challenge 1: Increase rate of speed when players press shift key
+    //Reset back to normal when key is released.
     
 
     void Start()
@@ -116,6 +119,7 @@ public class Player : MonoBehaviour
        CheckBorders();
        CheckFireButton();
        TurnThrustersOn();
+       CheckBooster();
     }
 
     void CheckFireButton()
@@ -137,11 +141,13 @@ public class Player : MonoBehaviour
             }
             _isMoving = true;
             _thruster.gameObject.SetActive(true);
+            _thrusterSound.Play();
 
         }else
         {
             _isMoving = false;
             _thruster.gameObject.SetActive(false);
+            _thrusterSound.Stop();
         }
     }
 
@@ -150,6 +156,18 @@ public class Player : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
         transform.Translate(new Vector3(horizontalInput, verticalInput,0)*_speed * _speedBoost * Time.deltaTime);
+    }
+
+    void CheckBooster()
+    {
+        if(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+        {
+            _speedBoost = 3f;//setting speedboost to 3 so it's noticable. Normal would be 1.3 or 1.5
+        }
+        else
+        {
+            _speedBoost = 1f;
+        }
     }
 
     void CheckBorders()
