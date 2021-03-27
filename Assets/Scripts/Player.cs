@@ -256,15 +256,21 @@ public class Player : MonoBehaviour
 
     private void Shields()
     {
+        if (_shieldPower <=0)
+        {
+            _shieldPower = 0;
+        }
         Color tmp = _shield.GetComponent<SpriteRenderer>().color;
             switch(_shieldPower)
             {
-                //_shield is shield GameObject                
+                //_shield is shield GameObject 
+                //               
                 case 3:
                 //strong
                 //normal sprite
                 tmp.a = 1f;
                 _shield.GetComponent<SpriteRenderer>().color = tmp;
+                _shield.GetComponent<SpriteRenderer>().color = Color.white;
                 _isShieldActive = true;
                 break;
                 case 2:
