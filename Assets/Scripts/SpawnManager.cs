@@ -22,11 +22,6 @@ public class SpawnManager : MonoBehaviour
     private bool _stopSpawning = false;
     private int _powerUpId;
 
-    void Start()
-    {
-
-    }
-
     public void StartSpawning()
     {
         StartCoroutine(SpawnEnemyRoutine());

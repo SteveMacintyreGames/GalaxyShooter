@@ -51,6 +51,7 @@ public class Player : MonoBehaviour
     private bool _isShieldActive = false;
     [SerializeField]
     private GameObject _shield;
+    private int _shieldPower;
 
     [HideInInspector]
     public int powerUpID;
@@ -63,8 +64,10 @@ public class Player : MonoBehaviour
 
     AudioSource _audioSource;
 
-    //Challenge 1: Increase rate of speed when players press shift key
-    //Reset back to normal when key is released.
+    //Challenge 2: Shield Strength - Visualize the strength of the shield
+    // This can be done through UI or color changing of the shield
+    // allow for 3 hits on the shield to accomodate visualization
+
     
 
     void Start()
@@ -91,7 +94,10 @@ public class Player : MonoBehaviour
         _thruster.gameObject.SetActive(false);
         _rightThruster.gameObject.SetActive(false);
         _leftThruster.gameObject.SetActive(false);
-        _shield.SetActive(false);       
+        
+        //Initiate Shields
+        _shield.SetActive(false);
+        _shieldPower = 3;       
 
         if(_spawnManager == null)
         {
@@ -120,6 +126,7 @@ public class Player : MonoBehaviour
        CheckFireButton();
        TurnThrustersOn();
        CheckBooster();
+       Shields();
     }
 
     void CheckFireButton()
@@ -208,10 +215,11 @@ public class Player : MonoBehaviour
     {
         if (_isShieldActive)
         {
-            _isShieldActive = false;
-            _shield.SetActive(false);
+            _shieldPower --;
             return;
         }
+
+            
         _playerLives --;
         
         _uiManager.UpdateLives(_playerLives);
@@ -246,6 +254,49 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void Shields()
+    {
+        Color tmp = _shield.GetComponent<SpriteRenderer>().color;
+            switch(_shieldPower)
+            {
+                //_shield is shield GameObject                
+                case 3:
+                //strong
+                //normal sprite
+                tmp.a = 1f;
+                _shield.GetComponent<SpriteRenderer>().color = tmp;
+                _isShieldActive = true;
+                break;
+                case 2:
+                //getting weak
+                //half the sprites alpha
+                //change color to purple
+                tmp.a = 0.5f;
+                _shield.GetComponent<SpriteRenderer>().color = tmp;
+                _shield.GetComponent<SpriteRenderer>().color = Color.magenta;
+                _isShieldActive = true;
+                break;
+                case 1:
+                //about to die
+                //quarter the alpha
+                //change the color to red
+                tmp.a = .1f;
+                _shield.GetComponent<SpriteRenderer>().color = tmp;
+                _shield.GetComponent<SpriteRenderer>().color = Color.red;
+                _isShieldActive = true;
+                break;
+                case 0:
+                _isShieldActive = false;
+                _shield.SetActive(false);
+                break;
+
+            }
+            //_isShieldActive = false;
+            //_shield.SetActive(false);
+            return;
+ 
+    }
+
     public void ActivateTripleShot()
     {
         _isTripleShotActive = true;
@@ -260,6 +311,7 @@ public class Player : MonoBehaviour
 
     public void ActivateShields()
     {
+        _shieldPower = 3;
         _isShieldActive = true;
         _shield.SetActive(true);
     }
