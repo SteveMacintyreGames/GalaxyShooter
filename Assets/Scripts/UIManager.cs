@@ -18,20 +18,41 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Text _restartGameText;
 
+    //Ammo count information
+    private Text _ammoCountText;
+    private int _ammoCount;
+    private int _maxAmmo;
+    [SerializeField]
+    private Image _ammoHealthBar;
+
     private bool _canRestart;
+
+    Player player;
 
 
     void Awake()
-    {
+    {   
+        player = GameObject.Find("Player").GetComponent<Player>();
+        _maxAmmo = _ammoCount = player.ammoCount;
         _gameOverText.gameObject.SetActive(false);
         _restartGameText.gameObject.SetActive(false);
+        _ammoCountText = GameObject.Find("AmmoText").GetComponent<Text>();
     }
     void Start()
     {
-        scoreText.text = "Score: 0";        
+        UpdateAmmoCount();
+        UpdateScore(0);
     }
 
 
+    public void UpdateAmmoCount()
+    {
+        _ammoCount = player.ammoCount;
+        _ammoCountText.text = "Ammo: "+_ammoCount.ToString();
+
+        _ammoHealthBar.fillAmount =  (float)_ammoCount/(float)_maxAmmo;
+        Debug.Log("Ammo : "+_ammoCount + " Max Ammo: "+_maxAmmo);
+    }
 
     public void UpdateScore(int playerScore)
     {

@@ -13,6 +13,12 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _fireRate = 0.5f;
     private float _canFire = -1f;
+    
+    public int ammoCount = 15;
+    private Sprite _laserHealthBar;
+
+    [SerializeField]
+    private AudioClip _ammoBuzzer;
 
     private GameObject _thruster;
     //[HideInInspector]
@@ -44,6 +50,9 @@ public class Player : MonoBehaviour
     private GameObject _tripleShot;
     [SerializeField]
     private bool _isTripleShotActive;
+
+
+
     [SerializeField]
     private float _speed = 5f;
     private float _speedBoost = 2f;
@@ -117,6 +126,8 @@ public class Player : MonoBehaviour
         {
             Debug.LogError("UIManager is null");
         }
+
+        
     }
 
     void Update()
@@ -136,6 +147,7 @@ public class Player : MonoBehaviour
            FireLaser();
        }
     }
+
 
     void TurnThrustersOn()
     {
@@ -197,18 +209,26 @@ public class Player : MonoBehaviour
 
     void FireLaser()
     {
-        _canFire = Time.time + _fireRate;
-        if(_isTripleShotActive)
+        if(ammoCount > 0)
         {
-            Instantiate(_tripleShot, transform.position, Quaternion.identity);
+            ammoCount --;
+            _uiManager.UpdateAmmoCount();
+            _canFire = Time.time + _fireRate;
+            if(_isTripleShotActive)
+            {
+                Instantiate(_tripleShot, transform.position, Quaternion.identity);
 
-        }else
-        {
-            Vector3 offset = new Vector3(0f,.8f,0f);
-            Instantiate(_laserPrefab, transform.position+offset, Quaternion.identity);
+            }else
+            {
+                Vector3 offset = new Vector3(0f,.8f,0f);
+                Instantiate(_laserPrefab, transform.position+offset, Quaternion.identity);
+            }
+            _audioSource.clip = _laser_Clip;
+            _audioSource.Play();
+        }else{
+            _audioSource.clip = _ammoBuzzer;
+            _audioSource.Play();
         }
-        _audioSource.clip = _laser_Clip;
-        _audioSource.Play();
     }
 
     public void Damage()
