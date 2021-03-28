@@ -13,8 +13,6 @@ public class PowerUp : MonoBehaviour
 
     [SerializeField]
     private AudioClip _audioClip;
-
-
  
     void Update()
     {
@@ -47,6 +45,9 @@ public class PowerUp : MonoBehaviour
                     case 2:
                         player.ActivateShields();                        
                          break;
+                    case 3:
+                        player.AddAmmo();
+                        break;
                     default:
                          break;
                 }

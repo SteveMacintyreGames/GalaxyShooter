@@ -33,9 +33,9 @@ public class UIManager : MonoBehaviour
     void Awake()
     {   
         player = GameObject.Find("Player").GetComponent<Player>();
-        _maxAmmo = _ammoCount = player.ammoCount;
         _gameOverText.gameObject.SetActive(false);
         _restartGameText.gameObject.SetActive(false);
+        _maxAmmo = _ammoCount = player.ammoCount;
         _ammoCountText = GameObject.Find("AmmoText").GetComponent<Text>();
     }
     void Start()

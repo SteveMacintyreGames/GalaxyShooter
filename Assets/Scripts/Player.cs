@@ -369,7 +369,11 @@ public class Player : MonoBehaviour
         _audioSource.Play();
     }
 
-
+    public void AddAmmo()
+    {
+        ammoCount += 15;
+        _uiManager.UpdateAmmoCount();
+    }
 }
 
 
