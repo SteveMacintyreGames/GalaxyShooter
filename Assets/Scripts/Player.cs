@@ -371,7 +371,7 @@ public class Player : MonoBehaviour
 
     public void AddAmmo()
     {
-        ammoCount += 15;
+        ammoCount = 15;
         _uiManager.UpdateAmmoCount();
     }
 }
