@@ -62,6 +62,8 @@ public class Player : MonoBehaviour
     private GameObject _shield;
     private int _shieldPower;
 
+    private GameObject _healthUp;
+
     [HideInInspector]
     public int powerUpID;
 
@@ -106,12 +108,16 @@ public class Player : MonoBehaviour
         
         //Initiate Shields
         _shield.SetActive(false);
-        _shieldPower = 3;       
+        _shieldPower = 0;       
 
         if(_spawnManager == null)
         {
             Debug.LogError("The SpawnManager is NULL!");
         }
+        
+        //Initiate Player healthup animation
+        _healthUp = GameObject.Find("HealthUpAnim");
+        _healthUp.SetActive(false);
 
         //Initializing the players position
         transform.position = new Vector3(0,0,0);
@@ -263,10 +269,16 @@ public class Player : MonoBehaviour
     {
             switch(_playerLives)
         {
+            case 3:
+            _leftThruster.gameObject.SetActive(false);
+            _rightThruster.gameObject.SetActive(false);
+            break;
             case 2:
             _leftThruster.gameObject.SetActive(true);
+            _rightThruster.gameObject.SetActive(false);
             break;
             case 1:
+            _leftThruster.gameObject.SetActive(true);
             _rightThruster.gameObject.SetActive(true);
             break;
             default:
@@ -279,6 +291,7 @@ public class Player : MonoBehaviour
         if (_shieldPower <=0)
         {
             _shieldPower = 0;
+            
         }
         Color tmp = _shield.GetComponent<SpriteRenderer>().color;
             switch(_shieldPower)
@@ -317,8 +330,6 @@ public class Player : MonoBehaviour
                 break;
 
             }
-            //_isShieldActive = false;
-            //_shield.SetActive(false);
             return;
  
     }
@@ -342,6 +353,30 @@ public class Player : MonoBehaviour
         _shield.SetActive(true);
     }
 
+    public void AddAmmo()
+    {
+        ammoCount = 15;
+        _uiManager.UpdateAmmoCount();
+    }
+
+    public void AddHealth()
+    {
+        _healthUp.SetActive(true);
+        _healthUp.GetComponent<Animator>().Play("HealthUp");
+        Invoke ("TurnOffHealthUp", .5f);
+        _playerLives ++;
+        if(_playerLives >=3)
+        {
+            _playerLives = 3;            
+        }
+        _uiManager.UpdateLives(_playerLives);
+        DamageShip();
+    }
+
+    private void TurnOffHealthUp()
+    {
+        _healthUp.SetActive(false);
+    }
     IEnumerator FinishPowerUp()
     {
         yield return new WaitForSeconds(_powerUpTimer);
@@ -369,11 +404,7 @@ public class Player : MonoBehaviour
         _audioSource.Play();
     }
 
-    public void AddAmmo()
-    {
-        ammoCount = 15;
-        _uiManager.UpdateAmmoCount();
-    }
+
 }
 
 
