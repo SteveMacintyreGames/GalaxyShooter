@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HomingMissile : MonoBehaviour
 {
-    public GameObject target;
+    private GameObject target;
     Rigidbody2D rb;
     private float _thrustSpeed = 5f;
     private float rotationSpeed = 75f;
@@ -39,6 +39,7 @@ public class HomingMissile : MonoBehaviour
 
         if(target)
         {
+        
         var dir = (target.transform.position - transform.position).normalized;
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         var rotateToTarget = Quaternion.AngleAxis(angle, Vector3.forward);
@@ -49,6 +50,8 @@ public class HomingMissile : MonoBehaviour
         else
         {
             transform.Translate(Vector3.forward * _thrustSpeed * Time.deltaTime);
+            //I know this should be Vector3.Up but the forward seems to be a happy accident and makes
+            //the missiles look pretty cool by going into the z axis.
 
         /*
         var dir = (DummyEnemy.transform.position - transform.position).normalized;
@@ -57,7 +60,7 @@ public class HomingMissile : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, rotateToTarget,Time.deltaTime * rotationSpeed);
         rb.velocity = new Vector2(dir.x*_thrustSpeed/10,dir.y*_thrustSpeed/10);
         */
-        Debug.Log(target);
+        
         }
 
         

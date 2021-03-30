@@ -39,6 +39,12 @@ public class Player : MonoBehaviour
 
     private GameObject _rightThruster;
     private GameObject _leftThruster;
+    [SerializeField]
+    public float _thrusterPower;
+    private float _thrusterUseSpeed;
+    private float _thrusterRefillSpeed;
+     private bool _canMove;
+
 
     
     public int _playerLives = 3;
@@ -55,8 +61,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _Missile;
     [SerializeField]
-    private bool _isMissileActive;
-    public int missileCount = 5;
+    public int missileCount = 0;
 
 
 
@@ -142,6 +147,10 @@ public class Player : MonoBehaviour
 
         ammoCount = 15;
         missileCount = 0;
+        _thrusterPower = 100f;
+        _thrusterUseSpeed = 20f;
+        _thrusterRefillSpeed = 35f;
+        _canMove = true;
 
         _uiManager.UpdateAmmoCount();
         _uiManager.UpdateMissileCount();
@@ -151,17 +160,32 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        CheckKeyPress();
        CalculateMovement();
        CheckBorders();
-       CheckFireButton();
        TurnThrustersOn();
        CheckBooster();
        Shields();
+       ThrusterRefill();
     }
-
-    void CheckFireButton()
+    void CheckKeyPress()
     {
-       if(Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
+        //check the movement keys
+        if(Input.GetKey("up") || Input.GetKey("down") ||
+         Input.GetKey("left") || Input.GetKey("right") || 
+         Input.GetKey("w") || Input.GetKey("a") || 
+         Input.GetKey("s") || Input.GetKey("d"))
+        {
+            _isMoving = true;   
+        }
+        else
+        {
+            _isMoving = false;
+            StartCoroutine(ThrusterRefill());
+        }
+
+        //Check the fire button
+        if(Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
        {
            switch (_weapon) //0 laser, 1 missiles
            {
@@ -173,35 +197,63 @@ public class Player : MonoBehaviour
                 break;
            }
        }
+
+
     }
 
 
     void TurnThrustersOn()
     {
         
-        if(Input.anyKey)
-        {
-            if(Input.GetKey(KeyCode.Space))
-            {
-                return;
-            }
-            _isMoving = true;
-            _thruster.gameObject.SetActive(true);
+        if(_isMoving && _canMove)
+        {   _thruster.gameObject.SetActive(true);
             _thrusterSound.Play();
 
+            _thrusterPower -= _thrusterUseSpeed * Time.deltaTime;
+            if(_thrusterPower < 0)
+            {
+                _thrusterPower = 0;
+                _canMove = false;
+            }
+            _uiManager.UpdateThrusterCount();
         }else
         {
-            _isMoving = false;
             _thruster.gameObject.SetActive(false);
             _thrusterSound.Stop();
         }
     }
 
+    IEnumerator ThrusterRefill()
+    {
+        
+        yield return new WaitForSeconds(1f);
+        if(!_isMoving)
+        {
+            _thrusterPower += _thrusterRefillSpeed * Time.deltaTime;
+            if (_thrusterPower >= 100)
+            {
+                _thrusterPower = 100;
+            }
+            _uiManager.UpdateThrusterCount();
+            _canMove=true;
+            
+        }
+        else
+        {
+            yield return new WaitForSeconds(.5f);
+            _canMove=true;
+        }
+    }
+
     void CalculateMovement()
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
-        transform.Translate(new Vector3(horizontalInput, verticalInput,0)*_speed * _speedBoost * Time.deltaTime);
+        if(_canMove)
+        {
+            float horizontalInput = Input.GetAxis("Horizontal");
+            float verticalInput = Input.GetAxis("Vertical");
+            transform.Translate(new Vector3(horizontalInput, verticalInput,0)
+            *_speed * _speedBoost * Time.deltaTime);
+        }
     }
 
     void CheckBooster()

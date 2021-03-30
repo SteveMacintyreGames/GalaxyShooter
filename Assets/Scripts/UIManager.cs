@@ -30,6 +30,9 @@ public class UIManager : MonoBehaviour
 
     private bool _canRestart;
 
+    private float _thrusterPower;
+    private Image _thrusterPowerBar;
+
     Player player;
 
 
@@ -42,12 +45,14 @@ public class UIManager : MonoBehaviour
         _ammoCountText = GameObject.Find("AmmoText").GetComponent<Text>();
         _missileCountText = GameObject.Find("Missile_Text").GetComponent<Text>();
         _missileCount = player.missileCount;
+        _thrusterPowerBar = GameObject.Find("ThrusterPowerBar").GetComponent<Image>();
     }
     void Start()
     {
         UpdateAmmoCount();
         UpdateMissileCount();
         UpdateScore(0);
+        UpdateThrusterCount();
     }
 
 
@@ -63,6 +68,13 @@ public class UIManager : MonoBehaviour
     {
         _missileCount = player.missileCount;
         _missileCountText.text = "Missiles: " + _missileCount;
+    }
+
+    public void UpdateThrusterCount()
+    {
+        _thrusterPower = player._thrusterPower;
+        _thrusterPowerBar.fillAmount = _thrusterPower/100;
+
     }
 
     public void UpdateScore(int playerScore)
