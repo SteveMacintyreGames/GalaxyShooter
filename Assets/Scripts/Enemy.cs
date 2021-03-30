@@ -124,7 +124,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void DestroyEnemyShip()
+    public void DestroyEnemyShip()
     {        
         _enemySpeed = 0;
         _canFire = 999999999;//REALLY make sure it doesn't fire again.

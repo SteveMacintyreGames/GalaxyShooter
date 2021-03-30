@@ -43,13 +43,20 @@ public class Player : MonoBehaviour
     
     public int _playerLives = 3;
 
-    private SpawnManager _spawnManager;   
+    private SpawnManager _spawnManager;
+    private int _weapon = 0; // 0 regular lasers, 1 missiles.
 
     //Powerups
     [SerializeField]
     private GameObject _tripleShot;
     [SerializeField]
     private bool _isTripleShotActive;
+
+    [SerializeField]
+    private GameObject _Missile;
+    [SerializeField]
+    private bool _isMissileActive;
+    public int missileCount = 5;
 
 
 
@@ -133,6 +140,12 @@ public class Player : MonoBehaviour
             Debug.LogError("UIManager is null");
         }
 
+        ammoCount = 15;
+        missileCount = 0;
+
+        _uiManager.UpdateAmmoCount();
+        _uiManager.UpdateMissileCount();
+
         
     }
 
@@ -150,7 +163,15 @@ public class Player : MonoBehaviour
     {
        if(Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
        {
-           FireLaser();
+           switch (_weapon) //0 laser, 1 missiles
+           {
+            case 0:
+                FireLaser();
+                break;
+            case 1:
+                FireMissile();
+                break;
+           }
        }
     }
 
@@ -222,6 +243,8 @@ public class Player : MonoBehaviour
             _canFire = Time.time + _fireRate;
             if(_isTripleShotActive)
             {
+                ammoCount -= 2;
+                _uiManager.UpdateAmmoCount();
                 Instantiate(_tripleShot, transform.position, Quaternion.identity);
 
             }else
@@ -234,6 +257,22 @@ public class Player : MonoBehaviour
         }else{
             _audioSource.clip = _ammoBuzzer;
             _audioSource.Play();
+        }
+    }
+
+    void FireMissile()
+    {
+        if (missileCount > 0)
+        {
+            missileCount --;
+            _uiManager.UpdateMissileCount();
+
+            _canFire = Time.time + _fireRate;
+            Vector3 offset = new Vector3(0f,.8f,0f);
+            Instantiate(_Missile, transform.position+offset, Quaternion.identity);
+        }else{
+            _uiManager.UpdateMissileCount();
+            _weapon = 0;
         }
     }
 
@@ -296,29 +335,23 @@ public class Player : MonoBehaviour
         Color tmp = _shield.GetComponent<SpriteRenderer>().color;
             switch(_shieldPower)
             {
-                //_shield is shield GameObject 
-                //               
+ 
                 case 3:
-                //strong
-                //normal sprite
+
                 tmp.a = 1f;
                 _shield.GetComponent<SpriteRenderer>().color = tmp;
                 _shield.GetComponent<SpriteRenderer>().color = Color.white;
                 _isShieldActive = true;
                 break;
                 case 2:
-                //getting weak
-                //half the sprites alpha
-                //change color to purple
+
                 tmp.a = 0.5f;
                 _shield.GetComponent<SpriteRenderer>().color = tmp;
                 _shield.GetComponent<SpriteRenderer>().color = Color.magenta;
                 _isShieldActive = true;
                 break;
                 case 1:
-                //about to die
-                //quarter the alpha
-                //change the color to red
+
                 tmp.a = .1f;
                 _shield.GetComponent<SpriteRenderer>().color = tmp;
                 _shield.GetComponent<SpriteRenderer>().color = Color.red;
@@ -371,6 +404,12 @@ public class Player : MonoBehaviour
         }
         _uiManager.UpdateLives(_playerLives);
         DamageShip();
+    }
+    public void ActivateMissiles()
+    {
+        _weapon = 1;
+        missileCount = 5;
+        _uiManager.UpdateMissileCount();
     }
 
     private void TurnOffHealthUp()

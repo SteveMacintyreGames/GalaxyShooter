@@ -25,6 +25,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Image _ammoHealthBar;
 
+    private Text _missileCountText;
+    private int _missileCount;
+
     private bool _canRestart;
 
     Player player;
@@ -37,10 +40,13 @@ public class UIManager : MonoBehaviour
         _restartGameText.gameObject.SetActive(false);
         _maxAmmo = _ammoCount = player.ammoCount;
         _ammoCountText = GameObject.Find("AmmoText").GetComponent<Text>();
+        _missileCountText = GameObject.Find("Missile_Text").GetComponent<Text>();
+        _missileCount = player.missileCount;
     }
     void Start()
     {
         UpdateAmmoCount();
+        UpdateMissileCount();
         UpdateScore(0);
     }
 
@@ -52,6 +58,11 @@ public class UIManager : MonoBehaviour
 
         _ammoHealthBar.fillAmount =  (float)_ammoCount/(float)_maxAmmo;
         Debug.Log("Ammo : "+_ammoCount + " Max Ammo: "+_maxAmmo);
+    }
+    public void UpdateMissileCount()
+    {
+        _missileCount = player.missileCount;
+        _missileCountText.text = "Missiles: " + _missileCount;
     }
 
     public void UpdateScore(int playerScore)
