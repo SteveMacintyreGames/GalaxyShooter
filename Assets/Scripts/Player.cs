@@ -86,15 +86,16 @@ public class Player : MonoBehaviour
     private GameManager _gameManager;
 
     AudioSource _audioSource;
-
-    //Challenge 2: Shield Strength - Visualize the strength of the shield
-    // This can be done through UI or color changing of the shield
-    // allow for 3 hits on the shield to accomodate visualization
-
-    
+    public ShakeCamera shakeCamera;
 
     void Start()
     {   
+        shakeCamera = GameObject.Find("CameraShaker").GetComponent<ShakeCamera>();
+        if(!shakeCamera)
+        {
+            Debug.LogError("CameraShaker is null");
+        }
+
         _audioSource = GetComponent<AudioSource>();
         if(!_audioSource){
             Debug.LogError("AudioSource in the Player is null");
@@ -328,8 +329,15 @@ public class Player : MonoBehaviour
         }
     }
 
+    void ShakeCam(float TimeToShake)
+    {
+        shakeCamera.InitiateShake(TimeToShake);
+    }
+
     public void Damage()
     {
+        ShakeCam(.3f);
+        
         if (_isShieldActive)
         {
             _shieldPower --;
