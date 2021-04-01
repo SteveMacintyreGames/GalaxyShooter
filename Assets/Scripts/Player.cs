@@ -39,11 +39,11 @@ public class Player : MonoBehaviour
 
     private GameObject _rightThruster;
     private GameObject _leftThruster;
-    [SerializeField]
+
     public float _thrusterPower;
     private float _thrusterUseSpeed;
     private float _thrusterRefillSpeed;
-     private bool _canMove;
+    private bool _canMove;
 
 
     

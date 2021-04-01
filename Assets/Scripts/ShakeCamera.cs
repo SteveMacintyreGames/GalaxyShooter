@@ -6,7 +6,8 @@ public class ShakeCamera : MonoBehaviour
 { 
     public Camera mainCamera;
     private float _timeToShake;
-    private float _shakeLimit;   
+    private float _shakeLimit;
+    private float _cameraZ = -12.45f;   
 
 
     // Start is called before the first frame update
@@ -23,7 +24,7 @@ public class ShakeCamera : MonoBehaviour
         _timeToShake -= Time.deltaTime;
         if (_timeToShake==0)
         {
-            mainCamera.transform.position = new Vector3(0,0,-10);
+            mainCamera.transform.position = new Vector3(0,0,_cameraZ);
             StopCoroutine("CameraShake");
         }
         if (_timeToShake <0)
@@ -35,8 +36,8 @@ public class ShakeCamera : MonoBehaviour
     {
         _timeToShake=_incomingTimeToShake;
         StartCoroutine("CameraShake");
-        Debug.Log(_timeToShake);
     }
+    
     IEnumerator CameraShake()
     {
         if (_timeToShake>0)
@@ -45,7 +46,7 @@ public class ShakeCamera : MonoBehaviour
 
         var x = Random.Range(-_shakeLimit, _shakeLimit);
         var y = Random.Range(-_shakeLimit, _shakeLimit);
-        var newPos = new Vector3(x,y,-10f);
+        var newPos = new Vector3(x,y,_cameraZ);
         mainCamera.transform.position = newPos;
         
         StartCoroutine("CameraShake");
