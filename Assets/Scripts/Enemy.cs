@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour
 
     private float _fireRate = 3.0f;
     private float _canFire = -1;
-    private bool _isExploding;
+    private bool _isExploding = false;
 
     //Screen Borders
     private float _bottomScreen = -6f;
@@ -22,6 +22,10 @@ public class Enemy : MonoBehaviour
 
     
     private int _playerLives;
+
+    float _x,_y,_z;
+    float _amp;
+    float _freq;
 
 
     Player _player;
@@ -66,6 +70,10 @@ public class Enemy : MonoBehaviour
         }
 
         _explosion_Clip = _audioSource.clip;
+
+        //Enemy 2 initialize side by side movement
+        _amp = Random.Range(.1f,2.5f);
+        _freq = Random.Range(.5f,4.5f);
     }
 
     void Update()
@@ -85,6 +93,10 @@ public class Enemy : MonoBehaviour
             case 1:
                 Enemy1Movement();
             break;
+            case 2:
+                Enemy2Movement();
+            break;
+
             default:
                 Enemy0Movement();
             break;
@@ -121,6 +133,7 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        Vector3 _currentPos = transform.position;
        
         if(other.CompareTag("Player"))
         {            
@@ -146,7 +159,7 @@ public class Enemy : MonoBehaviour
     {        
         _enemySpeed = 0;
         _canFire = 999999999;//REALLY make sure it doesn't fire again.
-        _isExploding=true;
+        _isExploding = true;
         _anim.SetTrigger("onEnemyDeath");
         _audioSource.clip = _explosion_Clip;
         _audioSource.Play();
@@ -162,7 +175,12 @@ public class Enemy : MonoBehaviour
     void Enemy0Movement()
     {
         Move();
-        if (transform.position.y < -6f)
+        CheckBottom();
+    }
+
+    void CheckBottom()
+    {
+         if (transform.position.y < -6f)
         {
             PickNewTopPosition();
         }
@@ -195,6 +213,27 @@ public class Enemy : MonoBehaviour
     {
         transform.position = new Vector3 (Random.Range(-6.5f,6.5f),Random.Range(8f,8.9f),0);
     }
+
+    void Enemy2Movement()
+    {
+
+         _y = transform.position.y;
+         _x = Mathf.Cos(Time.time * _freq)*_amp;
+         _z = transform.position.z;
+
+            if(_isExploding)
+            {
+                _x=0;
+            }
+            transform.position = new Vector3 (_x,_y,_z);
+            Move();
+            CheckBottom();
+            
+
+
+    }
+
+
 
 
 }
