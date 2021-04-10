@@ -6,6 +6,10 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField]
     private float _enemySpeed;
+    [SerializeField]
+    private int _enemyID;
+    [SerializeField]
+
     private float _fireRate = 3.0f;
     private float _canFire = -1;
     private bool _isExploding;
@@ -30,6 +34,11 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private AudioClip _enemyLaser_Clip;
     private AudioClip _explosion_Clip;
+
+    private  bool _halfReached = false;
+    bool _topPos = false;
+
+    Vector3 _direction = new Vector3(0,-1,0);
 
     void Start()
     {
@@ -61,28 +70,37 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        CalculateMovement();
+        CalculateMovementByID();
         FireLasers();
     }
 
-    void CalculateMovement()
+    void CalculateMovementByID()
     {
-        transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
-
-        if(transform.position.y < _bottomScreen)
+        switch(_enemyID)
         {
-            //If the enemy isn't exploding, then it can respawn at the top of the screen.
-            //I know it isn't useful after Jonathans solution but leaving it in just
-            //in case of a fluke.
-
-            if(!_isExploding)
-            {
-                float randomX = Random.Range(_leftBorder,_rightBorder);
-                transform.position = new Vector3(randomX, _topOfScreen, transform.position.z);
-            }
-
+            case 0:
+                Enemy0Movement();
+               
+            break;
+            case 1:
+                Enemy1Movement();
+            break;
+            default:
+                Enemy0Movement();
+            break;
         }
+        
+
     }
+
+    void Move()
+    {
+
+        transform.Translate(_direction * _enemySpeed * Time.deltaTime);
+    }
+
+
+
 
     void FireLasers()
     {
@@ -139,6 +157,43 @@ public class Enemy : MonoBehaviour
     {
         //public method called from within the enemy explosion animation.
         Destroy(this.gameObject);
+    }
+
+    void Enemy0Movement()
+    {
+        Move();
+        if (transform.position.y < -6f)
+        {
+            PickNewTopPosition();
+        }
+    }
+
+    void Enemy1Movement()
+    {    
+        Move(); 
+        //if enemy reaches halfway down the screen
+        if(transform.position.y < 1.3)
+        {
+
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(180,0,0), 400*Time.deltaTime);
+            //_direction = new Vector3(0,1,0);
+        }
+        //turn around and move up.
+        //if ship reaches top border, pick a new position and move down.
+        if (transform.position.y > 9)
+        {
+            
+            PickNewTopPosition();
+            transform.rotation = Quaternion.Euler(new Vector3(0,0,0));
+
+            //_direction = new Vector3(0,-1,0);
+        }
+            
+    }
+
+    void PickNewTopPosition()
+    {
+        transform.position = new Vector3 (Random.Range(-6.5f,6.5f),Random.Range(8f,8.9f),0);
     }
 
 
