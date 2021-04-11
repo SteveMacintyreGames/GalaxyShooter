@@ -8,6 +8,11 @@ public class Laser : MonoBehaviour
     private float _speed = 8f;
     private bool _isEnemyLaser = false;
 
+    void Start()
+    {
+        Invoke("DestroyLasers",5f);
+    }
+
     void Update()
     {
         if(!_isEnemyLaser)
@@ -17,6 +22,7 @@ public class Laser : MonoBehaviour
         {
             MoveDown();
         }
+        
     }
 
     void MoveUp()

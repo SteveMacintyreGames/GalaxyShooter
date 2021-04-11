@@ -7,6 +7,8 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     [SerializeField]
+    Canvas _canvas;
+    [SerializeField]
     private Text scoreText;
     [SerializeField]
     private Image _livesImg;
@@ -24,6 +26,12 @@ public class UIManager : MonoBehaviour
     private int _maxAmmo;
     [SerializeField]
     private Image _ammoHealthBar;
+    [SerializeField]
+    private Image _ammoIcon;
+    [SerializeField]
+    private Transform _AmmoHolder;
+
+    private Image[] ammoBits;
 
     private Text _missileCountText;
     private int _missileCount;
@@ -41,28 +49,54 @@ public class UIManager : MonoBehaviour
         player = GameObject.Find("Player").GetComponent<Player>();
         _gameOverText.gameObject.SetActive(false);
         _restartGameText.gameObject.SetActive(false);
+
         _maxAmmo = _ammoCount = player.ammoCount;
+        ammoBits = new Image[_maxAmmo];
         _ammoCountText = GameObject.Find("AmmoText").GetComponent<Text>();
+
         _missileCountText = GameObject.Find("Missile_Text").GetComponent<Text>();
         _missileCount = player.missileCount;
         _thrusterPowerBar = GameObject.Find("ThrusterPowerBar").GetComponent<Image>();
     }
     void Start()
     {
+        InitializeAmmoCounter();
         UpdateAmmoCount();
         UpdateMissileCount();
         UpdateScore(0);
         UpdateThrusterCount();
     }
 
+    void InitializeAmmoCounter()
+    {
+        for (int i=0; i < _maxAmmo; i++)
+        {
+            ammoBits[i] = Instantiate(_ammoIcon, new Vector2(0,0), Quaternion.identity);
+            ammoBits[i].transform.SetParent(_AmmoHolder);
+            ammoBits[i].transform.localPosition = new Vector3(0,0,0);
+            ammoBits[i].transform.localPosition = new Vector3(i*4,0,0);
+            ammoBits[i].enabled = false;
+        }
+    }
 
     public void UpdateAmmoCount()
     {
+      
         _ammoCount = player.ammoCount;
-        _ammoCountText.text = "Ammo: "+_ammoCount.ToString();
+        _ammoCountText.text = "Ammo: "+_ammoCount.ToString();        
+        //turn off all the bullets
+        for (int i=0; i < _maxAmmo; i++)
+        {
+            ammoBits[i].enabled = false;
+        }
+        //turn all the bullets on until the end of _ammoCount.
+        for(int i = 0; i < _ammoCount; i++)
+        {
+            ammoBits[i].enabled = true;
+        }
 
-        _ammoHealthBar.fillAmount =  (float)_ammoCount/(float)_maxAmmo;
-        Debug.Log("Ammo : "+_ammoCount + " Max Ammo: "+_maxAmmo);
+        //_ammoHealthBar.fillAmount =  (float)_ammoCount/(float)_maxAmmo;
+        //Debug.Log("Ammo : "+_ammoCount + " Max Ammo: "+_maxAmmo);
     }
     public void UpdateMissileCount()
     {

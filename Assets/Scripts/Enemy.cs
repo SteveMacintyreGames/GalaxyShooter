@@ -24,7 +24,9 @@ public class Enemy : MonoBehaviour
     private int _playerLives;
 
     float _x,_y,_z;
+    [SerializeField]
     float _amp;
+    [SerializeField]
     float _freq;
 
 
@@ -42,7 +44,11 @@ public class Enemy : MonoBehaviour
     private  bool _halfReached = false;
     bool _topPos = false;
 
+    Vector3 _originalPosition;
+
     Vector3 _direction = new Vector3(0,-1,0);
+
+    public bool isMovingRight;
 
     void Start()
     {
@@ -70,10 +76,46 @@ public class Enemy : MonoBehaviour
         }
 
         _explosion_Clip = _audioSource.clip;
+    switch (_enemyID)
+        {
+            case 2:
+            //Enemy 2 initialize side by side movement
+            _amp = Random.Range(.1f,2.5f);
+            Debug.Log("Enemy2 amp");
+            _freq = Random.Range(.5f,4.5f);
+            Debug.Log("Enemy2 freq");
+            break;
 
-        //Enemy 2 initialize side by side movement
-        _amp = Random.Range(.1f,2.5f);
-        _freq = Random.Range(.5f,4.5f);
+            case 3:
+            _amp = Random.Range (.2f, .4f);
+            Debug.Log("Enemy 3 Amp "+_amp);
+            _freq = Random.Range(8f,10f);
+            Debug.Log("Enemy3 Freq "+_freq);
+            
+            
+            var boolNum = Random.Range(0,2);
+            if (boolNum>0)
+            {isMovingRight = true;
+            }
+            else
+            {
+                {isMovingRight = false;}
+            }
+
+            if (isMovingRight)
+            {
+                transform.position = new Vector2(-10,Random.Range(5,0));
+            }else
+            {
+                transform.position = new Vector2(10, Random.Range(5,0));
+            }    
+            break;
+            default:
+            break;
+        }
+   
+
+
     }
 
     void Update()
@@ -97,6 +139,10 @@ public class Enemy : MonoBehaviour
                 Enemy2Movement();
             break;
 
+            case 3:
+                Enemy3Movement();
+            break;
+
             default:
                 Enemy0Movement();
             break;
@@ -105,9 +151,10 @@ public class Enemy : MonoBehaviour
 
     }
 
-    void Move()
+    void Move(Vector2 Direction, float speed)
     {
-
+        _direction = Direction;
+        _enemySpeed = speed;
         transform.Translate(_direction * _enemySpeed * Time.deltaTime);
     }
 
@@ -160,6 +207,7 @@ public class Enemy : MonoBehaviour
         _enemySpeed = 0;
         _canFire = 999999999;//REALLY make sure it doesn't fire again.
         _isExploding = true;
+        GetComponent<SpriteRenderer>().color = Color.white;
         _anim.SetTrigger("onEnemyDeath");
         _audioSource.clip = _explosion_Clip;
         _audioSource.Play();
@@ -174,7 +222,7 @@ public class Enemy : MonoBehaviour
 
     void Enemy0Movement()
     {
-        Move();
+        Move(new Vector2(0,-1),_enemySpeed);
         CheckBottom();
     }
 
@@ -188,7 +236,7 @@ public class Enemy : MonoBehaviour
 
     void Enemy1Movement()
     {    
-        Move(); 
+        Move(new Vector2(0,-1),_enemySpeed); 
         //if enemy reaches halfway down the screen
         if(transform.position.y < 1.3)
         {
@@ -226,13 +274,49 @@ public class Enemy : MonoBehaviour
                 _x=0;
             }
             transform.position = new Vector3 (_x,_y,_z);
-            Move();
-            CheckBottom();
-            
-
-
+            Move(new Vector2(0,-1),_enemySpeed);
+            CheckBottom();        
     }
 
+    void Enemy3Movement()
+    {
+
+         _y = Mathf.Sin(Time.time * _freq)*_amp;
+         _x = Mathf.Cos(Time.time * _freq)*_amp;
+         _z = transform.position.z;
+
+
+            if(_isExploding)
+            {
+                _x=0;
+                _y=0;
+            }
+
+            transform.position += new Vector3 (_x,_y,_z);
+            
+            if (isMovingRight)
+            {
+                _direction = new Vector2(1,0);
+            }else
+            {
+                _direction = new Vector2(-1,0);
+            }
+            Move(_direction, _enemySpeed);
+        Enemy3CheckBorders();
+    
+    }
+
+    void Enemy3CheckBorders()
+    {
+        if(isMovingRight && transform.position.x >10)
+        {
+            isMovingRight = !isMovingRight;
+        }else if (!isMovingRight && transform.position.x <-10)
+        {
+            isMovingRight = !isMovingRight;
+        }
+
+    }
 
 
 

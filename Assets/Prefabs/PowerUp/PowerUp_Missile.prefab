@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1301744661265067945}
   - component: {fileID: 5682923727455277422}
   - component: {fileID: 6581385661578486215}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PowerUp_Missile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
