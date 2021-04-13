@@ -204,7 +204,7 @@ public class Enemy : MonoBehaviour
     }
 
     public void DestroyEnemyShip()
-    {   transform.position = _currentPos;     
+    {     
         _enemySpeed = 0;
         _canFire = 999999999;//REALLY make sure it doesn't fire again.
         _isExploding = true;
