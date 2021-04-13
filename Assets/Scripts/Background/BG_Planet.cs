@@ -15,8 +15,9 @@ public class BG_Planet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(Vector3.down * 1* Time.deltaTime); 
-        if(transform.position.y < -300)
+        if(_isMoving)
+        transform.Translate(Vector3.down * .05f* Time.deltaTime); 
+        if(transform.position.y < -55)
         {
             StartCoroutine(ReachBottom());
         }
@@ -26,7 +27,7 @@ public class BG_Planet : MonoBehaviour
     {
             _isMoving=false;
             yield return new WaitForSeconds(Random.Range(60f,360f));
-            transform.position = new Vector2(Random.Range(-220f,220f),300f);
+            transform.position = new Vector2(Random.Range(-220f,220f),40f);
             _isMoving=true;
     }
 }

@@ -14,7 +14,7 @@ public class Player : MonoBehaviour
     private float _fireRate = 0.5f;
     private float _canFire = -1f;
     
-    public int ammoCount = 15;
+    public int ammoCount;
     private Sprite _laserHealthBar;
 
     [SerializeField]
@@ -307,9 +307,16 @@ public class Player : MonoBehaviour
             }
             _audioSource.clip = _laser_Clip;
             _audioSource.Play();
-        }else{
+        }
+        else
+        {
             _audioSource.clip = _ammoBuzzer;
             _audioSource.Play();
+        }
+        
+        if (ammoCount<=0)
+        {
+            ammoCount = 0;
         }
     }
 

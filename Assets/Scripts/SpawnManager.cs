@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SpawnManager : MonoBehaviour
 {
@@ -22,8 +23,33 @@ public class SpawnManager : MonoBehaviour
     private bool _stopSpawning = false;
     private int _powerUpId;
 
+
+[SerializeField]
+    private Text _levelText;
+
+[SerializeField]
+    private int _level;
+    private int _spawnEnemyNumber;
+    private float _timeToSpawn;
+    
+    [SerializeField]
+    private int _maxEnemies;
+    
+    [SerializeField]
+    private int _enemiesSpawned=0;
+
+    void Start()
+    {
+        _level = 1;
+        _timeToSpawn = 4f;
+        _maxEnemies = 3;
+        _levelText.gameObject.SetActive(false);
+    }
+
+
     public void StartSpawning()
     {
+        StartCoroutine(ShowLevel());
         StartCoroutine(SpawnEnemyRoutine());
         StartCoroutine(SpawnPowerUpRoutine());
     }
@@ -32,15 +58,47 @@ public class SpawnManager : MonoBehaviour
     {
         while(!_stopSpawning)
         {   
-            yield return new WaitForSeconds(3f);         
-            float randomX = Random.Range(-xPos,xPos);
-            Vector3 posToSpawn = new Vector3(randomX,Ypos,0);
-            GameObject newEnemy = Instantiate (_enemyPrefab[Random.Range(0,_enemyPrefab.Length)],posToSpawn, Quaternion.identity);
-            newEnemy.transform.parent = _enemyHolder.transform;
+            
+            for (int i = 0; i < _maxEnemies; i++)
+            {
+                yield return new WaitForSeconds(_timeToSpawn);         
+                float randomX = Random.Range(-xPos,xPos);
+                Vector3 posToSpawn = new Vector3(randomX,Ypos,0);
+                ChooseEnemy();
+                GameObject newEnemy = Instantiate (_enemyPrefab[Random.Range(0,_spawnEnemyNumber)],posToSpawn, Quaternion.identity);
+                _enemiesSpawned++;
+                newEnemy.transform.parent = _enemyHolder.transform;
+            }
+
+            if(_enemiesSpawned >= _maxEnemies)
+            {                
+                _enemiesSpawned=0;
+                _timeToSpawn -= .3f;
+                _maxEnemies += (int)_level/2;
+                _level ++;
+                StartCoroutine(ShowLevel());
+            }
             yield return new WaitForSeconds(_timeToWait);            
         }
     }
-    
+    IEnumerator ShowLevel()
+    {
+        _levelText.text = "Level: "+_level;
+        _levelText.gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(1f);
+
+        _levelText.gameObject.SetActive(false);
+
+    }
+    void ChooseEnemy()
+    {
+             _spawnEnemyNumber = _level;
+        if (_spawnEnemyNumber > _enemyPrefab.Length)
+        {
+            _spawnEnemyNumber = _enemyPrefab.Length;
+        }
+    }
     IEnumerator SpawnPowerUpRoutine()
     {
         while(!_stopSpawning)
