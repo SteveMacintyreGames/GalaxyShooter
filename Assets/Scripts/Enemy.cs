@@ -19,9 +19,10 @@ public class Enemy : MonoBehaviour
     private float _topOfScreen = 8f;
     private float _leftBorder = -9;
     private float _rightBorder = 9;
-
     
     private int _playerLives;
+
+    private Vector3 _currentPos; 
 
     float _x,_y,_z;
     [SerializeField]
@@ -180,7 +181,7 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Vector3 _currentPos = transform.position;
+        _currentPos = transform.position;
        
         if(other.CompareTag("Player"))
         {            
@@ -196,14 +197,14 @@ public class Enemy : MonoBehaviour
         if(other.CompareTag("Laser"))
         {            
             Destroy(other.gameObject);
-            Destroy(GetComponent<Collider2D>());            
-            _player.AddScore(Random.Range (5,11));
+            Destroy(gameObject.GetComponent<Collider2D>());            
+            _player.AddScore(Random.Range (7,11));
             DestroyEnemyShip();
         }
     }
 
     public void DestroyEnemyShip()
-    {        
+    {   transform.position = _currentPos;     
         _enemySpeed = 0;
         _canFire = 999999999;//REALLY make sure it doesn't fire again.
         _isExploding = true;
@@ -265,17 +266,22 @@ public class Enemy : MonoBehaviour
     void Enemy2Movement()
     {
 
-         _y = transform.position.y;
-         _x = Mathf.Cos(Time.time * _freq)*_amp;
-         _z = transform.position.z;
+         
+         var lastX = _x;
 
             if(_isExploding)
             {
-                _x=0;
+                _x=lastX;
             }
+            else
+            {
+            _y = transform.position.y;
+            _x = Mathf.Cos(Time.time * _freq)*_amp;
+            _z = transform.position.z; 
             transform.position = new Vector3 (_x,_y,_z);
             Move(new Vector2(0,-1),_enemySpeed);
-            CheckBottom();        
+            CheckBottom();
+            }        
     }
 
     void Enemy3Movement()

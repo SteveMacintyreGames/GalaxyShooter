@@ -227,7 +227,7 @@ public class Player : MonoBehaviour
     IEnumerator ThrusterRefill()
     {
         
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(.5f);
         if(!_isMoving)
         {
             _thrusterPower += _thrusterRefillSpeed * Time.deltaTime;
@@ -297,8 +297,13 @@ public class Player : MonoBehaviour
             if(_isTripleShotActive)
             {
                 ammoCount -= 2;
+                if (ammoCount<0)
+                {
+                    ammoCount = 0;
+                }
                 _uiManager.UpdateAmmoCount();
                 Instantiate(_tripleShot, transform.position, Quaternion.identity);
+
 
             }else
             {
@@ -314,10 +319,7 @@ public class Player : MonoBehaviour
             _audioSource.Play();
         }
         
-        if (ammoCount<=0)
-        {
-            ammoCount = 0;
-        }
+        
     }
 
     void FireMissile()

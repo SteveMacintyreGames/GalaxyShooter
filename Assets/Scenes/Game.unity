@@ -11354,13 +11354,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyPrefab:
   - {fileID: 796289087931787887, guid: b10d97057e42086fbb5c776cbdd74ba9, type: 3}
-  - {fileID: 796289087931787887, guid: b10d97057e42086fbb5c776cbdd74ba9, type: 3}
-  - {fileID: 796289087931787887, guid: b10d97057e42086fbb5c776cbdd74ba9, type: 3}
   - {fileID: 2610621915521009440, guid: 1100f6ccbfec39a06b698902e3b67f84, type: 3}
+  - {fileID: 796289087931787887, guid: b10d97057e42086fbb5c776cbdd74ba9, type: 3}
   - {fileID: 2610621915521009440, guid: 1100f6ccbfec39a06b698902e3b67f84, type: 3}
   - {fileID: 2610621915521009440, guid: 1100f6ccbfec39a06b698902e3b67f84, type: 3}
   - {fileID: 7079708357676049128, guid: dfd8693722db33cf4be2ad52da28ca34, type: 3}
   - {fileID: 7079708357676049128, guid: dfd8693722db33cf4be2ad52da28ca34, type: 3}
+  - {fileID: 2610621915521009440, guid: 1100f6ccbfec39a06b698902e3b67f84, type: 3}
   - {fileID: 2882634509199076259, guid: ac94210f186795ddfb27583411323092, type: 3}
   - {fileID: 2610621915521009440, guid: 1100f6ccbfec39a06b698902e3b67f84, type: 3}
   - {fileID: 7079708357676049128, guid: dfd8693722db33cf4be2ad52da28ca34, type: 3}
