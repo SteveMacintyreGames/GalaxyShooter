@@ -8,10 +8,29 @@ public class Laser : MonoBehaviour
     private float _speed = 8f;
     private bool _isEnemyLaser = false;
 
+    private GameObject _target;
+    private Vector3 _laserHomingDirection;
+    private Vector3 _laserDirection;
+
+    public bool _negativePowerupActivated;
+
+
+
     void Start()
     {
         Invoke("DestroyLasers",5f);
+        
+        if(GameManager.Instance._negativePowerupActivated)
+        {
+        _target = GameObject.FindWithTag("Player");
+        _laserHomingDirection = (_target.transform.position - transform.position).normalized;
+        _laserDirection =  new Vector3(_laserHomingDirection.x,-1,0) * _speed * Time.deltaTime;
+        }else
+        {
+            _laserDirection = Vector3.down * _speed * Time.deltaTime;
+        }
     }
+
 
     void Update()
     {
@@ -38,7 +57,8 @@ public class Laser : MonoBehaviour
 
         void MoveDown()
     {
-        transform.Translate(Vector3.down * _speed * Time.deltaTime);
+
+        transform.Translate(_laserDirection);
         
         //Destroy the laser or the parent if tripleshot
         if (transform.position.y >= 8)
@@ -74,4 +94,6 @@ public class Laser : MonoBehaviour
             }
         }
     }
+
+
 }

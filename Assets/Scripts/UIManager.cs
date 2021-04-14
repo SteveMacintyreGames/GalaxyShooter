@@ -6,6 +6,19 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    private static UIManager _instance;
+    public static UIManager Instance
+    {
+        get
+        {      
+            if(_instance == null)
+            {
+                Debug.LogError("UIManager is null!");
+            }      
+            return _instance;            
+        }
+    }
+
     [SerializeField]
     Canvas _canvas;
     [SerializeField]
@@ -45,7 +58,15 @@ public class UIManager : MonoBehaviour
 
 
     void Awake()
-    {   
+    {   if(Instance == null)
+    {
+        _instance = this;
+        Debug.Log("Never mind, UIManager isn't null anymore.");
+    }else
+    {
+        Destroy(gameObject);
+    }
+         
         player = GameObject.Find("Player").GetComponent<Player>();
         _gameOverText.gameObject.SetActive(false);
         _restartGameText.gameObject.SetActive(false);
@@ -80,12 +101,11 @@ public class UIManager : MonoBehaviour
     }
 
     public void UpdateAmmoCount()
-    {
-      
+    {      
         _ammoCount = player.ammoCount;
-        _ammoCountText.text = "Ammo: "+_ammoCount.ToString();        
+        _ammoCountText.text = "Ammo: "+_ammoCount.ToString();      
         //turn off all the bullets
-        for (int i=0; i < _maxAmmo; i++)
+        for (int i=0; i < _maxAmmo ;i++)
         {
             ammoBits[i].enabled = false;
         }

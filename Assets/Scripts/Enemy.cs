@@ -14,11 +14,13 @@ public class Enemy : MonoBehaviour
     private float _canFire = -1;
     private bool _isExploding = false;
 
+    /*
     //Screen Borders
     private float _bottomScreen = -6f;
     private float _topOfScreen = 8f;
     private float _leftBorder = -9;
     private float _rightBorder = 9;
+    */
     
     private int _playerLives;
 
@@ -42,12 +44,11 @@ public class Enemy : MonoBehaviour
     private AudioClip _enemyLaser_Clip;
     private AudioClip _explosion_Clip;
 
-    private  bool _halfReached = false;
-    bool _topPos = false;
-
     Vector3 _originalPosition;
 
     Vector3 _direction = new Vector3(0,-1,0);
+
+
 
     public bool isMovingRight;
 
@@ -82,17 +83,12 @@ public class Enemy : MonoBehaviour
             case 2:
             //Enemy 2 initialize side by side movement
             _amp = Random.Range(.1f,2.5f);
-            Debug.Log("Enemy2 amp");
             _freq = Random.Range(.5f,4.5f);
-            Debug.Log("Enemy2 freq");
             break;
 
             case 3:
             _amp = Random.Range (.2f, .4f);
-            Debug.Log("Enemy 3 Amp "+_amp);
-            _freq = Random.Range(8f,10f);
-            Debug.Log("Enemy3 Freq "+_freq);
-            
+            _freq = Random.Range(8f,10f); 
             
             var boolNum = Random.Range(0,2);
             if (boolNum>0)
@@ -158,9 +154,6 @@ public class Enemy : MonoBehaviour
         _enemySpeed = speed;
         transform.Translate(_direction * _enemySpeed * Time.deltaTime);
     }
-
-
-
 
     void FireLasers()
     {

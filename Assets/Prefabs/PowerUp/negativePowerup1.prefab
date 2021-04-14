@@ -115,7 +115,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.00000047683716, y: -0.09036896}
@@ -165,5 +165,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _powerUpID: -1
-  _powerUpSpeed: 3
-  _audioClip: {fileID: 0}
+  _powerUpSpeed: 2
+  _audioClip: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
+  _enemyLaser: {fileID: 4607562898117239082, guid: 7de166e54c38853bcb407d461f4f1a6f, type: 3}

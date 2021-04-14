@@ -120,6 +120,7 @@ MonoBehaviour:
   _powerUpID: 2
   _powerUpSpeed: 3
   _audioClip: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
+  _enemyLaser: {fileID: 4607562898117239082, guid: 7de166e54c38853bcb407d461f4f1a6f, type: 3}
 --- !u!61 &2218918668434704577
 BoxCollider2D:
   m_ObjectHideFlags: 0

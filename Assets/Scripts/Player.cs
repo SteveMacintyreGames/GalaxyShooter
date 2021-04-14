@@ -81,10 +81,6 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private int _score;
-
-    private UIManager _uiManager;
-    private GameManager _gameManager;
-
     AudioSource _audioSource;
     public ShakeCamera shakeCamera;
 
@@ -104,10 +100,6 @@ public class Player : MonoBehaviour
         if(!_spawnManager)
         {
             Debug.LogError("Spawn Manager in the Player is null");
-        }
-        _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
-        if (!_gameManager){
-            Debug.LogError("Game Manager in the Player is null");
         }
 
         //Thruster sprites and turning them off.
@@ -140,12 +132,6 @@ public class Player : MonoBehaviour
         _minWidth  = -_maxWidth;
         _speedBoost = 1f;
 
-        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
-        if(_uiManager == null)
-        {
-            Debug.LogError("UIManager is null");
-        }
-
         ammoCount = 15;
         missileCount = 0;
         _thrusterPower = 100f;
@@ -153,8 +139,8 @@ public class Player : MonoBehaviour
         _thrusterRefillSpeed = 35f;
         _canMove = true;
 
-        _uiManager.UpdateAmmoCount();
-        _uiManager.UpdateMissileCount();
+        UIManager.Instance.UpdateAmmoCount();
+        UIManager.Instance.UpdateMissileCount();
 
         
     }
@@ -216,7 +202,7 @@ public class Player : MonoBehaviour
                 _thrusterPower = 0;
                 _canMove = false;
             }
-            _uiManager.UpdateThrusterCount();
+            UIManager.Instance.UpdateThrusterCount();
         }else
         {
             _thruster.gameObject.SetActive(false);
@@ -235,7 +221,7 @@ public class Player : MonoBehaviour
             {
                 _thrusterPower = 100;
             }
-            _uiManager.UpdateThrusterCount();
+            UIManager.Instance.UpdateThrusterCount();
             _canMove=true;
             
         }
@@ -292,7 +278,7 @@ public class Player : MonoBehaviour
         if(ammoCount > 0)
         {
             ammoCount --;
-            _uiManager.UpdateAmmoCount();
+            UIManager.Instance.UpdateAmmoCount();
             _canFire = Time.time + _fireRate;
             if(_isTripleShotActive)
             {
@@ -301,7 +287,7 @@ public class Player : MonoBehaviour
                 {
                     ammoCount = 0;
                 }
-                _uiManager.UpdateAmmoCount();
+                UIManager.Instance.UpdateAmmoCount();
                 Instantiate(_tripleShot, transform.position, Quaternion.identity);
 
 
@@ -327,13 +313,13 @@ public class Player : MonoBehaviour
         if (missileCount > 0)
         {
             missileCount --;
-            _uiManager.UpdateMissileCount();
+            UIManager.Instance.UpdateMissileCount();
 
             _canFire = Time.time + _fireRate;
             Vector3 offset = new Vector3(0f,.8f,0f);
             Instantiate(_Missile, transform.position+offset, Quaternion.identity);
         }else{
-            _uiManager.UpdateMissileCount();
+            UIManager.Instance.UpdateMissileCount();
             _weapon = 0;
         }
     }
@@ -356,15 +342,15 @@ public class Player : MonoBehaviour
             
         _playerLives --;
         
-        _uiManager.UpdateLives(_playerLives);
+        UIManager.Instance.UpdateLives(_playerLives);
 
     DamageShip();
 
         if(_playerLives < 1)
         {
             Instantiate(_explosion_anim, transform.position, Quaternion.identity);
-            _gameManager.GameOver();
-            _uiManager.GameOverText();
+            GameManager.Instance.GameOver();
+            UIManager.Instance.GameOverText();
             _spawnManager.OnPlayerDeath();
             PlayExplosionSound();
             gameObject.SetActive(false);
@@ -458,7 +444,7 @@ public class Player : MonoBehaviour
     public void AddAmmo()
     {
         ammoCount = 15;
-        _uiManager.UpdateAmmoCount();
+        UIManager.Instance.UpdateAmmoCount();
     }
 
     public void AddHealth()
@@ -471,14 +457,14 @@ public class Player : MonoBehaviour
         {
             _playerLives = 3;            
         }
-        _uiManager.UpdateLives(_playerLives);
+        UIManager.Instance.UpdateLives(_playerLives);
         DamageShip();
     }
     public void ActivateMissiles()
     {
         _weapon = 1;
         missileCount = 5;
-        _uiManager.UpdateMissileCount();
+        UIManager.Instance.UpdateMissileCount();
     }
 
     private void TurnOffHealthUp()
@@ -503,7 +489,7 @@ public class Player : MonoBehaviour
     public void AddScore(int points)
     {
         _score+=points; 
-        _uiManager.UpdateScore(_score);       
+        UIManager.Instance.UpdateScore(_score);       
     }
 
     public void PlayExplosionSound()

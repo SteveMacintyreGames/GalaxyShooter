@@ -13,6 +13,8 @@ public class PowerUp : MonoBehaviour
 
     [SerializeField]
     private AudioClip _audioClip;
+    [SerializeField]
+
  
     void Update()
     {
@@ -36,6 +38,9 @@ public class PowerUp : MonoBehaviour
             {
                switch(_powerUpID)
                 {
+                    case -1:
+                        GameManager.Instance.ActivateNegativePowerup1();
+                    break;
                     case 0:
                         player.ActivateTripleShot();
                         break;
