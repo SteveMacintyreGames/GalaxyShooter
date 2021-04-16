@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8210307348427032836}
-  - component: {fileID: 3218996496520126324}
   - component: {fileID: 8607973417487095870}
   - component: {fileID: 8944086335752218721}
   - component: {fileID: 7386373676368827432}
@@ -36,23 +35,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3218996496520126324
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 796289087931787887}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78ed6da7ec9fe0eb393a9cc7757b0731, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _enemySpeed: 4
-  _enemyID: 0
-  _fireRate: 3
-  _enemyLaser: {fileID: 8506025685509265935, guid: 52228fdd2e4ac0681be9af8ead9af344, type: 3}
-  _enemyLaser_Clip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
 --- !u!212 &8607973417487095870
 SpriteRenderer:
   m_ObjectHideFlags: 0

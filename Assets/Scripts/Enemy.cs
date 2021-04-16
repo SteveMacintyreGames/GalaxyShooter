@@ -143,10 +143,6 @@ public class Enemy : MonoBehaviour
             _canFire = Time.time + _fireRate;
             GameObject enemyLaser = Instantiate(_enemyLaser, transform.position, Quaternion.identity);
             Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
-            for (int i=0; i<lasers.Length; i++)
-            {
-                lasers[i].AssignEnemyLaser();
-            }
             _audioSource.clip = _enemyLaser_Clip;
             _audioSource.Play();
         }
