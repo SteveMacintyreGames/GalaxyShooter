@@ -123,6 +123,8 @@ public class Enemy2 : MonoBehaviour
         else if(other.CompareTag("Player"))
         {        
             Player.Instance.Damage();
+            _shotsToKill -= 3;
+            DeathCheck();
             //I wanted to subtract -5 every time the player
             //hit the ship, as the ship will have 10-20 hp
             //but the child laser seems to be attached to
@@ -135,6 +137,7 @@ public class Enemy2 : MonoBehaviour
             //I have an inkling as to why it's happening
             //but I still don't know for sure how to fix it.
             //If you put this current code in, the enemy ship will self destruct
+            
        
         } 
 
@@ -144,15 +147,19 @@ public class Enemy2 : MonoBehaviour
   
             _shotsToKill --;
 
-            if(_shotsToKill <1)
-            {
-                DestroyEnemyShip();
-            }
+            DeathCheck();
         }
        
         
     }
 
+    private void DeathCheck()
+    {
+        if(_shotsToKill <1)
+            {
+                DestroyEnemyShip();
+            }
+    }
     public void DestroyEnemyShip()
     {
         _enemySpeed = 0;

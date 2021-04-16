@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 3221387806678680062}
   - component: {fileID: 3221387806678680063}
-  - component: {fileID: 3221387806678680061}
   - component: {fileID: 3221387806678680051}
   - component: {fileID: 3221387806678680060}
   - component: {fileID: 3221387806678680050}
+  - component: {fileID: 1930672938238590832}
   m_Layer: 7
   m_Name: Enemy4
   m_TagString: Enemy
@@ -88,23 +88,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3221387806678680061
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3221387806678680056}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 496aa52b3f8e9b4bb88bb97a16e04d40, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _shotsToKill: 3
-  _enemySpeed: 2
-  _fireCount: 0
-  _enemy2laser: {fileID: 0}
-  _anim2Play: 
 --- !u!58 &3221387806678680051
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -238,6 +221,23 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1930672938238590832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3221387806678680056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 496aa52b3f8e9b4bb88bb97a16e04d40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _shotsToKill: 4
+  _enemySpeed: 3
+  _fireCount: 0
+  _enemy2laser: {fileID: 507129425629961471}
+  _anim2Play: 
 --- !u!1001 &5324198878171033511
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -359,8 +359,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: lazur
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7952870117421136763, guid: e500baad38a6d13dca6eff99e2dcfbf5, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: e500baad38a6d13dca6eff99e2dcfbf5, type: 3}
+--- !u!1 &507129425629961471 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7952870117421136759, guid: e500baad38a6d13dca6eff99e2dcfbf5, type: 3}
+  m_PrefabInstance: {fileID: 7590793784769046408}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &507129425629961468 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7952870117421136756, guid: e500baad38a6d13dca6eff99e2dcfbf5, type: 3}
