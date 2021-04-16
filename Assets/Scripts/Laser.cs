@@ -6,17 +6,13 @@ public class Laser : MonoBehaviour
 {
     [SerializeField]
     private float _speed = 8f;
-    private bool _isEnemyLaser = false;
+    protected bool _isEnemyLaser = false;
 
     private GameObject _target;
     private Vector3 _laserHomingDirection;
     private Vector3 _laserDirection;
 
-    public bool _negativePowerupActivated;
-
-
-
-    void Start()
+    protected virtual void Start()
     {
         Invoke("DestroyLasers",5f);
         
@@ -32,7 +28,7 @@ public class Laser : MonoBehaviour
     }
 
 
-    void Update()
+    protected virtual void Update()
     {
         if(!_isEnemyLaser)
         {
@@ -67,7 +63,7 @@ public class Laser : MonoBehaviour
         }
     }
 
-    void DestroyLasers()
+    protected void DestroyLasers()
     {
             if(transform.parent == null)
             {
@@ -83,7 +79,7 @@ public class Laser : MonoBehaviour
         _isEnemyLaser = true;
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    protected virtual void OnTriggerEnter2D(Collider2D other)
     {
         if(other.CompareTag("Player") && _isEnemyLaser)
         {

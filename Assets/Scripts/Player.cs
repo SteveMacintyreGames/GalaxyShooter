@@ -5,6 +5,18 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    private static Player _instance;
+    public static Player Instance
+    {
+        get {
+            if(_instance == null)
+            {
+                Debug.LogError("Player is NULL");
+            }
+            return _instance;
+        }
+    }
+
     [SerializeField]
     private float _powerUpTimer = 5.0f;
 
@@ -36,6 +48,8 @@ public class Player : MonoBehaviour
     private AudioClip _explosion_Clip;
     [SerializeField]
     private GameObject _explosion_anim;
+    [SerializeField]
+    private GameObject _muzzleFlash;
 
     private GameObject _rightThruster;
     private GameObject _leftThruster;
@@ -84,6 +98,18 @@ public class Player : MonoBehaviour
     AudioSource _audioSource;
     public ShakeCamera shakeCamera;
 
+
+    void Awake()
+    {
+        if(_instance==null)
+        {
+            _instance = this;
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+    }
     void Start()
     {   
         shakeCamera = GameObject.Find("CameraShaker").GetComponent<ShakeCamera>();
@@ -124,6 +150,9 @@ public class Player : MonoBehaviour
         _healthUp = GameObject.Find("HealthUpAnim");
         _healthUp.SetActive(false);
 
+        //turn off the muzzleflash
+        _muzzleFlash.SetActive(false);
+
         //Initializing the players position
         transform.position = new Vector3(0,0,0);
         _maxHeight =  0f;
@@ -147,7 +176,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        CheckKeyPress();
+       CheckKeyPress();
        CalculateMovement();
        CheckBorders();
        TurnThrustersOn();
@@ -173,7 +202,7 @@ public class Player : MonoBehaviour
 
         //Check the fire button
         if(Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
-       {
+       {           
            switch (_weapon) //0 laser, 1 missiles
            {
             case 0:
@@ -183,9 +212,17 @@ public class Player : MonoBehaviour
                 FireMissile();
                 break;
            }
+           
        }
 
 
+    }
+
+    IEnumerator MuzzleFlash()
+    {
+        _muzzleFlash.gameObject.SetActive(true);
+        yield return new WaitForSeconds(.01f);
+        _muzzleFlash.gameObject.SetActive(false);
     }
 
 
@@ -298,6 +335,7 @@ public class Player : MonoBehaviour
             }
             _audioSource.clip = _laser_Clip;
             _audioSource.Play();
+            StartCoroutine(MuzzleFlash());
         }
         else
         {
@@ -455,8 +493,9 @@ public class Player : MonoBehaviour
         _playerLives ++;
         if(_playerLives >=3)
         {
-            _playerLives = 3;            
+            _playerLives = 3;       
         }
+        
         UIManager.Instance.UpdateLives(_playerLives);
         DamageShip();
     }

@@ -5,50 +5,34 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField]
-    private float _enemySpeed;
+    protected float _enemySpeed;
     [SerializeField]
     private int _enemyID;
     [SerializeField]
 
-    private float _fireRate = 3.0f;
-    private float _canFire = -1;
-    private bool _isExploding = false;
+    protected float _fireRate = 3.0f;
+    protected float _canFire = -1;
+    protected bool _isExploding = false;
 
-    /*
-    //Screen Borders
-    private float _bottomScreen = -6f;
-    private float _topOfScreen = 8f;
-    private float _leftBorder = -9;
-    private float _rightBorder = 9;
-    */
-    
-    private int _playerLives;
+    protected Vector3 _currentPos; 
 
-    private Vector3 _currentPos; 
-
-    float _x,_y,_z;
-    [SerializeField]
-    float _amp;
-    [SerializeField]
-    float _freq;
-
-
-    Player _player;
-    Animator _anim;
-    AudioSource _audioSource;
 
     [SerializeField]
-    private GameObject _enemyLaser;
+    protected int _shotsToKill = 1;
+
+    protected float _x,_y,_z,  _amp, _freq;
+    protected Animator _anim;
+    protected AudioSource _audioSource;
 
     [SerializeField]
-    private AudioClip _enemyLaser_Clip;
-    private AudioClip _explosion_Clip;
+    protected GameObject _enemyLaser;
+
+    [SerializeField]
+    protected AudioClip _enemyLaser_Clip;
 
     Vector3 _originalPosition;
 
     Vector3 _direction = new Vector3(0,-1,0);
-
-
 
     public bool isMovingRight;
 
@@ -56,20 +40,11 @@ public class Enemy : MonoBehaviour
     {
         _enemySpeed = Random.Range(1f,6f);        
 
-        _player = GameObject.Find("Player").GetComponent<Player>();
-        
-        if(!_player)
-        {
-            Debug.LogError("The Player inside Enemy is Null");
-        }
-
         _audioSource = GetComponent<AudioSource>();
         if(!_audioSource)
         {
             Debug.LogError("Audio source is null");
         }
-
-        _playerLives = _player._playerLives;
 
         _anim = this.GetComponent<Animator>();
         if(!_anim)
@@ -77,7 +52,7 @@ public class Enemy : MonoBehaviour
             Debug.LogError("The Animator inside Enemy is Null");
         }
 
-        _explosion_Clip = _audioSource.clip;
+       
     switch (_enemyID)
         {
             case 2:
@@ -115,7 +90,7 @@ public class Enemy : MonoBehaviour
 
     }
 
-    void Update()
+    protected virtual void Update()
     {
         CalculateMovementByID();
         FireLasers();
@@ -138,6 +113,11 @@ public class Enemy : MonoBehaviour
 
             case 3:
                 Enemy3Movement();
+            break;
+
+            case 4:
+            //big round laser enemy
+
             break;
 
             default:
@@ -172,17 +152,13 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    protected virtual void OnTriggerEnter2D(Collider2D other)
     {
         _currentPos = transform.position;
        
         if(other.CompareTag("Player"))
-        {            
-            Player player = other.transform.GetComponent<Player>();
-            if(player != null)
-            {
-                player.Damage();
-            }
+        {        
+            Player.Instance.Damage();
             DestroyEnemyShip();
             
         }
@@ -190,20 +166,24 @@ public class Enemy : MonoBehaviour
         if(other.CompareTag("Laser"))
         {            
             Destroy(other.gameObject);
+            _shotsToKill--;
+            if(_shotsToKill <1)
+            {
             Destroy(gameObject.GetComponent<Collider2D>());            
-            _player.AddScore(Random.Range (7,11));
+            Player.Instance.AddScore(Random.Range (7,11));
             DestroyEnemyShip();
+            }
+
         }
     }
 
-    public void DestroyEnemyShip()
+    public virtual void DestroyEnemyShip()
     {     
         _enemySpeed = 0;
         _canFire = 999999999;//REALLY make sure it doesn't fire again.
         _isExploding = true;
         GetComponent<SpriteRenderer>().color = Color.white;
         _anim.SetTrigger("onEnemyDeath");
-        _audioSource.clip = _explosion_Clip;
         _audioSource.Play();
         
     }
