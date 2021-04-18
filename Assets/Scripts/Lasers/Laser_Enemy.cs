@@ -38,6 +38,10 @@ public class Laser_Enemy : Laser
 
     protected override void OnTriggerEnter2D(Collider2D other)
     {
+        if (other.CompareTag("Enemy"))
+        {
+            return;
+        }
         if (other.CompareTag("Player"))
         {
             Player.Instance.Damage();

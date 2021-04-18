@@ -6135,25 +6135,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1206694003 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 507129425629961471, guid: e19b720625fc89a5ab45bf5f0088267d, type: 3}
-  m_PrefabInstance: {fileID: 1532618475}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1206694004
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1206694003}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8311bc0f200e5e73ac10a4884e329d4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _speed: 0
-  _laserDirection: {x: 0, y: 0, z: 0}
 --- !u!1 &1253165778
 GameObject:
   m_ObjectHideFlags: 0
@@ -11075,69 +11056,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 507129425629961456, guid: e19b720625fc89a5ab45bf5f0088267d, type: 3}
-      propertyPath: m_Size.x
-      value: 0.1
+    - target: {fileID: 1150598036465359853, guid: e19b720625fc89a5ab45bf5f0088267d, type: 3}
+      propertyPath: _pauseTime
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 507129425629961456, guid: e19b720625fc89a5ab45bf5f0088267d, type: 3}
-      propertyPath: m_Size.y
-      value: 10.338717
+    - target: {fileID: 1150598036465359853, guid: e19b720625fc89a5ab45bf5f0088267d, type: 3}
+      propertyPath: _shotsToKill
+      value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 507129425629961456, guid: e19b720625fc89a5ab45bf5f0088267d, type: 3}
-      propertyPath: m_Offset.y
-      value: -5.070641
-      objectReference: {fileID: 0}
-    - target: {fileID: 507129425629961471, guid: e19b720625fc89a5ab45bf5f0088267d, type: 3}
-      propertyPath: m_Name
-      value: Blaster
-      objectReference: {fileID: 0}
-    - target: {fileID: 507129425629961471, guid: e19b720625fc89a5ab45bf5f0088267d, type: 3}
-      propertyPath: m_TagString
-      value: EnemyLaser
-      objectReference: {fileID: 0}
-    - target: {fileID: 3221387805942265153, guid: e19b720625fc89a5ab45bf5f0088267d, type: 3}
-      propertyPath: m_Size.y
-      value: 8.687384
-      objectReference: {fileID: 0}
-    - target: {fileID: 3221387805942265153, guid: e19b720625fc89a5ab45bf5f0088267d, type: 3}
-      propertyPath: m_Offset.y
-      value: -5.896308
-      objectReference: {fileID: 0}
-    - target: {fileID: 3221387805942265166, guid: e19b720625fc89a5ab45bf5f0088267d, type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3221387805942265166, guid: e19b720625fc89a5ab45bf5f0088267d, type: 3}
-      propertyPath: m_TagString
-      value: EnemyLaser
-      objectReference: {fileID: 0}
-    - target: {fileID: 3221387806678680051, guid: e19b720625fc89a5ab45bf5f0088267d, type: 3}
-      propertyPath: m_Radius
-      value: 1.6697868
-      objectReference: {fileID: 0}
-    - target: {fileID: 3221387806678680051, guid: e19b720625fc89a5ab45bf5f0088267d, type: 3}
-      propertyPath: m_Offset.x
-      value: -0.12197864
-      objectReference: {fileID: 0}
-    - target: {fileID: 3221387806678680051, guid: e19b720625fc89a5ab45bf5f0088267d, type: 3}
-      propertyPath: m_Offset.y
-      value: 0.46
+    - target: {fileID: 1150598036465359853, guid: e19b720625fc89a5ab45bf5f0088267d, type: 3}
+      propertyPath: _shootingLaserPauseTime
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3221387806678680056, guid: e19b720625fc89a5ab45bf5f0088267d, type: 3}
       propertyPath: m_Name
       value: Enemy4
-      objectReference: {fileID: 0}
-    - target: {fileID: 3221387806678680056, guid: e19b720625fc89a5ab45bf5f0088267d, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3221387806678680061, guid: e19b720625fc89a5ab45bf5f0088267d, type: 3}
-      propertyPath: _enemy2laser
-      value: 
-      objectReference: {fileID: 1206694003}
-    - target: {fileID: 3221387806678680061, guid: e19b720625fc89a5ab45bf5f0088267d, type: 3}
-      propertyPath: _shotsToKill
-      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3221387806678680062, guid: e19b720625fc89a5ab45bf5f0088267d, type: 3}
       propertyPath: m_RootOrder
@@ -11145,11 +11078,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3221387806678680062, guid: e19b720625fc89a5ab45bf5f0088267d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.226828
+      value: 3.1
       objectReference: {fileID: 0}
     - target: {fileID: 3221387806678680062, guid: e19b720625fc89a5ab45bf5f0088267d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.814893
+      value: 2.22
       objectReference: {fileID: 0}
     - target: {fileID: 3221387806678680062, guid: e19b720625fc89a5ab45bf5f0088267d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -11183,12 +11116,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3221387806678680063, guid: e19b720625fc89a5ab45bf5f0088267d, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: eb3c1abd98ee7b78db4c3a99f7e1c59d, type: 3}
-    m_RemovedComponents:
-    - {fileID: 507129425629961459, guid: e19b720625fc89a5ab45bf5f0088267d, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e19b720625fc89a5ab45bf5f0088267d, type: 3}
 --- !u!1 &1593951363
 GameObject:
