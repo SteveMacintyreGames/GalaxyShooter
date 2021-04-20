@@ -4,20 +4,18 @@ using UnityEngine;
 
 public class MiniBoomALypse : MonoBehaviour
 {
-
     [SerializeField]
     private GameObject _papi;
     [SerializeField]
     private GameObject _miniBoom;
 
     [SerializeField]
-    private int _amountOfMiniBooms = 25;
+    public int _amountOfMiniBooms = 1;
 
     private GameObject[] _apocalypse;
 
-    
-    // Start is called before the first frame update
-    void Start()
+
+    public void Start()
     {
         _apocalypse = new GameObject[_amountOfMiniBooms];
         for (int x = 0; x < _amountOfMiniBooms;x++)
@@ -29,13 +27,7 @@ public class MiniBoomALypse : MonoBehaviour
         StartCoroutine(KeepOnBoomin());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    IEnumerator KeepOnBoomin()
+     IEnumerator KeepOnBoomin()
     {
         while(true)
         {

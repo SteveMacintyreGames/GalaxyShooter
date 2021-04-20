@@ -13,7 +13,11 @@ public class Enemy4 : MonoBehaviour
     [SerializeField]
     private int _shotsToKill = 1;
     [SerializeField]
+    private int _totalHP;
+    [SerializeField]
     private float _enemySpeed;
+     [SerializeField]
+    private int enemyID = 4;
     
     Vector2 _nextWayPoint;
     [SerializeField]
@@ -27,18 +31,20 @@ public class Enemy4 : MonoBehaviour
 
     [SerializeField]
     GameObject _explosionHolder;
+    private int amountOfBooms = 1;
 
     Animator _anim;
     private Animator _laserAnim;
     string _anim2Play;
 
-    private Vector3 _currentPos;
+
 
     void Awake()
     {
         _explosionHolder.gameObject.SetActive(false);
         _anim = GetComponent<Animator>();
         _laserAnim = _enemy2laser.GetComponent<Animator>();
+        
     }
     void Start()
     {    
@@ -54,6 +60,7 @@ public class Enemy4 : MonoBehaviour
         _pauseTimer = _pauseTime;
         _fireCountDown = 0;
         _isAlive=true;
+        _totalHP = _shotsToKill;
 
         PickARandomPoint();
         StartCoroutine(MoveAround()); 
@@ -130,7 +137,6 @@ public class Enemy4 : MonoBehaviour
         }
         else if(other.CompareTag("Player"))
         {   
-            Debug.Log("PLAYER HIT");
             Player.Instance.Damage();
             _shotsToKill -= 3;
             DeathCheck();
@@ -152,16 +158,47 @@ public class Enemy4 : MonoBehaviour
 
     private void DeathCheck()
     {
-        if(_shotsToKill <1)
+        var miniBoomer = _explosionHolder.GetComponent<MiniBoomALypse>();
+
+        if(_shotsToKill <= ((3/4) *_totalHP))
         {
+            Debug.Log("3/4 hit");
             _explosionHolder.gameObject.SetActive(true);
-             _enemySpeed = 0;
-            _isAlive = false;
-            _anim.SetTrigger("isDead");
-        }    
+            miniBoomer._amountOfMiniBooms = 1;
+            if(_shotsToKill <= ((2/4) *_totalHP))
+            {
+                Debug.Log("2/4 hit");
+                miniBoomer._amountOfMiniBooms = 3;
+                if(_shotsToKill <= ((2/4) *_totalHP))
+                {
+                    Debug.Log("2/4 hit");
+                    miniBoomer._amountOfMiniBooms = 3;
+
+                    if(_shotsToKill <= ((1/4)*_totalHP))
+                    {
+                        Debug.Log("1/4 hit");
+                        miniBoomer._amountOfMiniBooms =  5;
+                        if(_shotsToKill <1)
+                        {                            
+                            _enemySpeed = 0;
+                            miniBoomer._amountOfMiniBooms = 10;
+                            _isAlive = false;
+                            _anim.SetTrigger("isDead");
+                            SpawnManager.Instance._enemiesOnScreen --;
+                        }    
+                    }
+                }
+            }
+
+
+        }
+
+
+
     }
     public void DestroyEnemyShip()
-    {       
+    {  
+
         Player.Instance.AddScore(Random.Range (50,101));
         Destroy(gameObject);
     }

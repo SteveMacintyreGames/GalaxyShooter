@@ -30,7 +30,8 @@ public class Laser : MonoBehaviour
 
     protected virtual void DestroyLasers()
     {
-        this.gameObject.SetActive(false);
+        //this.gameObject.SetActive(false);
+        Destroy(this.gameObject);
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D other)

@@ -54,6 +54,9 @@ public class UIManager : MonoBehaviour
     private float _thrusterPower;
     private Image _thrusterPowerBar;
 
+    [SerializeField]
+    private Text _levelText;
+
     Player player;
 
 

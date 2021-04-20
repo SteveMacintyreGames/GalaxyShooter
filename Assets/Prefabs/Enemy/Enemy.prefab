@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7386373676368827432}
   - component: {fileID: 709201436567560961}
   - component: {fileID: -1534277300459709259}
+  - component: {fileID: 74101442}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Enemy
@@ -248,3 +249,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &74101442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 796289087931787887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78ed6da7ec9fe0eb393a9cc7757b0731, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemySpeed: 6
+  _enemyID: 0
+  _fireRate: 3
+  _shotsToKill: 1
+  _enemyLaser: {fileID: 8506025685509265935, guid: 52228fdd2e4ac0681be9af8ead9af344, type: 3}
+  _enemyLaser_Clip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
+  isMovingRight: 0

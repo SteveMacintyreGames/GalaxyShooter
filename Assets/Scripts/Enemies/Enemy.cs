@@ -174,7 +174,9 @@ public class Enemy : MonoBehaviour
     }
 
     public virtual void DestroyEnemyShip()
-    {     
+    {   
+        SpawnManager.Instance._powerupTime -= .5f;
+        SpawnManager.Instance._enemiesOnScreen --;
         _enemySpeed = 0;
         _canFire = 999999999;//REALLY make sure it doesn't fire again.
         _isExploding = true;

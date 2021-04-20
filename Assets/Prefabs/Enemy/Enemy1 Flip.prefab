@@ -7,9 +7,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 74101442, guid: b10d97057e42086fbb5c776cbdd74ba9, type: 3}
+      propertyPath: _enemyID
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 74101442, guid: b10d97057e42086fbb5c776cbdd74ba9, type: 3}
+      propertyPath: _enemySpeed
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 796289087931787887, guid: b10d97057e42086fbb5c776cbdd74ba9, type: 3}
       propertyPath: m_Name
-      value: Enemy1 Variant
+      value: Enemy1 Flip
       objectReference: {fileID: 0}
     - target: {fileID: 3218996496520126324, guid: b10d97057e42086fbb5c776cbdd74ba9, type: 3}
       propertyPath: _enemyID
@@ -21,11 +29,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8210307348427032836, guid: b10d97057e42086fbb5c776cbdd74ba9, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -1.48
       objectReference: {fileID: 0}
     - target: {fileID: 8210307348427032836, guid: b10d97057e42086fbb5c776cbdd74ba9, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1.52
       objectReference: {fileID: 0}
     - target: {fileID: 8210307348427032836, guid: b10d97057e42086fbb5c776cbdd74ba9, type: 3}
       propertyPath: m_LocalPosition.z
@@ -70,6 +78,10 @@ PrefabInstance:
     - target: {fileID: 8607973417487095870, guid: b10d97057e42086fbb5c776cbdd74ba9, type: 3}
       propertyPath: m_Color.r
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8607973417487095870, guid: b10d97057e42086fbb5c776cbdd74ba9, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b10d97057e42086fbb5c776cbdd74ba9, type: 3}
