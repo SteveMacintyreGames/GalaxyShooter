@@ -261,9 +261,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78ed6da7ec9fe0eb393a9cc7757b0731, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemySpeed: 6
+  _enemySpeed: 4
   _enemyID: 0
-  _fireRate: 3
+  _enemyShieldHolder: {fileID: 1987107951859439107, guid: ed05e8408438257deaf1aec3f48f3e61, type: 3}
+  _enemyShield: {fileID: 1987107951859439107, guid: ed05e8408438257deaf1aec3f48f3e61, type: 3}
+  _shieldActivated: 0
   _shotsToKill: 1
   _enemyLaser: {fileID: 8506025685509265935, guid: 52228fdd2e4ac0681be9af8ead9af344, type: 3}
   _enemyLaser_Clip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}

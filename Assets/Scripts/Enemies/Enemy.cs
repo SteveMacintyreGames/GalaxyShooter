@@ -9,6 +9,8 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private int _enemyID;
     [SerializeField]
+    private GameObject _enemyShieldHolder, _enemyShield;
+    public bool _shieldActivated;
 
     protected float _fireRate = 3.0f;
     protected float _canFire = -1;
@@ -36,8 +38,16 @@ public class Enemy : MonoBehaviour
 
     public bool isMovingRight;
 
+    void Awake()
+    {
+         
+    }
+
     void Start()
     {
+        
+
+
         _enemySpeed = Random.Range(1f,6f);        
 
         _audioSource = GetComponent<AudioSource>();
@@ -50,6 +60,11 @@ public class Enemy : MonoBehaviour
         if(!_anim)
         {
             Debug.LogError("The Animator inside Enemy is Null");
+        }
+
+        if(_shieldActivated)
+        {
+            _enemyShield.gameObject.SetActive(true);
         }
 
        
@@ -293,6 +308,12 @@ public class Enemy : MonoBehaviour
             isMovingRight = !isMovingRight;
         }
 
+    }
+
+    public void SpawnShield()
+    {
+        _enemyShield = Instantiate(_enemyShieldHolder, transform.position, Quaternion.identity);
+        _enemyShield.transform.parent = transform;
     }
 
 

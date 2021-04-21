@@ -111,7 +111,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3221387806678680056}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.42, y: 3.61, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.659192, y: 0.659192, z: 0.659192}
   m_Children:
   - {fileID: 507129425629961468}
@@ -134,7 +134,9 @@ MonoBehaviour:
   _pauseTimer: 0
   _pauseTime: 1
   _shotsToKill: 12
+  _totalHP: 0
   _enemySpeed: 3
+  enemyID: 4
   _fireCountDown: 0
   _fireCount: 3
   _enemy2laser: {fileID: 507129425629961471}

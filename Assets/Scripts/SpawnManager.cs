@@ -119,8 +119,17 @@ public class SpawnManager : MonoBehaviour
                 Vector3 posToSpawn = new Vector3(randomX,Ypos,0);
                 if(_canSpawn)               
                 {
-                    ChooseEnemy(); 
+                    ChooseEnemy();
+
                     GameObject newEnemy = Instantiate (_enemyPrefab[Random.Range(0,_spawnEnemyNumber)],posToSpawn, Quaternion.identity);
+                    
+                   
+                        var shieldOrNo = Random.value;
+                        if (shieldOrNo >.7)
+                        {
+                            newEnemy.GetComponent<Enemy>().SpawnShield();
+                        }
+                   
                     _enemiesSpawned++;
                     _enemiesOnScreen ++;
                     newEnemy.transform.parent = _enemyHolder.transform;
@@ -146,7 +155,7 @@ public class SpawnManager : MonoBehaviour
             yield return null;            
         }
     }
-
+    
     IEnumerator ShowLevel()
     {
 
