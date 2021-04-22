@@ -9,8 +9,10 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private int _enemyID;
     [SerializeField]
-    private GameObject _enemyShieldHolder, _enemyShield;
+    private GameObject _enemyShieldHolder;
+    private GameObject _enemyShield;
     public bool _shieldActivated;
+    public bool canShoot;
 
     protected float _fireRate = 3.0f;
     protected float _canFire = -1;
@@ -25,6 +27,9 @@ public class Enemy : MonoBehaviour
     protected float _x,_y,_z,  _amp, _freq;
     protected Animator _anim;
     protected AudioSource _audioSource;
+    protected Rigidbody2D _rb;
+
+    protected bool _shoots = false;
 
     [SerializeField]
     protected GameObject _enemyLaser;
@@ -37,30 +42,28 @@ public class Enemy : MonoBehaviour
     Vector3 _direction = new Vector3(0,-1,0);
 
     public bool isMovingRight;
+    protected int _phase = 1;
 
-    void Awake()
-    {
-         
-    }
+    [SerializeField]
+    GameObject _explosionHolder;
+    public bool playerNear = false;
+
 
     void Start()
-    {
-        
-
-
+    {   
         _enemySpeed = Random.Range(1f,6f);        
 
         _audioSource = GetComponent<AudioSource>();
         if(!_audioSource)
-        {
             Debug.LogError("Audio source is null");
-        }
 
-        _anim = this.GetComponent<Animator>();
+        _anim = GetComponent<Animator>();
         if(!_anim)
-        {
             Debug.LogError("The Animator inside Enemy is Null");
-        }
+
+        _rb = GetComponent<Rigidbody2D>();
+        if (!_rb)
+            Debug.LogError("_rb is NULL");
 
         if(_shieldActivated)
         {
@@ -97,6 +100,15 @@ public class Enemy : MonoBehaviour
                 transform.position = new Vector2(10, Random.Range(5,0));
             }    
             break;
+            case 4:
+            break;
+
+            case 5:
+            _enemySpeed = Random.Range(3f,4f);
+            canShoot=true;
+            _fireRate=5f;
+            break;
+
             default:
             break;
         }
@@ -108,7 +120,11 @@ public class Enemy : MonoBehaviour
     protected virtual void Update()
     {
         CalculateMovementByID();
-        FireLasers();
+        if(canShoot)
+        {
+            FireLasers();
+        }
+        
     }
 
     void CalculateMovementByID()
@@ -131,12 +147,14 @@ public class Enemy : MonoBehaviour
             break;
 
             case 4:
-            //big round laser enemy
-
+            //big laser enemy
             break;
 
-            default:
-                Enemy0Movement();
+            case 5:
+            RammerMovement();
+            break;
+
+            default:              
             break;
         }
         
@@ -170,6 +188,7 @@ public class Enemy : MonoBehaviour
         if(other.CompareTag("Player"))
         {        
             Player.Instance.Damage();
+
             DestroyEnemyShip();
             
         }
@@ -189,15 +208,24 @@ public class Enemy : MonoBehaviour
     }
 
     public virtual void DestroyEnemyShip()
-    {   
+    {  
+
         SpawnManager.Instance._powerupTime -= .5f;
         SpawnManager.Instance._enemiesOnScreen --;
         _enemySpeed = 0;
-        _canFire = 999999999;//REALLY make sure it doesn't fire again.
+        canShoot = false;
         _isExploding = true;
         GetComponent<SpriteRenderer>().color = Color.white;
-        _anim.SetTrigger("onEnemyDeath");
-        _audioSource.Play();
+        if(_enemyID != 5)
+        {
+            _anim.SetTrigger("onEnemyDeath");
+        }else{
+            Instantiate(_explosionHolder, transform.position, Quaternion.identity);
+            Destroy(this.gameObject);
+        }
+
+        
+        _audioSource.Play();       
         
     }
 
@@ -226,20 +254,15 @@ public class Enemy : MonoBehaviour
         Move(new Vector2(0,-1),_enemySpeed); 
         //if enemy reaches halfway down the screen
         if(transform.position.y < 1.3)
-        {
-
+        {            
             transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(180,0,0), 400*Time.deltaTime);
-            //_direction = new Vector3(0,1,0);
         }
         //turn around and move up.
         //if ship reaches top border, pick a new position and move down.
         if (transform.position.y > 9)
-        {
-            
+        {            
             PickNewTopPosition();
             transform.rotation = Quaternion.Euler(new Vector3(0,0,0));
-
-            //_direction = new Vector3(0,-1,0);
         }
             
     }
@@ -294,8 +317,7 @@ public class Enemy : MonoBehaviour
                 _direction = new Vector2(-1,0);
             }
             Move(_direction, _enemySpeed);
-        Enemy3CheckBorders();
-    
+        Enemy3CheckBorders();    
     }
 
     void Enemy3CheckBorders()
@@ -310,6 +332,42 @@ public class Enemy : MonoBehaviour
 
     }
 
+    void RammerMovement()
+    {
+        
+        Debug.Log(_phase);
+
+        //phase 1, move down as normal
+        //until player gets within a certain range
+        //then follow the player
+        //if they get very close, speed up and ram them.
+        if (_phase == 1)
+        {   
+            _rb.rotation = -90f;
+            Move(Vector2.right,_enemySpeed);
+            CheckBottom();
+
+            if(playerNear)
+            {
+                //Follow the player until enemy dies I guess.
+                _phase +=1;
+                
+            }
+        }
+
+        if(_phase > 1)
+        {
+            canShoot = false;
+            Vector3 direction = Player.Instance.gameObject.transform.position - transform.position;
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            _rb.rotation = angle;
+            direction.Normalize();
+            
+            _rb.MovePosition(transform.position+(direction * _enemySpeed * Time.deltaTime));
+            
+        }
+    }
+ 
     public void SpawnShield()
     {
         _enemyShield = Instantiate(_enemyShieldHolder, transform.position, Quaternion.identity);

@@ -11,6 +11,10 @@ PrefabInstance:
       propertyPath: _enemyID
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 74101442, guid: b10d97057e42086fbb5c776cbdd74ba9, type: 3}
+      propertyPath: canShoot
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 796289087931787887, guid: b10d97057e42086fbb5c776cbdd74ba9, type: 3}
       propertyPath: m_Name
       value: Enemy2-side by side Variant

@@ -12,6 +12,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 74101442, guid: b10d97057e42086fbb5c776cbdd74ba9, type: 3}
+      propertyPath: canShoot
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 74101442, guid: b10d97057e42086fbb5c776cbdd74ba9, type: 3}
       propertyPath: _enemySpeed
       value: 5
       objectReference: {fileID: 0}

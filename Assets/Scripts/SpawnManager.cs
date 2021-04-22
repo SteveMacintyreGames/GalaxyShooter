@@ -181,11 +181,11 @@ public class SpawnManager : MonoBehaviour
 
         int[] enemyTable =
         {
-            100, // 0 main enemy
-            93, // 1 flip up
-            87, // 2 side by side
-            80, // 3 circler
-            75 // big boy
+            40, // 0 main enemy
+            25, // 1 flip up
+            15, // 2 side by side
+            12, // 3 circler
+             8 // big boy
         };
 
         int[] enemyID =
@@ -247,20 +247,20 @@ public class SpawnManager : MonoBehaviour
 
            int[] powerupTable =
            {
-               700, // ammo
-               300, // health
-               275, // shield
-               200, // missile
-               120, // speed  
-               75, // tripleshot 
-               40 // negative           
+               40, // ammo
+               25, // missile  
+               16, // health   
+               8, // shield   
+               6, // speed     
+               3, // tripleshot 
+               2 // negative           
            };
             int[] powerupToAward =
            {
                3, //ammo
+               5, //missile
                4, //health
                2, //shield
-               5, //missile
                1, // speed
                0, // tripleshot
                6 // negative
