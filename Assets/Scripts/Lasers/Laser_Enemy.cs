@@ -6,12 +6,14 @@ public class Laser_Enemy : Laser
 {
 
     private GameObject _target;
-    private Vector3 _laserHomingDirection;   
+    private Vector3 _laserHomingDirection;
+    public Vector3 whatDirection = Vector3.down;
+
    
     protected override void Start()
     {
         Invoke("DestroyLasers",4f);
-        _laserDirection = Vector3.down;
+        
 
          if(GameManager.Instance._negativePowerupActivated)
         {
@@ -20,14 +22,14 @@ public class Laser_Enemy : Laser
         _laserDirection =  new Vector3(_laserHomingDirection.x,-1,0) * _speed * Time.deltaTime;
         }else
         {
-            _laserDirection = Vector3.down * _speed * Time.deltaTime;
+            Debug.Log(whatDirection);
+            _laserDirection = whatDirection * _speed * Time.deltaTime;
         }
     }
     
 
     protected override void DestroyLasers()
     {
-        Debug.Log(transform.parent.gameObject.name);
         if(transform.parent.gameObject.name == "Enemy_DuoLaser(Clone)")
         {
             //Debug.Log("EnemyLaser parent destroyed");
@@ -47,6 +49,5 @@ public class Laser_Enemy : Laser
             Player.Instance.Damage();
         }
     }
-
 
 }

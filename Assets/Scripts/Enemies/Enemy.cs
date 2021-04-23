@@ -36,6 +36,7 @@ public class Enemy : MonoBehaviour
 
     [SerializeField]
     protected AudioClip _enemyLaser_Clip;
+    public bool enemyLaserGoingUp;
 
     Vector3 _originalPosition;
 
@@ -120,10 +121,7 @@ public class Enemy : MonoBehaviour
     protected virtual void Update()
     {
         CalculateMovementByID();
-        if(canShoot)
-        {
-            FireLasers();
-        }
+
         
     }
 
@@ -133,17 +131,21 @@ public class Enemy : MonoBehaviour
         {
             case 0:
                 Enemy0Movement();
+                FireLasers();
                
             break;
             case 1:
                 Enemy1Movement();
+                FireLasers();
             break;
             case 2:
                 Enemy2Movement();
+                FireLasers();
             break;
 
             case 3:
                 Enemy3Movement();
+                FireLasers();
             break;
 
             case 4:
@@ -152,7 +154,18 @@ public class Enemy : MonoBehaviour
 
             case 5:
             RammerMovement();
+            if(canShoot)
+            {
+                FireLasers();
+            }
             break;
+
+            case 6:
+                Move(Vector2.down, _enemySpeed);
+                CheckPlayerBehind();
+                FireLasers();
+                CheckBottom();                
+                break;
 
             default:              
             break;
@@ -172,10 +185,25 @@ public class Enemy : MonoBehaviour
     {
         if (Time.time > _canFire)
         {
-            _fireRate = Random.Range(3f,7f);
-            _canFire = Time.time + _fireRate;
-            GameObject enemyLaser = Instantiate(_enemyLaser, transform.position, Quaternion.identity);
-            Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
+            //Debug.Log(enemyLaserGoingUp);
+            //_fireRate = Random.Range(4.5f,7.3f);
+            _fireRate = 1.5f;
+            _canFire = Time.time + _fireRate;           
+            
+            
+            GameObject enemyLaser = Instantiate(_enemyLaser, transform.position, Quaternion.identity) as GameObject;
+            if(enemyLaserGoingUp)
+            {
+                enemyLaser.transform.position += new Vector3(0,3,0);                
+                enemyLaser.transform.GetChild(0).gameObject.GetComponent<Laser_Enemy>().whatDirection = Vector3.up;
+                enemyLaser.transform.GetChild(1).gameObject.GetComponent<Laser_Enemy>().whatDirection = Vector3.up;   
+            }
+            
+
+            //var _currentLaserSpeed = enemyLaser.GetComponentsInChildren<Laser_Enemy>()._speed;
+            //if(_currentLaserSpeed < _enemySpeed)
+            //_currentLaserSpeed += _enemySpeed/2;
+            Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser_Enemy>();
             _audioSource.clip = _enemyLaser_Clip;
             _audioSource.Play();
         }
@@ -216,17 +244,25 @@ public class Enemy : MonoBehaviour
         canShoot = false;
         _isExploding = true;
         GetComponent<SpriteRenderer>().color = Color.white;
-        if(_enemyID != 5)
+        _audioSource.Play(); 
+
+        switch (_enemyID)
         {
-            _anim.SetTrigger("onEnemyDeath");
-        }else{
+            case(5):
             Instantiate(_explosionHolder, transform.position, Quaternion.identity);
             Destroy(this.gameObject);
+            break;
+
+            case(6):
+            Instantiate(_explosionHolder, transform.position, Quaternion.identity);
+            Destroy(this.gameObject);
+            break;
+
+        default:
+            _anim.SetTrigger("onEnemyDeath");
+            break;
         }
 
-        
-        _audioSource.Play();       
-        
     }
 
     public void RemoveGameObjectFromScene()
@@ -372,6 +408,25 @@ public class Enemy : MonoBehaviour
     {
         _enemyShield = Instantiate(_enemyShieldHolder, transform.position, Quaternion.identity);
         _enemyShield.transform.parent = transform;
+    }
+    
+    void CheckPlayerBehind()
+    {
+        Vector3 _playerPos = Player.Instance.gameObject.transform.position; 
+        Vector3 _relativePos = transform.position - _playerPos;
+        bool _isInFront = Vector3.Dot(transform.up, _relativePos) > 0.0f;
+
+        if(_isInFront)
+        {
+            Debug.Log("Player IN FRONT");
+            enemyLaserGoingUp = false;
+        }
+        else
+        {
+            Debug.Log("Player IS BEHIND");
+            
+            enemyLaserGoingUp = true;
+        }
     }
 
 

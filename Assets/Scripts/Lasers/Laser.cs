@@ -5,7 +5,7 @@ using UnityEngine;
 public class Laser : MonoBehaviour
 {
     [SerializeField]
-    protected float _speed = 8f;
+    public float _speed = 8f;
 
     [SerializeField]
     protected Vector3 _laserDirection = Vector3.up;

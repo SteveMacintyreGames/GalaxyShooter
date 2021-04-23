@@ -57,8 +57,6 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Text _levelText;
 
-    Player player;
-
 
     void Awake()
     {   if(Instance == null)
@@ -69,17 +67,16 @@ public class UIManager : MonoBehaviour
     {
         Destroy(gameObject);
     }
-         
-        player = GameObject.Find("Player").GetComponent<Player>();
+
         _gameOverText.gameObject.SetActive(false);
         _restartGameText.gameObject.SetActive(false);
 
-        _maxAmmo = _ammoCount = player.ammoCount;
+        _maxAmmo = _ammoCount = Player.Instance.ammoCount;
         ammoBits = new Image[_maxAmmo];
         _ammoCountText = GameObject.Find("AmmoText").GetComponent<Text>();
 
         _missileCountText = GameObject.Find("Missile_Text").GetComponent<Text>();
-        _missileCount = player.missileCount;
+        _missileCount = Player.Instance.missileCount;
         _thrusterPowerBar = GameObject.Find("ThrusterPowerBar").GetComponent<Image>();
     }
     void Start()
@@ -105,7 +102,7 @@ public class UIManager : MonoBehaviour
 
     public void UpdateAmmoCount()
     {      
-        _ammoCount = player.ammoCount;
+        _ammoCount = Player.Instance.ammoCount;
         _ammoCountText.text = "Ammo: "+_ammoCount.ToString();      
         //turn off all the bullets
         for (int i=0; i < _maxAmmo ;i++)
@@ -123,13 +120,13 @@ public class UIManager : MonoBehaviour
     }
     public void UpdateMissileCount()
     {
-        _missileCount = player.missileCount;
+        _missileCount = Player.Instance.missileCount;
         _missileCountText.text = "Missiles: " + _missileCount;
     }
 
     public void UpdateThrusterCount()
     {
-        _thrusterPower = player._thrusterPower;
+        _thrusterPower = Player.Instance._thrusterPower;
         _thrusterPowerBar.fillAmount = _thrusterPower/100;
 
     }
