@@ -17,6 +17,9 @@ public class Player : MonoBehaviour
         }
     }
 
+    public delegate void PowerupMagnet();
+    public static event PowerupMagnet powerupMagnet;
+
     [SerializeField]
     private float _powerUpTimer = 5.0f;
 
@@ -183,6 +186,7 @@ public class Player : MonoBehaviour
        CheckBooster();
        Shields();
        ThrusterRefill();
+       CallPowerups();
     }
     void CheckKeyPress()
     {
@@ -535,6 +539,15 @@ public class Player : MonoBehaviour
     {
         _audioSource.clip = _explosion_Clip;
         _audioSource.Play();
+    }
+
+    private void CallPowerups()
+    {
+        if(Input.GetKey(KeyCode.C))
+        {
+            if(powerupMagnet != null)
+            powerupMagnet();
+        }
     }
 
 

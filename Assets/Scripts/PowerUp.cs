@@ -9,6 +9,7 @@ public class PowerUp : MonoBehaviour
 
     [SerializeField]
     private float _powerUpSpeed = 3.0f;
+    private float _powerUpSpeedOriginal;
     private float _bottomOfScreen = -7.0f;
 
     [SerializeField]
@@ -18,16 +19,45 @@ public class PowerUp : MonoBehaviour
     [SerializeField]
     private GameObject Explosion;
 
+    private Rigidbody2D _rb;
+
+    protected Vector3 _direction = Vector3.down;
+
+    protected bool CPressed = false;
+
+    void OnEnable()
+    {
+        Player.powerupMagnet += HeadTowardsPlayer;
+    }
+
+    void Start()
+    {
+        _rb = GetComponent<Rigidbody2D>();
+        _powerUpSpeedOriginal = _powerUpSpeed;
+    }
 
  
     void Update()
     {
-        transform.Translate(Vector3.down * _powerUpSpeed * Time.deltaTime);
+        if (CPressed)
+        {
+         Vector3 target = Player.Instance.transform.position;
+        _direction = (target - transform.position).normalized;
+        _powerUpSpeed += .5f;
+
+        }else
+        {
+            _direction = Vector3.down;
+            _powerUpSpeed = _powerUpSpeedOriginal;
+        }
+        transform.Translate(_direction * _powerUpSpeed * Time.deltaTime);
 
         if(transform.position.y <= _bottomOfScreen)
         {
             Destroy(this.gameObject);
         }
+
+        CPressed = false;
 
     }
     void OnTriggerEnter2D(Collider2D other)
@@ -36,9 +66,9 @@ public class PowerUp : MonoBehaviour
         {   
             AudioSource.PlayClipAtPoint(_audioClip,transform.position);
 
-            Player player = other.transform.GetComponent<Player>();
-            player.powerUpID = _powerUpID;
-            if(player)
+           
+            Player.Instance.powerUpID = _powerUpID;
+            if(Player.Instance)
             {
                switch(_powerUpID)
                 {
@@ -46,22 +76,22 @@ public class PowerUp : MonoBehaviour
                         GameManager.Instance.ActivateNegativePowerup1();
                     break;
                     case 0:
-                        player.ActivateTripleShot();
+                        Player.Instance.ActivateTripleShot();
                         break;
                     case 1:
-                        player.ActivateSpeedBoost();
+                        Player.Instance.ActivateSpeedBoost();
                          break;
                     case 2:
-                        player.ActivateShields();                        
+                        Player.Instance.ActivateShields();                        
                          break;
                     case 3:
-                        player.AddAmmo();
+                        Player.Instance.AddAmmo();
                         break;
                     case 4:
-                        player.AddHealth();
+                        Player.Instance.AddHealth();
                         break;
                     case 5:
-                        player.ActivateMissiles();
+                        Player.Instance.ActivateMissiles();
                         break;
                     default:
                          break;
@@ -80,6 +110,12 @@ public class PowerUp : MonoBehaviour
     {
         Instantiate(Explosion,transform.position+ new Vector3(.3f,0-.3f,0),Quaternion.identity);
         yield return new WaitForSeconds(.4f);
+        
         Destroy(this.gameObject);
+    }
+
+    void HeadTowardsPlayer()
+    {
+        CPressed = true;
     }
 }
