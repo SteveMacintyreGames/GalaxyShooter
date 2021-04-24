@@ -114,9 +114,6 @@ public class UIManager : MonoBehaviour
         {
             ammoBits[i].enabled = true;
         }
-
-        //_ammoHealthBar.fillAmount =  (float)_ammoCount/(float)_maxAmmo;
-        //Debug.Log("Ammo : "+_ammoCount + " Max Ammo: "+_maxAmmo);
     }
     public void UpdateMissileCount()
     {

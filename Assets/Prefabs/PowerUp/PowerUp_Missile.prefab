@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 6581385661578486215}
   m_Layer: 8
   m_Name: PowerUp_Missile
-  m_TagString: Untagged
+  m_TagString: PowerUp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7844165392113823019}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.63, y: -3.2, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.37293, y: 0.37293, z: 0.74586}
   m_Children: []
   m_Father: {fileID: 0}
@@ -150,7 +150,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.3375406, y: 1.8497493}
+  m_Size: {x: 2.47, y: 1.8497493}
   m_EdgeRadius: 0
 --- !u!114 &6581385661578486215
 MonoBehaviour:
@@ -167,4 +167,4 @@ MonoBehaviour:
   _powerUpID: 5
   _powerUpSpeed: 3
   _audioClip: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
-  _enemyLaser: {fileID: 4607562898117239082, guid: 7de166e54c38853bcb407d461f4f1a6f, type: 3}
+  Explosion: {fileID: 2078615227446897435, guid: 39f03fc1153fbac20b3632198cede754, type: 3}

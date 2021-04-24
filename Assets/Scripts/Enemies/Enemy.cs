@@ -37,6 +37,8 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     protected AudioClip _enemyLaser_Clip;
     public bool enemyLaserGoingUp;
+    [SerializeField]
+    private float _enemyLaserSpeed = 1f;
 
     Vector3 _originalPosition;
 
@@ -118,12 +120,7 @@ public class Enemy : MonoBehaviour
 
     }
 
-    protected virtual void Update()
-    {
-        CalculateMovementByID();
-
-        
-    }
+    protected virtual void Update(){ CalculateMovementByID(); }
 
     void CalculateMovementByID()
     {
@@ -131,21 +128,25 @@ public class Enemy : MonoBehaviour
         {
             case 0:
                 Enemy0Movement();
-                FireLasers();
+                PowerupHunting();
+                FireLasers(_enemyLaserSpeed);
                
             break;
             case 1:
                 Enemy1Movement();
-                FireLasers();
+                PowerupHunting();
+                FireLasers(_enemyLaserSpeed);
             break;
             case 2:
                 Enemy2Movement();
-                FireLasers();
+                PowerupHunting();
+                FireLasers(_enemyLaserSpeed);
             break;
 
             case 3:
                 Enemy3Movement();
-                FireLasers();
+                PowerupHunting();
+                FireLasers(_enemyLaserSpeed);
             break;
 
             case 4:
@@ -154,16 +155,19 @@ public class Enemy : MonoBehaviour
 
             case 5:
             RammerMovement();
+            
             if(canShoot)
             {
-                FireLasers();
+                PowerupHunting();
+                FireLasers(_enemyLaserSpeed);
             }
             break;
 
             case 6:
                 Move(Vector2.down, _enemySpeed);
                 CheckPlayerBehind();
-                FireLasers();
+                PowerupHunting();
+                FireLasers(_enemyLaserSpeed);
                 CheckBottom();                
                 break;
 
@@ -181,13 +185,15 @@ public class Enemy : MonoBehaviour
         transform.Translate(_direction * _enemySpeed * Time.deltaTime);
     }
 
-    void FireLasers()
+ 
+
+    void FireLasers(float laserSpeed)
     {
+
         if (Time.time > _canFire)
         {
-            //Debug.Log(enemyLaserGoingUp);
-            //_fireRate = Random.Range(4.5f,7.3f);
-            _fireRate = 1.5f;
+            _fireRate = Random.Range(4.5f,7.3f);
+            //_fireRate = 1.5f;
             _canFire = Time.time + _fireRate;           
             
             
@@ -195,19 +201,16 @@ public class Enemy : MonoBehaviour
             if(enemyLaserGoingUp)
             {
                 enemyLaser.transform.position += new Vector3(0,3,0);                
-                enemyLaser.transform.GetChild(0).gameObject.GetComponent<Laser_Enemy>().whatDirection = Vector3.up;
-                enemyLaser.transform.GetChild(1).gameObject.GetComponent<Laser_Enemy>().whatDirection = Vector3.up;   
-            }
-            
-
-            //var _currentLaserSpeed = enemyLaser.GetComponentsInChildren<Laser_Enemy>()._speed;
-            //if(_currentLaserSpeed < _enemySpeed)
-            //_currentLaserSpeed += _enemySpeed/2;
+                enemyLaser.GetComponent<DuoLaser>().duoLaserSpeed = laserSpeed;
+            }   
+                
             Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser_Enemy>();
             _audioSource.clip = _enemyLaser_Clip;
             _audioSource.Play();
         }
     }
+
+  
 
     protected virtual void OnTriggerEnter2D(Collider2D other)
     {
@@ -418,17 +421,37 @@ public class Enemy : MonoBehaviour
 
         if(_isInFront)
         {
-            Debug.Log("Player IN FRONT");
             enemyLaserGoingUp = false;
         }
         else
-        {
-            Debug.Log("Player IS BEHIND");
-            
+        {            
             enemyLaserGoingUp = true;
         }
     }
 
+void PowerupHunting()
+{
+    //If a powerup is directly in front of the enemy, enemy shoots.
+    //cast a ray straight down
+    RaycastHit2D hit = Physics2D.Raycast(transform.position + new Vector3(0,-1f,0), transform.TransformDirection(Vector2.down), 10f);
+    Debug.DrawRay(transform.position + new Vector3(0,-1f,0), transform.TransformDirection(Vector2.down) * 10f, Color.red);
 
+    
+
+    if (hit)
+    {
+       //Debug.Log("I hit something " + hit.collider.name + ", " + hit.collider.tag);
+       if (hit.collider.tag == "PowerUp")
+       {
+          Debug.Log("I see a powerup!");
+          _canFire = Time.deltaTime;
+
+          FireLasers(20f);
+       }
+    
+    }
+    
+
+}
 
 }

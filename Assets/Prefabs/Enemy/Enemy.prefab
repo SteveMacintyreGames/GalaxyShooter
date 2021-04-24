@@ -268,7 +268,9 @@ MonoBehaviour:
   canShoot: 1
   _shotsToKill: 1
   _enemyLaser: {fileID: 8506025685509265935, guid: 52228fdd2e4ac0681be9af8ead9af344, type: 3}
+  _enemyLaser4Powerup: {fileID: 8606665582541217954, guid: 33939d9c5d5047fae90ab5c1bcd4d565, type: 3}
   _enemyLaser_Clip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
+  enemyLaserGoingUp: 0
   isMovingRight: 0
   _explosionHolder: {fileID: 6733522616298831898, guid: 4f4791a18dafef503a32fc9a1ccf4827, type: 3}
   playerNear: 0

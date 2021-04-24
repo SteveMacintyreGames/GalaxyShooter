@@ -120,7 +120,7 @@ MonoBehaviour:
   _powerUpID: 0
   _powerUpSpeed: 3
   _audioClip: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
-  _enemyLaser: {fileID: 4607562898117239082, guid: 7de166e54c38853bcb407d461f4f1a6f, type: 3}
+  Explosion: {fileID: 2078615227446897435, guid: 39f03fc1153fbac20b3632198cede754, type: 3}
 --- !u!61 &5157578759746279783
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -145,7 +145,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.1966903, y: 1.641602}
+  m_Size: {x: 2.35, y: 1.641602}
   m_EdgeRadius: 0
 --- !u!50 &5157578759746279780
 Rigidbody2D:

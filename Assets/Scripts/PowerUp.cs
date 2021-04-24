@@ -13,7 +13,11 @@ public class PowerUp : MonoBehaviour
 
     [SerializeField]
     private AudioClip _audioClip;
+
+
     [SerializeField]
+    private GameObject Explosion;
+
 
  
     void Update()
@@ -62,8 +66,20 @@ public class PowerUp : MonoBehaviour
                     default:
                          break;
                 }
-            }            
+            }
             Destroy(this.gameObject);
         }
+
+        if(other.CompareTag("EnemyLaser"))
+        {
+            StartCoroutine(DestroyPowerup());
+        }
+    }
+
+    IEnumerator DestroyPowerup()
+    {
+        Instantiate(Explosion,transform.position+ new Vector3(.3f,0-.3f,0),Quaternion.identity);
+        yield return new WaitForSeconds(.4f);
+        Destroy(this.gameObject);
     }
 }

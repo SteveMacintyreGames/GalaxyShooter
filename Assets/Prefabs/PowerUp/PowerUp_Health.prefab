@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1594504703821642727}
   m_Layer: 8
   m_Name: PowerUp_Health
-  m_TagString: Untagged
+  m_TagString: PowerUp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5421822405606602614}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.8559175, y: -2.3749578, z: -0.37864876}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.37843, y: 0.37843, z: 0.75686}
   m_Children: []
   m_Father: {fileID: 0}
@@ -150,7 +150,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.2608652, y: 1.8397572}
+  m_Size: {x: 2.46, y: 1.8397572}
   m_EdgeRadius: 0
 --- !u!114 &1594504703821642727
 MonoBehaviour:
@@ -167,4 +167,4 @@ MonoBehaviour:
   _powerUpID: 4
   _powerUpSpeed: 3
   _audioClip: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
-  _enemyLaser: {fileID: 4607562898117239082, guid: 7de166e54c38853bcb407d461f4f1a6f, type: 3}
+  Explosion: {fileID: 2078615227446897435, guid: 39f03fc1153fbac20b3632198cede754, type: 3}
