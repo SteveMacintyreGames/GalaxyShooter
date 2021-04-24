@@ -30,6 +30,11 @@ public class PowerUp : MonoBehaviour
         Player.powerupMagnet += HeadTowardsPlayer;
     }
 
+    void OnDisable()
+    {
+        Player.powerupMagnet -= HeadTowardsPlayer;
+    }
+
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
