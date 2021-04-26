@@ -44,6 +44,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _laserPrefab;
     [SerializeField]
+    private float _laserSpeed = 8f;
+    [SerializeField]
     private AudioClip _laser_Clip;
     [SerializeField]
     private AudioClip _thrust_Clip;
@@ -336,6 +338,7 @@ public class Player : MonoBehaviour
             {
                 Vector3 offset = new Vector3(0f,.8f,0f);
                 Instantiate(_laserPrefab, transform.position+offset, Quaternion.identity);
+                _laserPrefab.GetComponent<Laser>().speed = _laserSpeed;
             }
             _audioSource.clip = _laser_Clip;
             _audioSource.Play();

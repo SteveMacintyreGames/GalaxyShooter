@@ -5,7 +5,7 @@ using UnityEngine;
 public class Laser : MonoBehaviour
 {
     [SerializeField]
-    public float _speed;
+    public float speed;
 
     [SerializeField]
     protected Vector3 _laserDirection = Vector3.up;
@@ -24,7 +24,7 @@ public class Laser : MonoBehaviour
 
     protected virtual void Move()
     {
-        transform.Translate(_laserDirection * _speed * Time.deltaTime);
+        transform.Translate(_laserDirection * speed * Time.deltaTime);
         
     }
 

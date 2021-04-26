@@ -5,13 +5,10 @@ using UnityEngine;
 public class DuoLaser : Laser
 {
     [SerializeField]
-        public float duoLaserSpeed;
 
-    
     protected override void Start()
     {
-        base.Start();
-        _speed = duoLaserSpeed;    
+        base.Start();            
     }
 
     // Update is called once per frame

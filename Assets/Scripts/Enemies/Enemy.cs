@@ -19,6 +19,7 @@ public class Enemy : MonoBehaviour
     protected bool _isExploding = false;
 
     protected Vector3 _currentPos; 
+    protected Vector3 _lerpPos = Vector3.zero;
 
 
     [SerializeField]
@@ -38,7 +39,7 @@ public class Enemy : MonoBehaviour
     protected AudioClip _enemyLaser_Clip;
     public bool enemyLaserGoingUp;
     [SerializeField]
-    private float _enemyLaserSpeed = 1f;
+    private float _enemyLaserSpeed = 8f;
 
     Vector3 _originalPosition;
 
@@ -50,6 +51,8 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     GameObject _explosionHolder;
     public bool playerNear = false;
+    bool _dodge = false;
+
 
 
     void Start()
@@ -170,6 +173,14 @@ public class Enemy : MonoBehaviour
                 FireLasers(_enemyLaserSpeed);
                 CheckBottom();                
                 break;
+            
+            case 7:
+            Move(Vector2.down, _enemySpeed);
+            //FireLasers(_enemyLaserSpeed);
+            CheckBottom();
+         
+                
+            break;
 
             default:              
             break;
@@ -189,21 +200,23 @@ public class Enemy : MonoBehaviour
 
     void FireLasers(float laserSpeed)
     {
+        var _laserSpeed = -laserSpeed;
+        var _instantiationPosition = transform.position;
 
         if (Time.time > _canFire)
         {
             _fireRate = Random.Range(4.5f,7.3f);
             //_fireRate = 1.5f;
-            _canFire = Time.time + _fireRate;           
-            
-            
-            GameObject enemyLaser = Instantiate(_enemyLaser, transform.position, Quaternion.identity) as GameObject;
+            _canFire = Time.time + _fireRate;  
+
             if(enemyLaserGoingUp)
             {
-                enemyLaser.transform.position += new Vector3(0,3,0);                
-                enemyLaser.GetComponent<DuoLaser>().duoLaserSpeed = laserSpeed;
-            }   
-                
+                _laserSpeed *= -1;
+                _instantiationPosition += new Vector3(0,3f,0);
+
+            }
+            GameObject enemyLaser = Instantiate(_enemyLaser, _instantiationPosition, Quaternion.identity) as GameObject;
+            enemyLaser.GetComponent<DuoLaser>().speed = _laserSpeed;
             Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser_Enemy>();
             _audioSource.clip = _enemyLaser_Clip;
             _audioSource.Play();
@@ -213,30 +226,74 @@ public class Enemy : MonoBehaviour
   
 
     protected virtual void OnTriggerEnter2D(Collider2D other)
-    {
-        _currentPos = transform.position;
-       
+    {       
         if(other.CompareTag("Player"))
         {        
             Player.Instance.Damage();
-
-            DestroyEnemyShip();
-            
+            DestroyEnemyShip();            
         }
 
         if(other.CompareTag("Laser"))
-        {            
-            Destroy(other.gameObject);
-            _shotsToKill--;
-            if(_shotsToKill <1)
-            {
-            Destroy(gameObject.GetComponent<Collider2D>());            
-            Player.Instance.AddScore(Random.Range (7,11));
-            DestroyEnemyShip();
-            }
+        {
+            bool haveChosen=false;
 
+            //Check if it's the bullet dodger enemy.
+            if(_enemyID == 7)
+            {   
+                //Dodge it
+                if (other is BoxCollider2D)
+                {
+                    Vector3 amountToMove = new Vector3(1.5f,0,0);
+                    var _curPos = transform.position;
+                    if(other.transform.position.x < transform.position.x)
+                    {   if(!haveChosen)
+                        {
+                        _curPos += amountToMove;
+                        haveChosen=true;                        
+                        }
+                    }
+                    else if(other.transform.position.x>transform.position.x)
+                    {
+                        if(!haveChosen)
+                        {
+                            _curPos -= amountToMove;
+                            haveChosen = true;
+                        }   
+                    }
+                    _lerpPos = _curPos;
+                    StartCoroutine(Dodge());       
+                }                   
+            }    
+            if(other is CapsuleCollider2D)
+            {
+                Debug.Log("AIII! I AM SLAIN!");
+                Destroy(other.gameObject);
+                _shotsToKill--;
+                if(_shotsToKill <1)
+                {
+                    Destroy(gameObject.GetComponent<Collider2D>());            
+                    Player.Instance.AddScore(Random.Range (7,11));
+                    DestroyEnemyShip();
+                }  
+            }
         }
     }
+
+
+    IEnumerator Dodge()
+    {
+        
+        while (transform.position.x != _lerpPos.x)
+        {
+            _lerpPos.y = transform.position.y;
+            transform.position = Vector3.MoveTowards(transform.position, _lerpPos, 7f * Time.deltaTime);
+            Debug.Log(transform.position.x + ", "+_lerpPos.x);
+            yield return 0; 
+            
+        } 
+        yield return null;
+    }
+
 
     public virtual void DestroyEnemyShip()
     {  
@@ -246,24 +303,19 @@ public class Enemy : MonoBehaviour
         _enemySpeed = 0;
         canShoot = false;
         _isExploding = true;
+        //Change the enemy color to white so the internal explosion looks yellow and not tinted.
         GetComponent<SpriteRenderer>().color = Color.white;
         _audioSource.Play(); 
 
-        switch (_enemyID)
+        //Some new enemies don't have the built in animation that uses the parameter "onEnemyDeath" to trigger
+        //We'll just check the animator for any parameters, if they have them, it's the old one
+        //if there's no parameters, it's a new enemy with an explosion tacked on so play that.
+        if (_anim.parameterCount>0)
         {
-            case(5):
-            Instantiate(_explosionHolder, transform.position, Quaternion.identity);
-            Destroy(this.gameObject);
-            break;
-
-            case(6):
-            Instantiate(_explosionHolder, transform.position, Quaternion.identity);
-            Destroy(this.gameObject);
-            break;
-
-        default:
             _anim.SetTrigger("onEnemyDeath");
-            break;
+        }else{
+            Instantiate(_explosionHolder, transform.position, Quaternion.identity);
+            Destroy(this.gameObject);
         }
 
     }
@@ -374,8 +426,6 @@ public class Enemy : MonoBehaviour
     void RammerMovement()
     {
         
-        Debug.Log(_phase);
-
         //phase 1, move down as normal
         //until player gets within a certain range
         //then follow the player
@@ -434,18 +484,16 @@ void PowerupHunting()
     //If a powerup is directly in front of the enemy, enemy shoots.
     //cast a ray straight down
     RaycastHit2D hit = Physics2D.Raycast(transform.position + new Vector3(0,-1f,0), transform.TransformDirection(Vector2.down), 10f);
-    Debug.DrawRay(transform.position + new Vector3(0,-1f,0), transform.TransformDirection(Vector2.down) * 10f, Color.red);
+    //Debug.DrawRay(transform.position + new Vector3(0,-1f,0), transform.TransformDirection(Vector2.down) * 10f, Color.red);
 
     
 
     if (hit)
     {
-       //Debug.Log("I hit something " + hit.collider.name + ", " + hit.collider.tag);
+
        if (hit.collider.tag == "PowerUp")
        {
-          Debug.Log("I see a powerup!");
           _canFire = Time.deltaTime;
-
           FireLasers(20f);
        }
     
