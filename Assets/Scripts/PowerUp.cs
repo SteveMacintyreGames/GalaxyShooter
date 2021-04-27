@@ -98,6 +98,7 @@ public class PowerUp : MonoBehaviour
                     case 5:
                         Player.Instance.ActivateMissiles();
                         break;
+                    
                     default:
                          break;
                 }

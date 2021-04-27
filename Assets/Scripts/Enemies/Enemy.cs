@@ -14,6 +14,9 @@ public class Enemy : MonoBehaviour
     public bool _shieldActivated;
     public bool canShoot;
 
+    [SerializeField]
+    float _minX = 5f;
+
     protected float _fireRate = 3.0f;
     protected float _canFire = -1;
     protected bool _isExploding = false;
@@ -206,7 +209,6 @@ public class Enemy : MonoBehaviour
         if (Time.time > _canFire)
         {
             _fireRate = Random.Range(4.5f,7.3f);
-            //_fireRate = 1.5f;
             _canFire = Time.time + _fireRate;  
 
             if(enemyLaserGoingUp)
@@ -236,6 +238,22 @@ public class Enemy : MonoBehaviour
         if(other.CompareTag("Laser"))
         {
             bool haveChosen=false;
+            var _otherPos = other.gameObject.transform.position;
+
+            if(_enemyID == 5)//Check to see if it's the rammer
+            {
+                if(other is BoxCollider2D)
+                {
+                    
+                    GameObject kaboom = Instantiate(Resources.Load("Explosion_Smaller")) as GameObject;
+                    kaboom.transform.position = _otherPos;
+                    kaboom.transform.parent = transform;
+                    
+
+                    Destroy(other.gameObject);
+                    TakeDamage();
+                }
+            }
 
             //Check if it's the bullet dodger enemy.
             if(_enemyID == 7)
@@ -266,8 +284,23 @@ public class Enemy : MonoBehaviour
             }    
             if(other is CapsuleCollider2D)
             {
-                Debug.Log("AIII! I AM SLAIN!");
                 Destroy(other.gameObject);
+                TakeDamage();
+            }
+
+
+             
+                    GameObject kaboom2 = Instantiate(Resources.Load("Explosion_Smaller")) as GameObject;
+                    kaboom2.transform.position = _otherPos;
+                    kaboom2.transform.parent = transform;
+            Destroy(other.gameObject);
+            TakeDamage();
+        }
+    }
+
+    void TakeDamage()
+    {
+                
                 _shotsToKill--;
                 if(_shotsToKill <1)
                 {
@@ -275,11 +308,7 @@ public class Enemy : MonoBehaviour
                     Player.Instance.AddScore(Random.Range (7,11));
                     DestroyEnemyShip();
                 }  
-            }
-        }
     }
-
-
     IEnumerator Dodge()
     {
         
@@ -360,7 +389,7 @@ public class Enemy : MonoBehaviour
 
     void PickNewTopPosition()
     {
-        transform.position = new Vector3 (Random.Range(-6.5f,6.5f),Random.Range(8f,8.9f),0);
+        transform.position = new Vector3 (Random.Range(-_minX,_minX),Random.Range(8f,8.9f),0);
     }
 
     void Enemy2Movement()
@@ -485,8 +514,6 @@ void PowerupHunting()
     //cast a ray straight down
     RaycastHit2D hit = Physics2D.Raycast(transform.position + new Vector3(0,-1f,0), transform.TransformDirection(Vector2.down), 10f);
     //Debug.DrawRay(transform.position + new Vector3(0,-1f,0), transform.TransformDirection(Vector2.down) * 10f, Color.red);
-
-    
 
     if (hit)
     {
