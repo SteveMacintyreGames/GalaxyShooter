@@ -95,7 +95,7 @@ public class UIManager : MonoBehaviour
             ammoBits[i] = Instantiate(_ammoIcon, new Vector2(0,0), Quaternion.identity);
             ammoBits[i].transform.SetParent(_AmmoHolder);
             ammoBits[i].transform.localPosition = new Vector3(0,0,0);
-            ammoBits[i].transform.localPosition = new Vector3(i*5,0,0);
+            ammoBits[i].transform.localPosition = new Vector3(i*6,0,0);
             ammoBits[i].enabled = false;
         }
     }

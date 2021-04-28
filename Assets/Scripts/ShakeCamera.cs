@@ -7,7 +7,7 @@ public class ShakeCamera : MonoBehaviour
     public Camera mainCamera;
     private float _timeToShake;
     private float _shakeLimit;
-    private float _cameraZ = -12.45f;   
+    private float _cameraZ = -10f;   
 
 
     // Start is called before the first frame update

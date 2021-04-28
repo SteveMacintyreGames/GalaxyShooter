@@ -181,20 +181,28 @@ public class SpawnManager : MonoBehaviour
 
         int[] enemyTable =
         {
-            40, // 0 main enemy
-            25, // 1 flip up
-            15, // 2 side by side
-            12, // 3 circler
-             8 // big boy
+            100, // 0 main enemy            
+            90, // 2 sidewinder
+            80, // 1 flip up
+            75,  // rear shooter
+            60, // 3 circler
+            50,   // Dodger
+            40,  // big boy
+            30  //rammer
+            
+            
         };
 
         int[] enemyID =
         {
-            0,
-            1,
-            2,
-            3,
-            4
+            0,  // main enemy
+            2,  // sidewinder
+            1,  // flip up
+            6,  // rear shooter
+            3,  // circler
+            5,  //rammer  
+            4,  // big boy                      
+            7   // Dodger
         };
 
         for(int i = 0; i < _maxSpawnEnemyNumber; i++)
@@ -247,7 +255,7 @@ public class SpawnManager : MonoBehaviour
 
            int[] powerupTable =
            {
-               40, // ammo
+               50, // ammo
                25, // missile  
                16, // health   
                8, // shield   

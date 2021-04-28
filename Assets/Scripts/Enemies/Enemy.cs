@@ -14,9 +14,6 @@ public class Enemy : MonoBehaviour
     public bool _shieldActivated;
     public bool canShoot;
 
-    [SerializeField]
-    float _minX = 5f;
-
     protected float _fireRate = 3.0f;
     protected float _canFire = -1;
     protected bool _isExploding = false;
@@ -55,6 +52,9 @@ public class Enemy : MonoBehaviour
     GameObject _explosionHolder;
     public bool playerNear = false;
     bool _dodge = false;
+    int _numberOfDodges=0;
+    int _numberOfDodgesLimit = 3;
+    bool _canDodge = true;
 
 
 
@@ -238,13 +238,12 @@ public class Enemy : MonoBehaviour
         if(other.CompareTag("Laser"))
         {
             bool haveChosen=false;
-            var _otherPos = other.gameObject.transform.position;
 
             if(_enemyID == 5)//Check to see if it's the rammer
             {
                 if(other is BoxCollider2D)
                 {
-                    
+                    var _otherPos = other.gameObject.transform.position;
                     GameObject kaboom = Instantiate(Resources.Load("Explosion_Smaller")) as GameObject;
                     kaboom.transform.position = _otherPos;
                     kaboom.transform.parent = transform;
@@ -258,46 +257,50 @@ public class Enemy : MonoBehaviour
             //Check if it's the bullet dodger enemy.
             if(_enemyID == 7)
             {   
-                //Dodge it
-                if (other is BoxCollider2D)
+                if (_numberOfDodges < _numberOfDodgesLimit)
                 {
-                    Vector3 amountToMove = new Vector3(1.5f,0,0);
-                    var _curPos = transform.position;
-                    if(other.transform.position.x < transform.position.x)
-                    {   if(!haveChosen)
-                        {
-                        _curPos += amountToMove;
-                        haveChosen=true;                        
-                        }
-                    }
-                    else if(other.transform.position.x>transform.position.x)
+                    //Dodge it
+                    if (other is BoxCollider2D)
                     {
-                        if(!haveChosen)
+                        _numberOfDodges ++;
+                        Vector3 amountToMove = new Vector3(1.5f,0,0);
+                        var _curPos = transform.position;
+                        if(other.transform.position.x < transform.position.x)
+                        {   if(!haveChosen)
+                            {
+                            _curPos += amountToMove;
+                            StartCoroutine(StopDodging());
+                            haveChosen=true;                        
+                            }
+                        }
+                        else if(other.transform.position.x>transform.position.x)
                         {
-                            _curPos -= amountToMove;
-                            haveChosen = true;
-                        }   
-                    }
-                    _lerpPos = _curPos;
-                    StartCoroutine(Dodge());       
-                }                   
-            }    
-            if(other is CapsuleCollider2D)
-            {
-                Destroy(other.gameObject);
-                TakeDamage();
-            }
+                            if(!haveChosen)
+                            {
+                                _curPos -= amountToMove;
+                                haveChosen = true;
+                            }   
+                        }
+                        _lerpPos = _curPos;
+                        StartCoroutine(Dodge());       
+                    } 
+                }else{
+                    Destroy(other.gameObject);
+                    TakeDamage();
+                }                
+            } 
 
-
-             
-                    GameObject kaboom2 = Instantiate(Resources.Load("Explosion_Smaller")) as GameObject;
-                    kaboom2.transform.position = _otherPos;
-                    kaboom2.transform.parent = transform;
             Destroy(other.gameObject);
             TakeDamage();
+
         }
     }
 
+    IEnumerator StopDodging()
+    {
+        yield return new WaitForSeconds(3f);
+        _canDodge = false;
+    }
     void TakeDamage()
     {
                 
@@ -316,7 +319,6 @@ public class Enemy : MonoBehaviour
         {
             _lerpPos.y = transform.position.y;
             transform.position = Vector3.MoveTowards(transform.position, _lerpPos, 7f * Time.deltaTime);
-            Debug.Log(transform.position.x + ", "+_lerpPos.x);
             yield return 0; 
             
         } 
@@ -389,7 +391,7 @@ public class Enemy : MonoBehaviour
 
     void PickNewTopPosition()
     {
-        transform.position = new Vector3 (Random.Range(-_minX,_minX),Random.Range(8f,8.9f),0);
+        transform.position = new Vector3 (Random.Range(-6.5f,6.5f),Random.Range(8f,8.9f),0);
     }
 
     void Enemy2Movement()
@@ -520,13 +522,17 @@ void PowerupHunting()
 
        if (hit.collider.tag == "PowerUp")
        {
-          _canFire = Time.deltaTime;
-          FireLasers(20f);
+          StartCoroutine(KillPowerup());
        }
     
     }
     
 
+}
+IEnumerator KillPowerup()
+{
+    FireLasers(20f);
+    yield return new WaitForSeconds(1f);
 }
 
 }
