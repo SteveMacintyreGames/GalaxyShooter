@@ -51,10 +51,10 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     GameObject _explosionHolder;
     public bool playerNear = false;
-    bool _dodge = false;
+
     int _numberOfDodges=0;
     int _numberOfDodgesLimit = 3;
-    bool _canDodge = true;
+
 
 
 
@@ -235,33 +235,67 @@ public class Enemy : MonoBehaviour
             DestroyEnemyShip();            
         }
 
+       
+
         if(other.CompareTag("Laser"))
         {
-            bool haveChosen=false;
-
-            if(_enemyID == 5)//Check to see if it's the rammer
+             switch(_enemyID)
             {
-                if(other is BoxCollider2D)
+                case 0:
+                Destroy(other.gameObject);
+                TakeDamage();
+                break;
+
+                case 1:
+                Destroy(other.gameObject);
+                TakeDamage();
+                break;
+
+                case 2:
+                Destroy(other.gameObject);
+                TakeDamage();
+                break;
+
+                case 3:
+                Destroy(other.gameObject);
+                TakeDamage();
+                break;
+
+                case 4:
+                Destroy(other.gameObject);
+                TakeDamage();
+                break;
+
+                case 5:
+                 bool haveChosen=false;
+
+                if(_enemyID == 5)//Check to see if it's the rammer
                 {
-                    var _otherPos = other.gameObject.transform.position;
-                    GameObject kaboom = Instantiate(Resources.Load("Explosion_Smaller")) as GameObject;
-                    kaboom.transform.position = _otherPos;
-                    kaboom.transform.parent = transform;
-                    
+                    if(other is BoxCollider2D)
+                        {
+                            var _otherPos = other.gameObject.transform.position;
+                            GameObject kaboom = Instantiate(Resources.Load("Explosion_Smaller")) as GameObject;
+                            kaboom.transform.position = _otherPos;
+                            kaboom.transform.parent = transform;
 
-                    Destroy(other.gameObject);
-                    TakeDamage();
-                }
-            }
+                            Destroy(other.gameObject);
+                            TakeDamage();
+                        }
+                }     
 
-            //Check if it's the bullet dodger enemy.
-            if(_enemyID == 7)
-            {   
+                break;
+
+                case 6:
+                Destroy(other.gameObject);
+                TakeDamage();
+                break;
+
+                case 7:
+                haveChosen = false;
                 if (_numberOfDodges < _numberOfDodgesLimit)
                 {
                     //Dodge it
-                    if (other is BoxCollider2D)
-                    {
+                   
                         _numberOfDodges ++;
                         Vector3 amountToMove = new Vector3(1.5f,0,0);
                         var _curPos = transform.position;
@@ -269,7 +303,6 @@ public class Enemy : MonoBehaviour
                         {   if(!haveChosen)
                             {
                             _curPos += amountToMove;
-                            StartCoroutine(StopDodging());
                             haveChosen=true;                        
                             }
                         }
@@ -283,24 +316,19 @@ public class Enemy : MonoBehaviour
                         }
                         _lerpPos = _curPos;
                         StartCoroutine(Dodge());       
-                    } 
+                    
                 }else{
                     Destroy(other.gameObject);
                     TakeDamage();
-                }                
-            } 
+                }              
+                break;    
 
-            Destroy(other.gameObject);
-            TakeDamage();
+             
+            }
 
         }
     }
 
-    IEnumerator StopDodging()
-    {
-        yield return new WaitForSeconds(3f);
-        _canDodge = false;
-    }
     void TakeDamage()
     {
                 
@@ -317,10 +345,11 @@ public class Enemy : MonoBehaviour
         
         while (transform.position.x != _lerpPos.x)
         {
+            Debug.Log(transform.position.x + " , " + _lerpPos.x);
+
             _lerpPos.y = transform.position.y;
             transform.position = Vector3.MoveTowards(transform.position, _lerpPos, 7f * Time.deltaTime);
-            yield return 0; 
-            
+            yield return 0;             
         } 
         yield return null;
     }
