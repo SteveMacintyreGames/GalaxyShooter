@@ -1,35 +1,48 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Boss : MonoBehaviour
 {
-    [SerializeField] Transform _bossMover;
+    [SerializeField] GameObject _bossMover;
     [SerializeField] float _timeToWaitBetweenSections;
     
-    [SerializeField] protected List<GameObject> _waypointsOriginal;
-    protected List<GameObject> _waypoints;
+    [SerializeField] protected List<GameObject> _waypointsOriginal = new List<GameObject>();
+    [SerializeField] protected List<GameObject> _waypoints = new List<GameObject>();
      [SerializeField] private float _speed;
      protected int _currentWaypoint;
-
+     
     private bool _canMove = true;
     protected bool _nearWaypoint = false;
+
+    [SerializeField] protected Text debugText;
+
   
-    // get list of waypoints
-    //move to a waypoint
-    //stop
-    //move to the next.
     
     void Start()
     {
         _waypoints = _waypointsOriginal;
         _currentWaypoint = 0;
+
+      for(int x = 0; x < _waypoints.Count; x++)
+      {
+          //debugText.text += "\n" + _waypoints[x];
+      }
+       // debugText.text += "\n All waypoints tallied";
+        
+
        StartCoroutine(Move());
+      // debugText.text += "\n_waypoints: " + _waypoints.Count;
+       //debugText.text += "\n 0: "  +_waypoints[0];
+       //debugText.text += "\n 09: " + _waypoints[9];
+       //debugText.text += "\n";
     }
     void Update()
     {
         CheckNumberOfWaypoints();
         CheckIfNearWayPoint();
+       
     }
 
     void CheckNumberOfWaypoints()
@@ -38,6 +51,7 @@ public class Boss : MonoBehaviour
         {
             _canMove = false;
             Debug.Log("All waypoints destroyed!");
+            debugText.text = "All waypoints destroyed";
             Debug.Break();
         }
     }
@@ -48,6 +62,7 @@ public class Boss : MonoBehaviour
         {
             while(_waypoints.Count > 1)
             {
+                    //debugText.text = "Moving to: " + _waypoints[_currentWaypoint];
                    transform.position = Vector3.MoveTowards(transform.position, 
                     _waypoints[_currentWaypoint].transform.position, Time.deltaTime * _speed);
                 if(_nearWaypoint)
@@ -60,25 +75,9 @@ public class Boss : MonoBehaviour
                         }   
                 }  
                 yield return 0;     
-            }        
-                                
-
-             
+            }                 
         }
     }   
-
-
-
-    protected void RemoveCurrentWaypoint()
-    {
-        _waypoints.Remove(_waypoints[_currentWaypoint].gameObject);
-        foreach (GameObject section in _waypoints)
-        {
-            Debug.Log(section.name);
-        }
-        
-
-    }
 
     private void CheckIfNearWayPoint()
     {
@@ -90,5 +89,12 @@ public class Boss : MonoBehaviour
         }
     }
 
+    protected void RemoveSectionByID(int id)
+    {
+        debugText.text = "";
+        debugText.text = id.ToString();
+        Debug.Log(id);
+        _waypoints.RemoveAt(id);
+    }
 
 }

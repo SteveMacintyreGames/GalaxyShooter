@@ -11,7 +11,13 @@ public class BossSection : Boss
     {
         if(transform.childCount == 0)
         {
-            RemoveCurrentWaypoint();
+          
+            base.RemoveSectionByID(_sectionID);
+           
+             
         }
     }
+
+
+
 }
