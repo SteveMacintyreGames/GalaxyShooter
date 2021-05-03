@@ -11,11 +11,10 @@ public class Boss : MonoBehaviour
     [SerializeField] float _timeToWaitBetweenSections = 1f;
 
     [SerializeField] protected List<GameObject> _waypoints = new List<GameObject>();
-    bool[] canAttack = new bool[10];
 
 
     protected int _currentWaypoint;
-    int _destroyedWaypoints = 0;
+
     bool _canMove = true;
 
     void OnEnable()
@@ -37,44 +36,17 @@ public class Boss : MonoBehaviour
     //if a section is destroyed while your in it,
     //move on to the next section.
 
-    void Awake()
-    {
-        _currentWaypoint = 0;
-        _destroyedWaypoints = 0;
-        for (int y =0; y < _waypoints.Count; y++)
-        {
-            _debugText.text += _waypoints[y] + ", ";
-        }
-        for (int x=0; x < canAttack.Length; x++)
-        {
-            canAttack[x] = true;
-        }
-        StartCoroutine(MoveThroughWaypoints());
-    }
     void Start()
     {
-       
-    }
+        _currentWaypoint = 0;
+             
+        StartCoroutine(MoveThroughWaypoints());
         
-
-
+    }
+  
     void Update()
     {
-        string txt = "";
-     //_debugText.text = "Waypoint: "+_currentWaypoint;
-             for (int y =0; y < _waypoints.Count; y++)
-        {
-             txt += _waypoints[y] + ", ";
-        }
-        _debugText.text = txt;
-    }
-    void IfOnLastSection()
-    {
-        if((Vector3.Distance(transform.position,_waypoints[_currentWaypoint].transform.position ) <0.5f) &&
-        _destroyedWaypoints == 9)
-        {
-            _canMove = false;
-        }
+
     }
 
     IEnumerator MoveThroughWaypoints()
@@ -85,9 +57,12 @@ public class Boss : MonoBehaviour
         
             if(Vector3.Distance(transform.position,_waypoints[_currentWaypoint].transform.position ) <0.5f)
             {
-               
-                IfOnLastSection();
+                if(_waypoints.Count <=1)
+                {
+                    _canMove = false;
+                }   
 
+               
                 yield return new WaitForSeconds(_timeToWaitBetweenSections);
                 ChooseNextWaypoint();
                 
@@ -116,23 +91,29 @@ public class Boss : MonoBehaviour
     }
 
     void IgnoreSectionNow(int id)
-    {
-        var _id = id;
-        //GameObject removeThis = _waypoints[id];
-        //_waypoints.Remove(removeThis);
-        if(_waypoints[_id] != null){
-        _waypoints.RemoveAt(_id);
-        _debugText.text = "Waypoint "+_id+" destroyed";
-        }     
+    {   
        
-        canAttack[_id] = false;
-        _destroyedWaypoints ++;
-        if (_destroyedWaypoints == 10)
+        string x = "Path ("+id+")";
+        for(int i = _waypoints.Count-1; i>=0 ; i--)
         {
-            Debug.Log("All waypoints destroyed in IgnoreSectionNow");
+            if(x == _waypoints[i].transform.name)
+            {
+                _waypoints.RemoveAt(i);
+                ChooseNextWaypoint();
+                _debugText.text += _waypoints.Count.ToString();
+                break;
+
+            }
+            
+            //_debugText.text += _waypoints[i].transform.name;
+            //Debug.Log(_waypoints[i].transform.name);
+            //_debugText.text += _waypoints[i].ToString() + ": "+x;
+            //Debug.Log(_debugText.text += _waypoints[i].ToString() + ": "+x);
+            //Debug.Log(_waypoints[i].ToString());
+            
         }
-        //ChooseNextWaypoint();
-        
+      
+
     }
 
 }
