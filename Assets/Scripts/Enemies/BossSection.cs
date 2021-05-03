@@ -2,8 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossSection : Boss
+public class BossSection : MonoBehaviour
 {
+
+    public delegate void DeleteSection(int sectionID);
+    public static event DeleteSection deleteSection;
+
     [SerializeField] int _sectionID;
    
 
@@ -11,13 +15,13 @@ public class BossSection : Boss
     {
         if(transform.childCount == 0)
         {
-          
-            base.RemoveSectionByID(_sectionID);
-           
-             
+            if(deleteSection != null)
+            {
+                Debug.Log("All children destroyed in section " + _sectionID);
+                deleteSection(_sectionID);
+                
+            }
         }
     }
-
-
 
 }
