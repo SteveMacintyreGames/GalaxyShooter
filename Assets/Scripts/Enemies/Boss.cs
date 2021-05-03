@@ -37,23 +37,36 @@ public class Boss : MonoBehaviour
     //if a section is destroyed while your in it,
     //move on to the next section.
 
-
-    void Start()
+    void Awake()
     {
         _currentWaypoint = 0;
         _destroyedWaypoints = 0;
+        for (int y =0; y < _waypoints.Count; y++)
+        {
+            _debugText.text += _waypoints[y] + ", ";
+        }
         for (int x=0; x < canAttack.Length; x++)
         {
             canAttack[x] = true;
         }
         StartCoroutine(MoveThroughWaypoints());
     }
+    void Start()
+    {
+       
+    }
         
 
 
     void Update()
     {
+        string txt = "";
      //_debugText.text = "Waypoint: "+_currentWaypoint;
+             for (int y =0; y < _waypoints.Count; y++)
+        {
+             txt += _waypoints[y] + ", ";
+        }
+        _debugText.text = txt;
     }
     void IfOnLastSection()
     {
@@ -104,17 +117,21 @@ public class Boss : MonoBehaviour
 
     void IgnoreSectionNow(int id)
     {
+        var _id = id;
         //GameObject removeThis = _waypoints[id];
-        //_waypoints.Remove(removeThis);     
-        _waypoints.RemoveAt(id);
-        _debugText.text = "Waypoint "+id+" destroyed";
-        canAttack[id] = false;
+        //_waypoints.Remove(removeThis);
+        if(_waypoints[_id] != null){
+        _waypoints.RemoveAt(_id);
+        _debugText.text = "Waypoint "+_id+" destroyed";
+        }     
+       
+        canAttack[_id] = false;
         _destroyedWaypoints ++;
         if (_destroyedWaypoints == 10)
         {
             Debug.Log("All waypoints destroyed in IgnoreSectionNow");
         }
-        ChooseNextWaypoint();
+        //ChooseNextWaypoint();
         
     }
 
