@@ -9,6 +9,8 @@ public class BossSection : MonoBehaviour
     public static event DeleteSection deleteSection;
 
     [SerializeField] int _sectionID;
+    bool sentMessage = false;
+
    
 
     void Update()
@@ -17,8 +19,15 @@ public class BossSection : MonoBehaviour
         {
             if(deleteSection != null)
             {
-                Debug.Log("All children destroyed in section " + _sectionID);
-                deleteSection(_sectionID);
+                
+                if(!this.sentMessage)
+                {
+                    Debug.Log("All children destroyed in section " + _sectionID);
+                    deleteSection(_sectionID);
+                    this.sentMessage = true;
+                    //HUGE thank you to Paul Marsh for the clue this was constantly on.
+                }
+                
                 
             }
         }

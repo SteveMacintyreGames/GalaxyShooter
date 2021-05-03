@@ -10,7 +10,7 @@ public class target : MonoBehaviour
         if(other.CompareTag("Laser"))
         {
             _hp--;
-            if (_hp <0)
+            if (_hp <=0)
             {
                 Destroy(other.gameObject);
                 Destroy(this.gameObject);
