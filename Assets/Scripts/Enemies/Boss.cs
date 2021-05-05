@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Boss : MonoBehaviour
 {
-    [SerializeField] GameObject _bossMover;
+  
     [SerializeField] private Text _debugText;
     [SerializeField] float _speed = 1f;
     [SerializeField] float _timeToWaitBetweenSections = 1f;
@@ -44,11 +44,6 @@ public class Boss : MonoBehaviour
         
     }
   
-    void Update()
-    {
-
-    }
-
     IEnumerator MoveThroughWaypoints()
     {
         while(_canMove)
@@ -60,12 +55,11 @@ public class Boss : MonoBehaviour
                 if(_waypoints.Count <=1)
                 {
                     _canMove = false;
-                }   
+                }
 
                
                 yield return new WaitForSeconds(_timeToWaitBetweenSections);
                 ChooseNextWaypoint();
-                
             }
             yield return 0;
         }
@@ -92,7 +86,6 @@ public class Boss : MonoBehaviour
 
     void IgnoreSectionNow(int id)
     {   
-       
         string x = "Path ("+id+")";
         for(int i = _waypoints.Count-1; i>=0 ; i--)
         {
@@ -100,20 +93,11 @@ public class Boss : MonoBehaviour
             {
                 _waypoints.RemoveAt(i);
                 ChooseNextWaypoint();
-                _debugText.text += _waypoints.Count.ToString();
+                //_debugText.text += _waypoints.Count.ToString();
                 break;
 
-            }
-            
-            //_debugText.text += _waypoints[i].transform.name;
-            //Debug.Log(_waypoints[i].transform.name);
-            //_debugText.text += _waypoints[i].ToString() + ": "+x;
-            //Debug.Log(_debugText.text += _waypoints[i].ToString() + ": "+x);
-            //Debug.Log(_waypoints[i].ToString());
-            
-        }
-      
-
+            }            
+        } 
     }
 
 }
