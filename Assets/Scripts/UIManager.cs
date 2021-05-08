@@ -107,6 +107,7 @@ public class UIManager : MonoBehaviour
         //turn off all the bullets
         for (int i=0; i < _maxAmmo ;i++)
         {
+            if(ammoBits != null)
             ammoBits[i].enabled = false;
         }
         //turn all the bullets on until the end of _ammoCount.

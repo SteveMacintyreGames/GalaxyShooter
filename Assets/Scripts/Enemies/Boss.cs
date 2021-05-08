@@ -12,7 +12,7 @@ public class Boss : MonoBehaviour
 
     [SerializeField] protected List<GameObject> _waypoints = new List<GameObject>();
 
-
+  
     protected int _currentWaypoint;
 
     bool _canMove = true;
@@ -57,7 +57,6 @@ public class Boss : MonoBehaviour
                     _canMove = false;
                 }
 
-               
                 yield return new WaitForSeconds(_timeToWaitBetweenSections);
                 ChooseNextWaypoint();
             }

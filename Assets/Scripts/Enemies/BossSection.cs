@@ -9,6 +9,7 @@ public class BossSection : MonoBehaviour
     public static event DeleteSection deleteSection;
 
     [SerializeField] int _sectionID;
+    [SerializeField] int _childrenCount = 1;
     bool sentMessage = false;
 
    
@@ -16,7 +17,7 @@ public class BossSection : MonoBehaviour
     void Update()
     {   
         
-        if(transform.childCount == 0)
+        if(transform.childCount == _childrenCount)
         {        
                 if(!this.sentMessage)
                 {
