@@ -17,6 +17,8 @@ public class Boss : MonoBehaviour
 
     bool _canMove = true;
 
+    private int _deathCount = 0;
+
     void OnEnable()
     {
         BossSection.deleteSection += IgnoreSectionNow;
@@ -91,12 +93,21 @@ public class Boss : MonoBehaviour
             if(x == _waypoints[i].transform.name)
             {
                 _waypoints.RemoveAt(i);
+                _deathCount++;
+                if(_deathCount == 10)
+                {
+                    Die();
+                }
                 ChooseNextWaypoint();
-                //_debugText.text += _waypoints.Count.ToString();
                 break;
 
             }            
         } 
+    }
+
+    void Die()
+    {
+        Destroy(this.gameObject);
     }
 
 }

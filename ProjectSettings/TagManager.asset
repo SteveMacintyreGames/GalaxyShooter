@@ -52,3 +52,6 @@ TagManager:
   - name: Foreground
     uniqueID: 303980667
     locked: 0
+  - name: Destruction
+    uniqueID: 2176464221
+    locked: 0

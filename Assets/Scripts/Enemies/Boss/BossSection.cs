@@ -1,10 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class BossSection : MonoBehaviour
 {
-
     public delegate void DeleteSection(int sectionID);
     public static event DeleteSection deleteSection;
 
@@ -13,7 +11,6 @@ public class BossSection : MonoBehaviour
     [SerializeField] GameObject[] _Layers;
     [SerializeField] protected int _currentLayer;
     int currentCount;
-
     bool sentMessage = false;
 
   
@@ -27,20 +24,12 @@ public class BossSection : MonoBehaviour
    //wait for all children inside layer to disappear
    //deactivate layer and turn on the next layer downward
    //repeat until all layers are destroyed
-   //set a flag that this id is done. 
-        
-        
-        
-   
-
-
+   //set a flag that this id is done.    
+ 
     void Update()
     {   
-        
         CheckChildren();
-        CheckLayers();    
-       
-        
+        CheckLayers();
     }
 
     void CheckChildren()
