@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TurretBullet : MonoBehaviour
 {
-    private float _bulletSpeed = -6f;
+    private float _bulletSpeed = -3f;
 
     public float BulletSpeed
     {
@@ -32,5 +32,14 @@ public class TurretBullet : MonoBehaviour
     void DestroyBullet()
     {
         Destroy(this.gameObject);
+    }
+
+        void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.CompareTag("Player"))
+        {
+            if (Random.value>.3);
+            Player.Instance.Damage();
+        }
     }
 }

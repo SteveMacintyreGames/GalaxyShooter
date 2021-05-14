@@ -63,6 +63,7 @@ public class Player : MonoBehaviour
     private float _thrusterUseSpeed;
     private float _thrusterRefillSpeed;
     private bool _canMove;
+    private bool _canHit = true;
 
 
     
@@ -375,6 +376,7 @@ public class Player : MonoBehaviour
     }
 
     public void Damage()
+    {if (_canHit)
     {
         ShakeCam(.3f);
         
@@ -386,6 +388,7 @@ public class Player : MonoBehaviour
 
             
         _playerLives --;
+        StartCoroutine(DontHitMePlease());
         
         UIManager.Instance.UpdateLives(_playerLives);
 
@@ -402,6 +405,14 @@ public class Player : MonoBehaviour
             Destroy(this.gameObject,1);
             
         }
+    }
+        
+    }
+    IEnumerator DontHitMePlease()
+    {
+        _canHit = false;
+        yield return new WaitForSeconds (3f);
+        _canHit = true;
     }
 
     private void DamageShip()

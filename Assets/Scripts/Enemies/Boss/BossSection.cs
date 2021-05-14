@@ -12,6 +12,7 @@ public class BossSection : MonoBehaviour
     [SerializeField] protected int _currentLayer;
     int currentCount;
     bool sentMessage = false;
+    [SerializeField] int _points = 100;
 
   
 
@@ -36,6 +37,7 @@ public class BossSection : MonoBehaviour
     {
          if(transform.childCount == _childrenCount)
         {        
+                Player.Instance.AddScore(_points);
                 if(!this.sentMessage)
                 { 
                     deleteSection(_sectionID); 

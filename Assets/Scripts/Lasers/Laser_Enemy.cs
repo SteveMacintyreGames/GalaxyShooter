@@ -17,9 +17,7 @@ public class Laser_Enemy : DuoLaser
         Invoke("DestroyLasers",4f);   
          if(GameManager.Instance._negativePowerupActivated)
         {
-        _target = Player.Instance.gameObject;
-        _laserHomingDirection = (_target.transform.position - transform.position).normalized;
-        _laserDirection =  new Vector3(_laserHomingDirection.x,-1,0) * speed * Time.deltaTime;
+            HomingLasers();
         }else
         {
             _laserDirection = whatDirection * speed * Time.deltaTime;
@@ -47,6 +45,13 @@ public class Laser_Enemy : DuoLaser
         {
             Player.Instance.Damage();
         }
+    }
+
+    public void HomingLasers()
+    {
+        _target = Player.Instance.gameObject;
+        _laserHomingDirection = (_target.transform.position - transform.position).normalized;
+        _laserDirection =  new Vector3(_laserHomingDirection.x,-1,0) * speed * Time.deltaTime;
     }
 
 }

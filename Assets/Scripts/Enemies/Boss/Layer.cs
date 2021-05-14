@@ -4,12 +4,6 @@ using UnityEngine;
 
 public class Layer : BossSection
 {
-
-    void Start()
-    {
-        
-    }
-
     void Update()
     {
         if(transform.childCount == 0)
