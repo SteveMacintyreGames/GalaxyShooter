@@ -36,6 +36,11 @@ public class TurretBullet : MonoBehaviour
 
         void OnTriggerEnter2D(Collider2D other)
     {
+        if(other.CompareTag("Laser"))
+        {
+            Destroy(other.gameObject);
+            DestroyBullet();
+        }
         if(other.CompareTag("Player"))
         {
             if (Random.value>.3);

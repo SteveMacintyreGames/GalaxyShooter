@@ -8,6 +8,7 @@ public class Layer : BossSection
     {
         if(transform.childCount == 0)
         {   
+            Player.Instance.AddScore(100);
 
             base._currentLayer --;
             Destroy(this.gameObject);
