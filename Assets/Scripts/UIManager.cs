@@ -54,8 +54,7 @@ public class UIManager : MonoBehaviour
     private float _thrusterPower;
     private Image _thrusterPowerBar;
 
-    [SerializeField]
-    private Text _levelText;
+    [SerializeField] private Text _levelText;
 
 
     void Awake()
@@ -132,6 +131,11 @@ public class UIManager : MonoBehaviour
     public void UpdateScore(int playerScore)
     {
         scoreText.text = "Score: "+playerScore;
+    }
+
+    public void UpdateLevel(int level)
+    {
+        _levelText.text = "Level: "+level;
     }
 
     public void UpdateLives(int currentLives)

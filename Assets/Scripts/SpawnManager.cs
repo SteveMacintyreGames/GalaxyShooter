@@ -77,7 +77,7 @@ public class SpawnManager : MonoBehaviour
         _level = 1;
         _timeToSpawn = 5f;
         _timeToWait = 5f;
-        _maxEnemies = 4f;
+        _maxEnemies = 5f;
         _maxEnemiesOnScreen = 3;
         _levelText.gameObject.SetActive(false);
         _minpowerupTime = 5f;
@@ -100,31 +100,12 @@ public class SpawnManager : MonoBehaviour
         }     
     }
 
-    void Update()
-    {
-        CheckEnemiesOnScreen();
-    }
-   
-        void CheckEnemiesOnScreen()
-    {
-        _enemiesOnScreenArray = GameObject.FindGameObjectsWithTag("Enemy");
-        _enemiesOnScreen = _enemiesOnScreenArray.Length;
-    }
-
-    //Decide on a percentage of Enemies & Powerups per level
-    //Increase the number of enemies and powerups every few levels up to a limit.
-
     public void StartSpawning()
     {
         StartCoroutine("SpawnEnemyRoutine");
         StartCoroutine("SpawnPowerUpRoutine");
         StartCoroutine("ShowLevel");
     }
-
-    // have enemy spawned count
-    // max enemy count
-    // destroyed enemy count
-    // when destroyed enemies = max enemy count = new level.
 
     IEnumerator SpawnEnemyRoutine()
     {
@@ -133,14 +114,21 @@ public class SpawnManager : MonoBehaviour
 
                 yield return new WaitForSeconds(_timeToSpawn); //wait some time
                 
-                if (_enemiesOnScreen <= _maxEnemiesOnScreen)
+                SpawnEnemy();
+                _enemiesSpawned ++;
+                  if(_enemiesSpawned >= (int)_maxEnemies)
                 {
-                    SpawnEnemy();
-                }
+                    StartCoroutine(NextLevel());
+                }    
+
+
 
             yield return null;            
         }
-      }
+    }
+
+  
+    
 
     private void SpawnEnemy()
     {
@@ -167,42 +155,36 @@ public class SpawnManager : MonoBehaviour
                         newEnemy.GetComponent<Enemy>().SpawnShield();
                     }
                 
-                _enemiesSpawned++;
+                
                
                 newEnemy.transform.parent = _enemyHolder.transform;    
     }
-    public void EnemyDestroyed()
-    {
-        _enemiesDestroyed++;
-        
-        CheckAllEnemiesDestroyed();
-    }
+  
 
 
-    public void CheckAllEnemiesDestroyed()
+    IEnumerator NextLevel()
     {
-         if(_enemiesDestroyed == (int)_maxEnemies)
-                {  
-                    if(!_isBossFight)
-                    {
-                     _enemiesSpawned = 0;
-                     _enemiesDestroyed = 0;
-                    _timeToSpawn -= .2f;
-                    _maxEnemies += .5f;
-                    _maxEnemiesOnScreen += .5f;                    
-                    _level ++;
-                    StartCoroutine(ShowLevel());
-                    }
-                    else
-                    {
-                        _level = 999999999;
-                        StartCoroutine(ShowLevel());
-                    }   
-                    if (_level == _bossFightLevel)
-                    {
-                        LoadBossFight();
-                    }
-                }  
+        yield return new WaitForSeconds(3f);
+         
+         
+        if(!_isBossFight)
+        {
+        _enemiesSpawned = 0;
+        _timeToSpawn -= .2f;
+        _maxEnemies += .5f;
+        _level ++;
+        StartCoroutine(ShowLevel());
+        }
+
+        else
+        {
+            StartCoroutine(ShowLevel());
+        }   
+        if (_level == _bossFightLevel)
+        {
+            LoadBossFight();
+        }
+                  
     }
     void LoadBossFight()
     {
@@ -218,6 +200,7 @@ public class SpawnManager : MonoBehaviour
         {
             _levelText.text = "Level: "+_level;
         }
+        UIManager.Instance.UpdateLevel(_level);
         
         _levelText.gameObject.SetActive(true);
         yield return new WaitForSeconds(1f);

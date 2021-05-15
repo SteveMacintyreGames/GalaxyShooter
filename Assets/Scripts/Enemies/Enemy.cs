@@ -366,7 +366,6 @@ public class Enemy : MonoBehaviour
     {  
 
         SpawnManager.Instance._powerupTime -= .5f;
-        SpawnManager.Instance.EnemyDestroyed();
         _isDead = true;
         _enemySpeed = 0;
         canShoot = false;

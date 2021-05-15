@@ -229,7 +229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c0db31c6d0a337e68da0ae9fea33a5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0
+  speed: 8
   _laserDirection: {x: 0, y: 1, z: 0}
 --- !u!1 &7140104555674021792
 GameObject:

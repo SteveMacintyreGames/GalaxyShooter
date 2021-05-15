@@ -167,9 +167,8 @@ public class Player : MonoBehaviour
         _minWidth  = -_maxWidth;
         _speedBoost = 1f;
 
-        //FOR CORE CHALLENGE TESTING PURPOSES ONLY. REMOVE AFTER TEST.
-        //ammoCount = 15;
-        ammoCount = 300;
+        
+        ammoCount = 15;       
         missileCount = 0;
         _thrusterPower = 100f;
         _thrusterUseSpeed = 10f;
@@ -184,7 +183,6 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        _canHit = false; // For testing purposes only, remove after core challenges are done.
        CheckKeyPress();
        CalculateMovement();
        CheckBorders();

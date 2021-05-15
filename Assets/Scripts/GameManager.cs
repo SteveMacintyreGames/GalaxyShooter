@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
             return _instance;
         }
     }
+    
     public bool _negativePowerupActivated = false;
 
     [SerializeField]
