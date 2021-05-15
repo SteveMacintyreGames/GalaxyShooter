@@ -19,27 +19,23 @@ public class SpawnManager : MonoBehaviour
 
     [SerializeField]
     private GameObject[] _enemyPrefab;
-    [SerializeField]
-    private Text _enemyHolderHolder;
+    [SerializeField] private Text _enemyHolderHolder;
 
-    [SerializeField]
-    private GameObject[] _powerUps;
+    [SerializeField] private GameObject[] _powerUps;
     private float _minpowerupTime, _maxpowerupTime;
     public float _powerupTime;
 
-    [SerializeField]
-    private GameObject _enemyHolder;
+    [SerializeField] private GameObject _enemyHolder;
     private float xPos = 6.5f;
     private float Ypos = 8f;
-    [SerializeField]
-    private float _timeToWait = 5.0f;
+    [SerializeField] private float _timeToWait = 5.0f;
 
     private bool _stopSpawning = false;
     private int _powerUpId;
 
 
-[SerializeField]
-    private Text _levelText;
+[SerializeField] private Text _levelText;
+[SerializeField] private Text _debugText;
 
 [SerializeField]
     private int _level;
@@ -53,6 +49,7 @@ public class SpawnManager : MonoBehaviour
     private int _enemiesSpawned = 0;
     public int _enemiesDestroyed =0;
     public int _enemiesOnScreen = 0;
+    private GameObject[] _enemiesOnScreenArray;
     private float _maxEnemiesOnScreen = 1f;
     private bool _canSpawn = true;
 
@@ -105,10 +102,15 @@ public class SpawnManager : MonoBehaviour
 
     void Update()
     {
-        //
+        CheckEnemiesOnScreen();
     }
    
-  
+        void CheckEnemiesOnScreen()
+    {
+        _enemiesOnScreenArray = GameObject.FindGameObjectsWithTag("Enemy");
+        _enemiesOnScreen = _enemiesOnScreenArray.Length;
+    }
+
     //Decide on a percentage of Enemies & Powerups per level
     //Increase the number of enemies and powerups every few levels up to a limit.
 
@@ -169,16 +171,16 @@ public class SpawnManager : MonoBehaviour
                     }
                 
                 _enemiesSpawned++;
-                _enemiesOnScreen ++;
+               
                 newEnemy.transform.parent = _enemyHolder.transform;    
     }
     public void EnemyDestroyed()
     {
         _enemiesDestroyed++;
-        _enemiesOnScreen--;
+        
         CheckAllEnemiesDestroyed();
-
     }
+
 
     public void CheckAllEnemiesDestroyed()
     {
@@ -188,7 +190,6 @@ public class SpawnManager : MonoBehaviour
                     {
                      _enemiesSpawned = 0;
                      _enemiesDestroyed = 0;
-                     _enemiesOnScreen = 0;
                     _timeToSpawn -= .2f;
                     _maxEnemies += .5f;
                     _maxEnemiesOnScreen += .5f;                    
