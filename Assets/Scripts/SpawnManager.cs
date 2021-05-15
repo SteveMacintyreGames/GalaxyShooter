@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class SpawnManager : MonoBehaviour
 {
@@ -18,27 +19,23 @@ public class SpawnManager : MonoBehaviour
 
     [SerializeField]
     private GameObject[] _enemyPrefab;
-    [SerializeField]
-    private Text _enemyHolderHolder;
+    [SerializeField] private Text _enemyHolderHolder;
 
-    [SerializeField]
-    private GameObject[] _powerUps;
+    [SerializeField] private GameObject[] _powerUps;
     private float _minpowerupTime, _maxpowerupTime;
     public float _powerupTime;
 
-    [SerializeField]
-    private GameObject _enemyHolder;
+    [SerializeField] private GameObject _enemyHolder;
     private float xPos = 6.5f;
     private float Ypos = 8f;
-    [SerializeField]
-    private float _timeToWait = 5.0f;
+    [SerializeField] private float _timeToWait = 5.0f;
 
-    private bool _stopSpawning = false;
+    public bool _stopSpawning = false;
     private int _powerUpId;
 
 
-[SerializeField]
-    private Text _levelText;
+[SerializeField] private Text _levelText;
+[SerializeField] private Text _debugText;
 
 [SerializeField]
     private int _level;
@@ -50,8 +47,10 @@ public class SpawnManager : MonoBehaviour
     
     [SerializeField]
     private int _enemiesSpawned = 0;
+    public int _enemiesDestroyed =0;
     public int _enemiesOnScreen = 0;
-    private float _maxEnemiesOnScreen = 3f;
+    private GameObject[] _enemiesOnScreenArray;
+    private float _maxEnemiesOnScreen = 1f;
     private bool _canSpawn = true;
 
     [SerializeField]
@@ -60,6 +59,8 @@ public class SpawnManager : MonoBehaviour
     private int _weightedTotal;
 
     private bool _firstPowerupSpawn = true;
+    public bool _isBossFight = false;
+    private int _bossFightLevel = 10;
 
     void Awake()
     {
@@ -71,95 +72,153 @@ public class SpawnManager : MonoBehaviour
 
     void Start()
     {
+        if(!_isBossFight)
+        {
         _level = 1;
-        _timeToSpawn = 3f;
-        _timeToWait = 3f;
-        _maxEnemies = 5f;
+        _timeToSpawn = 5f;
+        _timeToWait = 5f;
+        _maxEnemies = 4f;
+        _maxEnemiesOnScreen = 3;
         _levelText.gameObject.SetActive(false);
-        _minpowerupTime = 10f;
-        _maxpowerupTime = 20f;
-        _powerupTime = _maxpowerupTime;
+        _minpowerupTime = 5f;
+        _maxpowerupTime = 15f;
+        _powerupTime = Random.Range(_minpowerupTime,_maxpowerupTime);
+        }
+        else
+        {
+            _level = 1;
+            _timeToSpawn = 8f;
+            _timeToWait = 8f;
+            _maxEnemies = 1f;
+            _maxEnemiesOnScreen = 1f;
+            _enemiesOnScreen = 0;
+            _levelText.gameObject.SetActive(false);
+            _minpowerupTime = 5f;
+            _maxpowerupTime = 10f;
+            _powerupTime = _maxpowerupTime;
+
+        }     
     }
 
     void Update()
     {
-        CheckIfCanSpawn();
+        CheckEnemiesOnScreen();
+    }
+   
+        void CheckEnemiesOnScreen()
+    {
+        _enemiesOnScreenArray = GameObject.FindGameObjectsWithTag("Enemy");
+        _enemiesOnScreen = _enemiesOnScreenArray.Length;
     }
 
-    void CheckIfCanSpawn()
-    {
-        if(_enemiesOnScreen > (int)_maxEnemiesOnScreen)
-        {
-            _canSpawn = false;
-        }else
-        {
-            _canSpawn = true;
-        }
-    }
     //Decide on a percentage of Enemies & Powerups per level
     //Increase the number of enemies and powerups every few levels up to a limit.
 
     public void StartSpawning()
     {
-        StartCoroutine(SpawnEnemyRoutine());
-        StartCoroutine(SpawnPowerUpRoutine());
+        StartCoroutine("SpawnEnemyRoutine");
+        StartCoroutine("SpawnPowerUpRoutine");
+        StartCoroutine("ShowLevel");
     }
+
+    // have enemy spawned count
+    // max enemy count
+    // destroyed enemy count
+    // when destroyed enemies = max enemy count = new level.
 
     IEnumerator SpawnEnemyRoutine()
     {
         while(!_stopSpawning)
         {   
-            StartCoroutine(ShowLevel());
-            yield return new WaitForSeconds(3f);
-    
-            for (int i = 0; i < (int)_maxEnemies; i++)
-            {
-                yield return new WaitForSeconds(_timeToSpawn);         
-                float randomX = Random.Range(-xPos,xPos);
-                Vector3 posToSpawn = new Vector3(randomX,Ypos,0);
-                if(_canSpawn)               
-                {
-                    ChooseEnemy();
 
-                    GameObject newEnemy = Instantiate (_enemyPrefab[Random.Range(0,_spawnEnemyNumber)],posToSpawn, Quaternion.identity);
-                    
-                   
-                        var shieldOrNo = Random.value;
-                        if (shieldOrNo >.7)
-                        {
-                            newEnemy.GetComponent<Enemy>().SpawnShield();
-                        }
-                   
-                    _enemiesSpawned++;
-                    _enemiesOnScreen ++;
-                    newEnemy.transform.parent = _enemyHolder.transform;
-                }
-                else
-                {
-                    yield return new WaitForSeconds(_timeToWait);
-                }
+                yield return new WaitForSeconds(_timeToSpawn); //wait some time
                 
-
-               if(_enemiesSpawned >= (int)_maxEnemies)
-                {      
-                     _enemiesSpawned=0;
-                    _timeToSpawn -= .2f;
-                    _maxEnemies += .5f;
-                    _maxEnemiesOnScreen += .3f;                    
-                    _level ++;
-                    yield return new WaitForSeconds(_timeToWait);    
+                if (_enemiesOnScreen <= _maxEnemiesOnScreen)
+                {
+                    SpawnEnemy();
                 }
-                // all enemies spawned
-            }
 
             yield return null;            
         }
+      }
+
+    private void SpawnEnemy()
+    {
+         float randomX = Random.Range(-xPos,xPos); //pick a random spot on the x axis
+                Vector3 posToSpawn = new Vector3(randomX,Ypos,0); //put spawning position in variable
+            
+                ChooseEnemy();
+
+                GameObject newEnemy = Instantiate (_enemyPrefab[Random.Range(0,_spawnEnemyNumber)],posToSpawn, Quaternion.identity);
+                
+                    //No shields for ships during bossfights.
+                    float ShieldChance;
+                    if(_isBossFight)
+                    {
+                        ShieldChance=1;
+                    }
+                    else
+                    {
+                        ShieldChance = .8f;
+                    }
+                    var shieldOrNo = Random.value;
+                    if (shieldOrNo >ShieldChance)
+                    {
+                        newEnemy.GetComponent<Enemy>().SpawnShield();
+                    }
+                
+                _enemiesSpawned++;
+               
+                newEnemy.transform.parent = _enemyHolder.transform;    
     }
-    
+    public void EnemyDestroyed()
+    {
+        _enemiesDestroyed++;
+        
+        CheckAllEnemiesDestroyed();
+    }
+
+
+    public void CheckAllEnemiesDestroyed()
+    {
+         if(_enemiesDestroyed == (int)_maxEnemies)
+                {  
+                    if(!_isBossFight)
+                    {
+                     _enemiesSpawned = 0;
+                     _enemiesDestroyed = 0;
+                    _timeToSpawn -= .2f;
+                    _maxEnemies += .5f;
+                    _maxEnemiesOnScreen += .5f;                    
+                    _level ++;
+                    StartCoroutine(ShowLevel());
+                    }
+                    else
+                    {
+                        _level = 999999999;
+                        StartCoroutine(ShowLevel());
+                    }   
+                    if (_level == _bossFightLevel)
+                    {
+                        LoadBossFight();
+                    }
+                }  
+    }
+    void LoadBossFight()
+    {
+        SceneManager.LoadScene(2);
+    }
     IEnumerator ShowLevel()
     {
-
-        _levelText.text = "Level: "+_level;
+        if (_level == 999999999)
+        {
+            _levelText.text = "Boss Fight!";
+        }
+        else
+        {
+            _levelText.text = "Level: "+_level;
+        }
+        
         _levelText.gameObject.SetActive(true);
         yield return new WaitForSeconds(1f);
         _levelText.text = "GET READY!";
@@ -205,6 +264,10 @@ public class SpawnManager : MonoBehaviour
             7   // Dodger
         };
 
+        if(_isBossFight)
+        {
+            _maxSpawnEnemyNumber = 7;
+        }
         for(int i = 0; i < _maxSpawnEnemyNumber; i++)
         {
             _weightedTotal += enemyTable[i];
@@ -232,11 +295,16 @@ public class SpawnManager : MonoBehaviour
     {
         while(!_stopSpawning)
         {   
-            if(_firstPowerupSpawn)
+            if(!_isBossFight)
             {
-                _firstPowerupSpawn = false;
-                yield return new WaitForSeconds(30f);
+                if(_firstPowerupSpawn)
+                {
+                    _firstPowerupSpawn = false;
+                    yield return new WaitForSeconds(30f);
+                }
             }
+        
+           
 
             float randomX = Random.Range(-xPos,xPos);
             Vector3 posToSpawn = new Vector3(randomX, Ypos,0);
@@ -300,6 +368,11 @@ public class SpawnManager : MonoBehaviour
     public void OnPlayerDeath()
     {
         _stopSpawning = true;
+    }
+
+    public void ForTheLoveOfGodPleaseStop()
+    {
+      SceneManager.LoadScene("GameOver");
     }
 
 }

@@ -63,6 +63,7 @@ public class Player : MonoBehaviour
     private float _thrusterUseSpeed;
     private float _thrusterRefillSpeed;
     private bool _canMove;
+    private bool _canHit = true;
 
 
     
@@ -166,10 +167,12 @@ public class Player : MonoBehaviour
         _minWidth  = -_maxWidth;
         _speedBoost = 1f;
 
-        ammoCount = 15;
+        //FOR CORE CHALLENGE TESTING PURPOSES ONLY. REMOVE AFTER TEST.
+        //ammoCount = 15;
+        ammoCount = 300;
         missileCount = 0;
         _thrusterPower = 100f;
-        _thrusterUseSpeed = 20f;
+        _thrusterUseSpeed = 10f;
         _thrusterRefillSpeed = 35f;
         _canMove = true;
 
@@ -181,6 +184,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        _canHit = false; // For testing purposes only, remove after core challenges are done.
        CheckKeyPress();
        CalculateMovement();
        CheckBorders();
@@ -375,6 +379,7 @@ public class Player : MonoBehaviour
     }
 
     public void Damage()
+    {if (_canHit)
     {
         ShakeCam(.3f);
         
@@ -386,6 +391,7 @@ public class Player : MonoBehaviour
 
             
         _playerLives --;
+        StartCoroutine(DontHitMePlease());
         
         UIManager.Instance.UpdateLives(_playerLives);
 
@@ -402,6 +408,14 @@ public class Player : MonoBehaviour
             Destroy(this.gameObject,1);
             
         }
+    }
+        
+    }
+    IEnumerator DontHitMePlease()
+    {
+        _canHit = false;
+        yield return new WaitForSeconds (3f);
+        _canHit = true;
     }
 
     private void DamageShip()

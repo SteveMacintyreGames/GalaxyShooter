@@ -8,7 +8,7 @@ public class Laser : MonoBehaviour
     public float speed;
 
     [SerializeField]
-    protected Vector3 _laserDirection = Vector3.up;
+    public Vector3 _laserDirection = Vector3.up;
 
     protected virtual void Start()
     {

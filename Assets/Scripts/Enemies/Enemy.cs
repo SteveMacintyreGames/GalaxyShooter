@@ -32,11 +32,11 @@ public class Enemy : MonoBehaviour
 
     protected bool _shoots = false;
 
-    [SerializeField]
-    protected GameObject _enemyLaser;
+    [SerializeField] protected GameObject _enemyLaser;
 
-    [SerializeField]
-    protected AudioClip _enemyLaser_Clip;
+    [SerializeField] protected AudioClip _enemyLaser_Clip;
+    
+    [SerializeField] protected AudioClip _explosion_Clip;
     public bool enemyLaserGoingUp;
     [SerializeField]
     private float _enemyLaserSpeed = 8f;
@@ -54,6 +54,7 @@ public class Enemy : MonoBehaviour
 
     int _numberOfDodges=0;
     int _numberOfDodgesLimit = 3;
+    private bool _isDead = false;
 
 
 
@@ -217,11 +218,17 @@ public class Enemy : MonoBehaviour
                 _instantiationPosition += new Vector3(0,3f,0);
 
             }
-            GameObject enemyLaser = Instantiate(_enemyLaser, _instantiationPosition, Quaternion.identity) as GameObject;
-            enemyLaser.GetComponent<DuoLaser>().speed = _laserSpeed;
-            Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser_Enemy>();
-            _audioSource.clip = _enemyLaser_Clip;
-            _audioSource.Play();
+
+
+            if (!_isDead)
+            {
+                GameObject enemyLaser = Instantiate(_enemyLaser, _instantiationPosition, Quaternion.identity) as GameObject;
+                enemyLaser.GetComponent<DuoLaser>().speed = _laserSpeed;
+                Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser_Enemy>();
+                _audioSource.clip = _enemyLaser_Clip;
+                _audioSource.Play();
+            }
+
         }
     }
 
@@ -359,12 +366,14 @@ public class Enemy : MonoBehaviour
     {  
 
         SpawnManager.Instance._powerupTime -= .5f;
-        SpawnManager.Instance._enemiesOnScreen --;
+        SpawnManager.Instance.EnemyDestroyed();
+        _isDead = true;
         _enemySpeed = 0;
         canShoot = false;
         _isExploding = true;
         //Change the enemy color to white so the internal explosion looks yellow and not tinted.
         GetComponent<SpriteRenderer>().color = Color.white;
+        _audioSource.clip = _explosion_Clip;
         _audioSource.Play(); 
 
         //Some new enemies don't have the built in animation that uses the parameter "onEnemyDeath" to trigger
@@ -373,10 +382,12 @@ public class Enemy : MonoBehaviour
         if (_anim.parameterCount>0)
         {
             _anim.SetTrigger("onEnemyDeath");
+
         }else{
             Instantiate(_explosionHolder, transform.position, Quaternion.identity);
-            Destroy(this.gameObject);
+            Destroy(this.gameObject);            
         }
+        
 
     }
 
