@@ -67,7 +67,7 @@ Transform:
   m_GameObject: {fileID: 3221387806678680056}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.659192, y: 0.659192, z: 0.659192}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 507129425629961468}
   - {fileID: 1674715678}
@@ -88,7 +88,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _pauseTimer: 0
   _pauseTime: 1
-  _shotsToKill: 12
+  _shotsToKill: 4
   _totalHP: 0
   _enemySpeed: 3
   enemyID: 4
@@ -310,6 +310,10 @@ PrefabInstance:
       propertyPath: _papi
       value: 
       objectReference: {fileID: 3221387806678680056}
+    - target: {fileID: 3715318766588403052, guid: c1c09cda5494de6a3be3b0031537c7b3, type: 3}
+      propertyPath: _miniBoom
+      value: 
+      objectReference: {fileID: 2078615227446897435, guid: 39f03fc1153fbac20b3632198cede754, type: 3}
     - target: {fileID: 3715318766588403053, guid: c1c09cda5494de6a3be3b0031537c7b3, type: 3}
       propertyPath: m_RootOrder
       value: 1

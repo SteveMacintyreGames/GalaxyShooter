@@ -5451,7 +5451,7 @@ RectTransform:
   m_GameObject: {fileID: 717180067}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.41877958, y: 0.6126734, z: 0.4047624}
+  m_LocalScale: {x: 0.4815965, y: 0.68159914, z: 0.4047624}
   m_Children: []
   m_Father: {fileID: 895115811}
   m_RootOrder: 11
@@ -11429,7 +11429,7 @@ MonoBehaviour:
   _powerUps:
   - {fileID: 5157578759746279781, guid: adf97298e794203118b39b6e2f9897b5, type: 3}
   - {fileID: 4675016065397619668, guid: cb932b4109c885395ac58c8b9ed187ee, type: 3}
-  - {fileID: 4675016065397619668, guid: 8c12ffff03404467d8f3a7d80a5acb44, type: 3}
+  - {fileID: 1043004218837762764, guid: 498682bdc706613e6bc9711718b69965, type: 3}
   - {fileID: 7104200021260756541, guid: 304773d8d598eb07185684e77cc99f9b, type: 3}
   - {fileID: 5421822405606602614, guid: 4da97564799fe980cb37c9667f8ed202, type: 3}
   - {fileID: 7844165392113823019, guid: 300410cd00bbb6955bf9d5d632fa80bb, type: 3}
@@ -11441,6 +11441,7 @@ MonoBehaviour:
   _level: 0
   _maxEnemies: 0
   _enemiesSpawned: 0
+  _enemiesDestroyed: 0
   _enemiesOnScreen: 0
   _powerupToSpawn: 0
   _isBossFight: 0

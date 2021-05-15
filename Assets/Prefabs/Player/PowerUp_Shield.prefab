@@ -119,8 +119,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _powerUpID: 2
   _powerUpSpeed: 3
-  _audioClip: {fileID: 0}
-  Explosion: {fileID: 0}
+  _audioClip: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
+  Explosion: {fileID: 8707896360387141599, guid: 3f379d536a6decf7d9f0d9222b46ea5c, type: 3}
 --- !u!61 &1043004218837762762
 BoxCollider2D:
   m_ObjectHideFlags: 0

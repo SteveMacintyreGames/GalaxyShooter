@@ -269,6 +269,7 @@ MonoBehaviour:
   _shotsToKill: 1
   _enemyLaser: {fileID: 8506025685509265935, guid: 52228fdd2e4ac0681be9af8ead9af344, type: 3}
   _enemyLaser_Clip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
+  _explosion_Clip: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc, type: 3}
   enemyLaserGoingUp: 0
   _enemyLaserSpeed: 8
   isMovingRight: 0

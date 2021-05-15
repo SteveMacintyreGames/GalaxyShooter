@@ -171,7 +171,7 @@ public class Player : MonoBehaviour
         ammoCount = 15;
         missileCount = 0;
         _thrusterPower = 100f;
-        _thrusterUseSpeed = 20f;
+        _thrusterUseSpeed = 10f;
         _thrusterRefillSpeed = 35f;
         _canMove = true;
 
