@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class SpawnManager : MonoBehaviour
 {
@@ -50,8 +51,9 @@ public class SpawnManager : MonoBehaviour
     
     [SerializeField]
     private int _enemiesSpawned = 0;
+    private int _enemiesDestroyed =0;
     public int _enemiesOnScreen = 0;
-    private float _maxEnemiesOnScreen = 3f;
+    private float _maxEnemiesOnScreen = 1f;
     private bool _canSpawn = true;
 
     [SerializeField]
@@ -60,6 +62,8 @@ public class SpawnManager : MonoBehaviour
     private int _weightedTotal;
 
     private bool _firstPowerupSpawn = true;
+    public bool _isBossFight = false;
+    private int _bossFightLevel = 10;
 
     void Awake()
     {
@@ -71,14 +75,33 @@ public class SpawnManager : MonoBehaviour
 
     void Start()
     {
+        if(!_isBossFight)
+        {
         _level = 1;
         _timeToSpawn = 3f;
         _timeToWait = 3f;
         _maxEnemies = 5f;
         _levelText.gameObject.SetActive(false);
-        _minpowerupTime = 10f;
-        _maxpowerupTime = 20f;
-        _powerupTime = _maxpowerupTime;
+        _minpowerupTime = 5f;
+        _maxpowerupTime = 15f;
+        _powerupTime = Random.Range(_minpowerupTime,_maxpowerupTime);
+        }
+        else
+        {
+            _level = 1;
+            _timeToSpawn = 8f;
+            _timeToWait = 8f;
+            _maxEnemies = 1f;
+            _maxEnemiesOnScreen = 1f;
+            _levelText.gameObject.SetActive(false);
+            _minpowerupTime = 5f;
+            _maxpowerupTime = 10f;
+            _powerupTime = _maxpowerupTime;
+
+        }
+
+        
+        
     }
 
     void Update()
@@ -103,63 +126,106 @@ public class SpawnManager : MonoBehaviour
     {
         StartCoroutine(SpawnEnemyRoutine());
         StartCoroutine(SpawnPowerUpRoutine());
+        StartCoroutine(ShowLevel());
     }
 
     IEnumerator SpawnEnemyRoutine()
     {
         while(!_stopSpawning)
         {   
-            StartCoroutine(ShowLevel());
-            yield return new WaitForSeconds(3f);
-    
-            for (int i = 0; i < (int)_maxEnemies; i++)
+                 
+            
+            if (_canSpawn)
             {
-                yield return new WaitForSeconds(_timeToSpawn);         
-                float randomX = Random.Range(-xPos,xPos);
-                Vector3 posToSpawn = new Vector3(randomX,Ypos,0);
-                if(_canSpawn)               
-                {
-                    ChooseEnemy();
+                yield return new WaitForSeconds(_timeToSpawn); //wait some time
 
-                    GameObject newEnemy = Instantiate (_enemyPrefab[Random.Range(0,_spawnEnemyNumber)],posToSpawn, Quaternion.identity);
-                    
-                   
-                        var shieldOrNo = Random.value;
-                        if (shieldOrNo >.7)
-                        {
-                            newEnemy.GetComponent<Enemy>().SpawnShield();
-                        }
-                   
-                    _enemiesSpawned++;
-                    _enemiesOnScreen ++;
-                    newEnemy.transform.parent = _enemyHolder.transform;
-                }
-                else
-                {
-                    yield return new WaitForSeconds(_timeToWait);
-                }
+                float randomX = Random.Range(-xPos,xPos); //pick a random spot on the x axis
+                Vector3 posToSpawn = new Vector3(randomX,Ypos,0); //put spawning position in variable
+            
+                ChooseEnemy();
+
+                GameObject newEnemy = Instantiate (_enemyPrefab[Random.Range(0,_spawnEnemyNumber)],posToSpawn, Quaternion.identity);
+                
+                    //No shields for ships during bossfights.
+                    float ShieldChance;
+                    if(_isBossFight)
+                    {
+                        ShieldChance=1;
+                    }
+                    else
+                    {
+                        ShieldChance = .7f;
+                    }
+                    var shieldOrNo = Random.value;
+                    if (shieldOrNo >ShieldChance)
+                    {
+                        newEnemy.GetComponent<Enemy>().SpawnShield();
+                    }
+                
+                _enemiesSpawned++;
+                _enemiesOnScreen ++;
+                newEnemy.transform.parent = _enemyHolder.transform;
+            }
+                
+               
+               
                 
 
                if(_enemiesSpawned >= (int)_maxEnemies)
-                {      
-                     _enemiesSpawned=0;
+                {  
+                    if(!_isBossFight)
+                    {
+                     _enemiesSpawned = 0;
+                     _enemiesDestroyed = 0;
                     _timeToSpawn -= .2f;
-                    _maxEnemies += .5f;
-                    _maxEnemiesOnScreen += .3f;                    
+                    _maxEnemies += .35f;
+                    _maxEnemiesOnScreen += .35f;                    
                     _level ++;
-                    yield return new WaitForSeconds(_timeToWait);    
+                    if(!_isBossFight)
+                    {
+                        StartCoroutine(ShowLevel());
+                    }
+                    else
+                    {
+                        _level = 999999999;
+                        StartCoroutine(ShowLevel());
+                    }   
+                    if (_level == _bossFightLevel)
+                    {
+                        LoadBossFight();
+                    }
+                    yield return new WaitForSeconds(_timeToWait);
+                    }
+                    else
+                    {
+                        _enemiesSpawned = 0;
+                        _maxEnemies += .2f;
+                        _maxEnemiesOnScreen += .1f;
+                    }  
+                         
                 }
                 // all enemies spawned
-            }
+            
 
             yield return null;            
         }
     }
     
+    void LoadBossFight()
+    {
+        SceneManager.LoadScene(2);
+    }
     IEnumerator ShowLevel()
     {
-
-        _levelText.text = "Level: "+_level;
+        if (_level == 999999999)
+        {
+            _levelText.text = "Boss Fight!";
+        }
+        else
+        {
+            _levelText.text = "Level: "+_level;
+        }
+        
         _levelText.gameObject.SetActive(true);
         yield return new WaitForSeconds(1f);
         _levelText.text = "GET READY!";
@@ -205,6 +271,10 @@ public class SpawnManager : MonoBehaviour
             7   // Dodger
         };
 
+        if(_isBossFight)
+        {
+            _maxSpawnEnemyNumber = 7;
+        }
         for(int i = 0; i < _maxSpawnEnemyNumber; i++)
         {
             _weightedTotal += enemyTable[i];
@@ -232,11 +302,16 @@ public class SpawnManager : MonoBehaviour
     {
         while(!_stopSpawning)
         {   
-            if(_firstPowerupSpawn)
+            if(!_isBossFight)
             {
-                _firstPowerupSpawn = false;
-                yield return new WaitForSeconds(30f);
+                if(_firstPowerupSpawn)
+                {
+                    _firstPowerupSpawn = false;
+                    yield return new WaitForSeconds(30f);
+                }
             }
+        
+           
 
             float randomX = Random.Range(-xPos,xPos);
             Vector3 posToSpawn = new Vector3(randomX, Ypos,0);

@@ -375,8 +375,9 @@ public class Enemy : MonoBehaviour
             _anim.SetTrigger("onEnemyDeath");
         }else{
             Instantiate(_explosionHolder, transform.position, Quaternion.identity);
-            Destroy(this.gameObject);
+            Destroy(this.gameObject);            
         }
+        
 
     }
 

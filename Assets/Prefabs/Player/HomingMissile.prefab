@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 9219474252219931107}
   - component: {fileID: 9183240132554326115}
   - component: {fileID: 5801480141588143693}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: HomingMissile
   m_TagString: Laser
   m_Icon: {fileID: 0}
@@ -120,7 +120,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 303980667
   m_SortingLayer: 2
-  m_SortingOrder: 5
+  m_SortingOrder: 105
   m_Sprite: {fileID: 21300000, guid: a08bea06816f918f395c6a0c70711c5d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

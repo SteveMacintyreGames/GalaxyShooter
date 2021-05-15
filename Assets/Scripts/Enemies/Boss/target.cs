@@ -32,7 +32,6 @@ public class target : MonoBehaviour
                     }
                     if (_hp <=0)
                     {
-
                         Player.Instance.AddScore(_points);
                         GameObject explosion = Instantiate(Resources.Load("Explosion1"), transform.position, Quaternion.identity) as GameObject;
                         explosion.transform.localScale = transform.localScale;

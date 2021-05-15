@@ -73,8 +73,12 @@ public class HomingMissile : MonoBehaviour
             return;
         }
         if(other.CompareTag("Enemy"))
-        {             
-             other.gameObject.GetComponent<Enemy>().DestroyEnemyShip();
+        {   
+            if(other.gameObject.GetComponent<Enemy>() !=null)
+            {
+                other.gameObject.GetComponent<Enemy>().DestroyEnemyShip();
+            }          
+             
              Destroy(this.gameObject);
         }
        

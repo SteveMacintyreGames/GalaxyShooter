@@ -45,9 +45,9 @@ GameObject:
   - component: {fileID: 5406239288500046636}
   - component: {fileID: 8458047658061036978}
   - component: {fileID: 5060080070641688954}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: expendableTurret 1
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -159,6 +159,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hp: 2
+  _points: 10
 --- !u!114 &5406239288500046636
 MonoBehaviour:
   m_ObjectHideFlags: 0

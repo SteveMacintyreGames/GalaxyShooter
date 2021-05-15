@@ -167,7 +167,8 @@ public class Player : MonoBehaviour
         _minWidth  = -_maxWidth;
         _speedBoost = 1f;
 
-        //ammoCount = 15;
+        
+        ammoCount = 15;
         missileCount = 0;
         _thrusterPower = 100f;
         _thrusterUseSpeed = 20f;

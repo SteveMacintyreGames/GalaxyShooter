@@ -41,10 +41,13 @@ public class TurretBullet : MonoBehaviour
             Destroy(other.gameObject);
             DestroyBullet();
         }
+        
         if(other.CompareTag("Player"))
         {
-            if (Random.value>.3);
-            Player.Instance.Damage();
+            if (Random.value>.3)
+            {
+                Player.Instance.Damage();
+            }
         }
     }
 }

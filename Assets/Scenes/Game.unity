@@ -11443,6 +11443,7 @@ MonoBehaviour:
   _enemiesSpawned: 0
   _enemiesOnScreen: 0
   _powerupToSpawn: 0
+  _isBossFight: 0
 --- !u!4 &1866165844
 Transform:
   m_ObjectHideFlags: 0

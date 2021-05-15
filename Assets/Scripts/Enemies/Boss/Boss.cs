@@ -44,6 +44,8 @@ public class Boss : MonoBehaviour
 
     void Start()
     {
+        SpawnManager.Instance._isBossFight = true;
+        SpawnManager.Instance.StartSpawning();
         _currentWaypoint = 0;
         _destructionHolder.gameObject.SetActive(false);
              
