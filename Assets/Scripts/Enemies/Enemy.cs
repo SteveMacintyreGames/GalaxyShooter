@@ -90,8 +90,8 @@ public class Enemy : MonoBehaviour
             break;
 
             case 3:
-            _amp = Random.Range (.2f, .4f);
-            _freq = Random.Range(8f,10f); 
+            _amp = Random.Range (.05f, .07f);
+            _freq = Random.Range(5f,7f); 
             
             var boolNum = Random.Range(0,2);
             if (boolNum>0)
@@ -173,7 +173,7 @@ public class Enemy : MonoBehaviour
             case 6:
                 Move(Vector2.down, _enemySpeed);
                 CheckPlayerBehind();
-                PowerupHunting();
+
                 FireLasers(_enemyLaserSpeed);
                 CheckBottom();                
                 break;

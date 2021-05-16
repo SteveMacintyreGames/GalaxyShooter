@@ -178,6 +178,9 @@ public class Player : MonoBehaviour
         UIManager.Instance.UpdateAmmoCount();
         UIManager.Instance.UpdateMissileCount();
 
+        _score = 0;
+        UIManager.Instance.UpdateScore(_score);
+
         
     }
 

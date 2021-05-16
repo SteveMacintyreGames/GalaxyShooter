@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2873314454496815335}
   - component: {fileID: 2873314454496815328}
   - component: {fileID: 1676333783993378754}
+  - component: {fileID: 7763524182540283475}
   m_Layer: 7
   m_Name: Enemy6 RearGuard
   m_TagString: Enemy
@@ -117,7 +118,7 @@ CapsuleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.024558824, y: 0.12893483}
@@ -140,9 +141,10 @@ MonoBehaviour:
   _enemyShieldHolder: {fileID: 1987107951859439107, guid: ed05e8408438257deaf1aec3f48f3e61, type: 3}
   _shieldActivated: 0
   canShoot: 1
-  _shotsToKill: 3
+  _shotsToKill: 1
   _enemyLaser: {fileID: 8506025685509265935, guid: 52228fdd2e4ac0681be9af8ead9af344, type: 3}
   _enemyLaser_Clip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
+  _explosion_Clip: {fileID: 0}
   enemyLaserGoingUp: 0
   _enemyLaserSpeed: 8
   isMovingRight: 0
@@ -158,7 +160,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -244,3 +246,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!95 &7763524182540283475
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2873314454496815329}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

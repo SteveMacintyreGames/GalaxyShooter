@@ -51,7 +51,6 @@ public class SpawnManager : MonoBehaviour
     public int _enemiesOnScreen = 0;
     private GameObject[] _enemiesOnScreenArray;
     private float _maxEnemiesOnScreen = 1f;
-    private bool _canSpawn = true;
 
     [SerializeField]
     private int _powerupToSpawn;
@@ -61,6 +60,9 @@ public class SpawnManager : MonoBehaviour
     private bool _firstPowerupSpawn = true;
     public bool _isBossFight = false;
     private int _bossFightLevel = 10;
+    private float _canSpawn = -1f;
+    private bool _asteroidDead = false;
+    
 
     void Awake()
     {
@@ -102,29 +104,37 @@ public class SpawnManager : MonoBehaviour
 
     public void StartSpawning()
     {
-        StartCoroutine("SpawnEnemyRoutine");
         StartCoroutine("SpawnPowerUpRoutine");
         StartCoroutine("ShowLevel");
+        _asteroidDead = true;
     }
 
-    IEnumerator SpawnEnemyRoutine()
+ 
+
+    void Update()
     {
-        while(!_stopSpawning)
-        {   
-
-                yield return new WaitForSeconds(_timeToSpawn); //wait some time
-                
-                SpawnEnemy();
-                _enemiesSpawned ++;
-                  if(_enemiesSpawned >= (int)_maxEnemies)
+        if(!_isBossFight)
+        {
+            if (_asteroidDead)
+        {
+            if (Time.time > _canSpawn)
+            {
+                if(!_stopSpawning)
                 {
-                    StartCoroutine(NextLevel());
-                }    
-
-
-
-            yield return null;            
+                    SpawnEnemy();
+                    _enemiesSpawned ++;
+                    _canSpawn = Time.time + _timeToSpawn;
+                    if(_enemiesSpawned >= (int)_maxEnemies)
+                    {
+                        StartCoroutine(NextLevel());
+                    }
+                }
+            
+             }
         }
+        }
+        
+        
     }
 
   
@@ -171,7 +181,7 @@ public class SpawnManager : MonoBehaviour
         {
         _enemiesSpawned = 0;
         _timeToSpawn -= .2f;
-        _maxEnemies += .5f;
+        _maxEnemies += 1;
         _level ++;
         StartCoroutine(ShowLevel());
         }
@@ -204,7 +214,10 @@ public class SpawnManager : MonoBehaviour
         
         _levelText.gameObject.SetActive(true);
         yield return new WaitForSeconds(1f);
-        _levelText.text = "GET READY!";
+        string[] _hype = new string[] {"GET READY!", "RIP AND TEAR!", "NO MERCY!", "YIPPEE KAY YAY, SPACE COWBOY!",
+         "RIP 'EM WITH YOUR LASER BEAMS!", "NO SURVIVORS!", "WARNING: OUT OF BUBBLEGUM!", "PEW PEW!","DISINTIGRATION IS STRENGTH!",
+         "ANNHILATION IS SERVED!","THEY'RE AFRAID!", "TO BOLDLY GO, SEE, AND CONQUER","WHY DO THEY ALWAYS WANT TO DO IT THE HARD WAY?" };
+        _levelText.text = _hype[Random.Range(0, _hype.Length)];
         yield return new WaitForSeconds(1f);
         _levelText.gameObject.SetActive(false);
         yield return new WaitForSeconds (2f);

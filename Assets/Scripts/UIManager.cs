@@ -135,7 +135,11 @@ public class UIManager : MonoBehaviour
 
     public void UpdateLevel(int level)
     {
-        _levelText.text = "Level: "+level;
+        if(_levelText != null)
+        {
+            _levelText.text = "Level: "+level;
+        }
+        
     }
 
     public void UpdateLives(int currentLives)
