@@ -17,6 +17,8 @@ public class Player : MonoBehaviour
         }
     }
 
+    public static bool NewGame;
+
     public delegate void PowerupMagnet();
     public static event PowerupMagnet powerupMagnet;
 
@@ -67,7 +69,7 @@ public class Player : MonoBehaviour
 
 
     
-    public int _playerLives = 3;
+    public static int _playerLives = 3;
 
     private SpawnManager _spawnManager;
     private int _weapon = 0; // 0 regular lasers, 1 missiles.
@@ -100,13 +102,18 @@ public class Player : MonoBehaviour
     public int powerUpID;
 
     [SerializeField]
-    private int _score;
+    public static int _score;
     AudioSource _audioSource;
     public ShakeCamera shakeCamera;
 
 
     void Awake()
     {
+        if(NewGame)
+        {
+            _score=0;
+        }
+        Debug.Log(NewGame);
         if(_instance==null)
         {
             _instance = this;
@@ -114,11 +121,11 @@ public class Player : MonoBehaviour
         else
         {
             Destroy(this.gameObject);
-        }
+        }       
     }
     void Start()
     {   
-        shakeCamera = GameObject.Find("CameraShaker").GetComponent<ShakeCamera>();
+         shakeCamera = GameObject.Find("CameraShaker").GetComponent<ShakeCamera>();
         if(!shakeCamera)
         {
             Debug.LogError("CameraShaker is null");
@@ -167,7 +174,8 @@ public class Player : MonoBehaviour
         _minWidth  = -_maxWidth;
         _speedBoost = 1f;
 
-        
+        if(NewGame)
+        {            
         ammoCount = 15;       
         missileCount = 0;
         _thrusterPower = 100f;
@@ -180,6 +188,10 @@ public class Player : MonoBehaviour
 
         _score = 0;
         UIManager.Instance.UpdateScore(_score);
+        NewGame = false;
+        }
+        
+       
 
         
     }
@@ -194,6 +206,9 @@ public class Player : MonoBehaviour
        Shields();
        ThrusterRefill();
        CallPowerups();
+       UIManager.Instance.UpdateScore(_score);
+       UIManager.Instance.UpdateAmmoCount();
+       UIManager.Instance.UpdateMissileCount();
     }
     void CheckKeyPress()
     {
@@ -485,7 +500,8 @@ public class Player : MonoBehaviour
     public void ActivateTripleShot()
     {
         _isTripleShotActive = true;
-        StartCoroutine(FinishPowerUp());
+        Invoke("TurnOffTripleShot",5f);
+        //StartCoroutine(FinishPowerUp());
     }
 
     public void ActivateSpeedBoost()
@@ -545,6 +561,10 @@ public class Player : MonoBehaviour
             _speedBoost = 1f;
             break;  
         }
+    }
+    void TurnOffTripleShot()
+    {
+        _isTripleShotActive = false;
     }
 
     public void AddScore(int points)

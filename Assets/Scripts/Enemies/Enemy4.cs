@@ -45,6 +45,7 @@ public class Enemy4 : MonoBehaviour
         _anim = GetComponent<Animator>();
         _laserAnim = _enemy2laser.GetComponent<Animator>();
         
+        
     }
     void Start()
     {    

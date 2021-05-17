@@ -18691,10 +18691,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 4689441993901063445, guid: 32d441f46f595f30882c2e1010a8edf7, type: 3}
-      propertyPath: ammoCount
-      value: 500
-      objectReference: {fileID: 0}
     - target: {fileID: 4689441993901063446, guid: 32d441f46f595f30882c2e1010a8edf7, type: 3}
       propertyPath: m_SortingOrder
       value: 100

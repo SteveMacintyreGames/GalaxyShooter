@@ -59,7 +59,7 @@ public class SpawnManager : MonoBehaviour
 
     private bool _firstPowerupSpawn = true;
     public bool _isBossFight = false;
-    private int _bossFightLevel = 10;
+    private int _bossFightLevel = 11;
     private float _canSpawn = -1f;
     private bool _asteroidDead = false;
     
@@ -95,8 +95,8 @@ public class SpawnManager : MonoBehaviour
             _maxEnemiesOnScreen = 1f;
             _enemiesOnScreen = 0;
             _levelText.gameObject.SetActive(false);
-            _minpowerupTime = 5f;
-            _maxpowerupTime = 10f;
+            _minpowerupTime = 1f;
+            _maxpowerupTime = 5f;
             _powerupTime = _maxpowerupTime;
 
         }     
@@ -192,6 +192,7 @@ public class SpawnManager : MonoBehaviour
         }   
         if (_level == _bossFightLevel)
         {
+            Player.NewGame = false;
             LoadBossFight();
         }
                   
@@ -216,7 +217,7 @@ public class SpawnManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         string[] _hype = new string[] {"GET READY!", "RIP AND TEAR!", "NO MERCY!", "YIPPEE KAY YAY, SPACE COWBOY!",
          "RIP 'EM WITH YOUR LASER BEAMS!", "NO SURVIVORS!", "WARNING: OUT OF BUBBLEGUM!", "PEW PEW!","DISINTIGRATION IS STRENGTH!",
-         "ANNHILATION IS SERVED!","THEY'RE AFRAID!", "TO BOLDLY GO, SEE, AND CONQUER","WHY DO THEY ALWAYS WANT TO DO IT THE HARD WAY?" };
+         "ANNHILATION IS SERVED!","THEY'RE AFRAID!","WHY DO THEY ALWAYS WANT TO DO IT THE HARD WAY?" };
         _levelText.text = _hype[Random.Range(0, _hype.Length)];
         yield return new WaitForSeconds(1f);
         _levelText.gameObject.SetActive(false);
@@ -296,7 +297,7 @@ public class SpawnManager : MonoBehaviour
                 if(_firstPowerupSpawn)
                 {
                     _firstPowerupSpawn = false;
-                    yield return new WaitForSeconds(30f);
+                    yield return new WaitForSeconds(15f);
                 }
             }
         
